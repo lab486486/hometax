@@ -189,7 +189,10 @@ function localImagePath(remoteUrl) {
   try {
     const u = new URL(remoteUrl);
     if (!u.pathname.includes("/wp-content/uploads/")) return null;
-    const rel = u.pathname.replace(/^\/wp-content\/uploads\//, "");
+    // Decode %XX so on-disk names match browser-decoded request paths
+    const rel = decodeURIComponentSafe(
+      u.pathname.replace(/^\/wp-content\/uploads\//, ""),
+    );
     return {
       abs: path.join(imgDir, rel),
       publicPath: `/images/wp/${rel}`,

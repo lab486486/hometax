@@ -5,155 +5,416 @@ import Footer from "../components/Footer.astro";
 import { getAllPosts, getBlogPosts, getGunmartPosts, postUrl, formatDate } from "../utils/posts";
 import { site } from "../site.config";
 
-const posts = await getAllPosts();
-const taxPosts = (await getBlogPosts()).slice(0, 8);
-const gunPosts = (await getGunmartPosts()).slice(0, 6);
-const latest = posts.slice(0, 12);
+const allPosts = await getAllPosts();
+const taxPosts = await getBlogPosts();
+const gunPosts = await getGunmartPosts();
+
+const featured = taxPosts.filter((p) => p.data.cover_image).slice(0, 6);
+const latestTax = taxPosts.slice(0, 8);
+const latestGun = gunPosts.slice(0, 4);
+
+const topics = [
+  {
+    label: "종합소득세",
+    desc: "신고 대상·추계·장부 유형까지",
+    href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/",
+  },
+  {
+    label: "연말정산",
+    desc: "공제·자료제공동의·변경사항",
+    href: "/category/%EC%97%B0%EB%A7%90%EC%A0%95%EC%82%B0/",
+  },
+  {
+    label: "지원금·장려금",
+    desc: "근로·자녀장려금 신청 가이드",
+    href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/",
+  },
+  {
+    label: "군마트",
+    desc: "위치·영업시간·전화번호",
+    href: "/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/",
+  },
+];
+
+const highlights = [
+  {
+    title: "클릭 순서대로",
+    text: "홈택스·정부24 화면 기준으로 따라가면 끝나도록 정리했습니다.",
+  },
+  {
+    title: "시즌별 핵심만",
+    text: "종합소득세·연말정산·장려금처럼 그때그때 필요한 정보만 모았습니다.",
+  },
+  {
+    title: "생활 세금까지",
+    text: "자동차세, 전입신고, 증명서 발급 등 자주 막히는 행정 절차도 다룹니다.",
+  },
+];
 ---
 
-<Layout solidHeader>
+<Layout>
   <Header />
   <main id="main" class="home-page">
-    <section class="container home-hero">
-      <p class="section-eyebrow">hometax.me</p>
-      <h1>{site.name}</h1>
-      <p class="home-lead">{site.description}</p>
-      <div class="home-cta-row">
-        <a class="btn btn-primary" href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드</a>
-        <a class="btn btn-ghost" href="/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/">군마트 정보</a>
+    <section class="home-hero" id="home">
+      <div class="container home-hero-grid">
+        <div class="home-hero-copy">
+          <p class="hero-kicker">세금·지원금 실무 가이드</p>
+          <h1>
+            <span class="home-brand">{site.name}</span>
+            <span class="home-headline">신고·환급·서류발급을 헤매지 않게</span>
+          </h1>
+          <p class="hero-lead">
+            종합소득세부터 연말정산, 장려금, 증명서까지. 홈택스와 생활 세금을 단계별로 쉽게 정리합니다.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드 보기</a>
+            <a class="btn btn-secondary" href="#featured">인기 글 살펴보기</a>
+          </div>
+        </div>
+        <aside class="home-hero-panel" aria-label="바로가기">
+          <p class="home-panel-label">자주 찾는 주제</p>
+          <ul class="home-topic-list">
+            {
+              topics.map((t) => (
+                <li>
+                  <a href={t.href}>
+                    <strong>{t.label}</strong>
+                    <span>{t.desc}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
       </div>
     </section>
 
-    <section class="container home-section">
-      <header class="category-head">
-        <p class="section-eyebrow">최신글</p>
-        <h2>최근 업데이트</h2>
-      </header>
-      <ul class="post-grid">
+    <section class="section home-highlights">
+      <div class="container home-highlight-grid">
         {
-          latest.map((post) => (
-            <li>
-              <a class="post-card" href={postUrl(post)}>
-                <div class="post-card-media">
-                  {post.data.cover_image ? (
-                    <img src={post.data.cover_image} alt="" width="640" height="360" loading="lazy" />
-                  ) : (
-                    <div class="post-card-fallback" aria-hidden="true">홈</div>
-                  )}
-                </div>
-                <div class="post-card-body">
-                  <span class="post-card-tag">{post.data.tags[0] || "가이드"}</span>
-                  <h2>{post.data.title}</h2>
-                  <p class="post-card-excerpt">{post.data.description}</p>
-                  <div class="post-card-author">
-                    <span class="post-card-avatar" aria-hidden="true">홈</span>
-                    <div>
-                      <strong>{site.name}</strong>
-                      <time datetime={post.data.date.toISOString().slice(0, 10)}>
-                        {formatDate(post.data.date)}
-                      </time>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </li>
+          highlights.map((h) => (
+            <article class="home-highlight">
+              <h2>{h.title}</h2>
+              <p>{h.text}</p>
+            </article>
           ))
         }
-      </ul>
+      </div>
     </section>
 
-    {
-      taxPosts.length > 0 && (
-        <section class="container home-section">
-          <header class="category-head">
-            <p class="section-eyebrow">본체</p>
-            <h2>세금·지원금 가이드</h2>
-            <p class="category-lead">홈택스·연말정산·신고 실무 글</p>
-          </header>
-          <ul class="post-list-simple">
-            {taxPosts.map((post) => (
+    <section class="section" id="featured">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-eyebrow">추천</p>
+          <h2>세금 가이드 핵심 글</h2>
+          <p>검색으로 가장 많이 찾는 실무 글을 먼저 모아 두었습니다.</p>
+        </div>
+        <ul class="post-grid">
+          {
+            featured.map((post) => (
               <li>
-                <a href={postUrl(post)}>
-                  <span>{post.data.title}</span>
-                  <time datetime={post.data.date.toISOString().slice(0, 10)}>
-                    {formatDate(post.data.date)}
-                  </time>
+                <a class="post-card" href={postUrl(post)}>
+                  <div class="post-card-media">
+                    {post.data.cover_image ? (
+                      <img
+                        src={post.data.cover_image}
+                        alt=""
+                        width="640"
+                        height="360"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="post-card-fallback" aria-hidden="true">홈</div>
+                    )}
+                  </div>
+                  <div class="post-card-body">
+                    <span class="post-card-tag">{post.data.tags[0] || "홈택스"}</span>
+                    <h2>{post.data.title}</h2>
+                    <p class="post-card-excerpt">{post.data.description}</p>
+                    <div class="post-card-author">
+                      <span class="post-card-avatar" aria-hidden="true">홈</span>
+                      <div>
+                        <strong>{site.name}</strong>
+                        <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                          {formatDate(post.data.date)}
+                        </time>
+                      </div>
+                    </div>
+                  </div>
                 </a>
               </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
+            ))
+          }
+        </ul>
+        <p class="home-more">
+          <a href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드 전체 보기 →</a>
+        </p>
+      </div>
+    </section>
 
-    {
-      gunPosts.length > 0 && (
-        <section class="container home-section">
-          <header class="category-head">
-            <p class="section-eyebrow">자산</p>
-            <h2>군마트 위치·영업시간</h2>
-            <p class="category-lead">기존 검색 유입용 정보 페이지 (별도 관리)</p>
-          </header>
-          <ul class="post-list-simple">
-            {gunPosts.map((post) => (
-              <li>
-                <a href={postUrl(post)}>
-                  <span>{post.data.title}</span>
-                  <time datetime={post.data.date.toISOString().slice(0, 10)}>
-                    {formatDate(post.data.date)}
-                  </time>
-                </a>
-              </li>
-            ))}
+    <section class="section home-split">
+      <div class="container home-split-grid">
+        <div>
+          <div class="section-head">
+            <p class="section-eyebrow">최신</p>
+            <h2>방금 업데이트된 글</h2>
+          </div>
+          <ul class="home-feed">
+            {
+              latestTax.map((post) => (
+                <li>
+                  <a href={postUrl(post)}>
+                    <span class="home-feed-tag">{post.data.tags[0] || "홈택스"}</span>
+                    <span class="home-feed-title">{post.data.title}</span>
+                    <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                      {formatDate(post.data.date)}
+                    </time>
+                  </a>
+                </li>
+              ))
+            }
           </ul>
-        </section>
-      )
-    }
+        </div>
+        <div>
+          <div class="section-head">
+            <p class="section-eyebrow">참고 자산</p>
+            <h2>군마트 위치 정보</h2>
+            <p>기존 검색 유입용으로 별도 관리하는 페이지입니다.</p>
+          </div>
+          <ul class="home-feed home-feed-muted">
+            {
+              latestGun.map((post) => (
+                <li>
+                  <a href={postUrl(post)}>
+                    <span class="home-feed-tag">군마트</span>
+                    <span class="home-feed-title">{post.data.title}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="home-more">
+            <a href="/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/">군마트 목록 →</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section home-cta">
+      <div class="container home-cta-box">
+        <div>
+          <p class="section-eyebrow">시작하기</p>
+          <h2>지금 필요한 세금 정보부터</h2>
+          <p>복잡한 용어 대신, 실제로 클릭하는 순서와 주의점만 담았습니다.</p>
+        </div>
+        <a class="btn btn-primary" href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">가이드 보러가기</a>
+      </div>
+    </section>
   </main>
   <Footer />
 </Layout>
 
 <style>
   .home-hero {
-    padding: 4rem 0 2rem;
+    position: relative;
+    padding: 7.5rem 0 3.5rem;
+    overflow: hidden;
+  }
+  .home-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(900px 420px at 12% 10%, rgba(12, 110, 107, 0.22), transparent 60%),
+      radial-gradient(700px 380px at 88% 0%, rgba(26, 111, 181, 0.16), transparent 55%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 70%);
+    pointer-events: none;
+  }
+  .home-hero-grid {
+    position: relative;
+    display: grid;
+    gap: 2rem;
+    align-items: stretch;
+  }
+  @media (min-width: 900px) {
+    .home-hero-grid {
+      grid-template-columns: 1.35fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+  }
+  .home-brand {
+    display: block;
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--brand);
+    line-height: 1.15;
+    margin-bottom: 0.55rem;
+  }
+  .home-headline {
+    display: block;
+    font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1.35;
   }
   .home-hero h1 {
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    margin: 0.35rem 0 0.75rem;
+    margin: 0 0 1rem;
   }
-  .home-lead {
-    max-width: 40rem;
-    color: var(--muted, #555);
-    line-height: 1.6;
+  .home-hero .hero-lead {
+    max-width: 36rem;
   }
-  .home-cta-row {
+  .home-hero-panel {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.25rem 1.35rem;
+    backdrop-filter: blur(8px);
+  }
+  .home-panel-label {
+    margin: 0 0 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .home-topic-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .home-topic-list a {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.85rem 0.95rem;
+    border-radius: 0.9rem;
+    background: var(--brand-soft);
+    transition: transform 0.18s ease, background 0.18s ease;
+  }
+  .home-topic-list a:hover {
+    transform: translateY(-1px);
+    background: #d8efed;
+  }
+  .home-topic-list strong {
+    font-size: 1rem;
+  }
+  .home-topic-list span {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .home-highlights {
+    padding-top: 0.5rem;
+  }
+  .home-highlight-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 800px) {
+    .home-highlight-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .home-highlight {
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.35rem 1.4rem;
+  }
+  .home-highlight h2 {
+    margin: 0 0 0.45rem;
+    font-size: 1.15rem;
+  }
+  .home-highlight p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .home-more {
+    margin: 1.5rem 0 0;
+    text-align: right;
+  }
+  .home-more a {
+    color: var(--brand-dark);
+    font-weight: 700;
+  }
+  .post-card h3 {
+    margin: 0.35rem 0;
+    font-size: 1.15rem;
+    line-height: 1.4;
+  }
+  .home-split-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 900px) {
+    .home-split-grid {
+      grid-template-columns: 1.3fr 1fr;
+      gap: 3rem;
+    }
+  }
+  .home-feed {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .home-feed a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .home-feed-muted a {
+    grid-template-columns: auto 1fr;
+  }
+  .home-feed-tag {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+    background: var(--brand-soft);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.4rem;
+  }
+  .home-feed-title {
+    font-weight: 600;
+  }
+  .home-feed time {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .home-cta-box {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-  .home-section {
-    padding: 2rem 0 3rem;
-  }
-  .post-list-simple {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.65rem;
-  }
-  .post-list-simple a {
-    display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 0.85rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    text-decoration: none;
-    color: inherit;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 2rem;
+    border-radius: calc(var(--radius) + 0.25rem);
+    background: linear-gradient(135deg, #0c6e6b, #1a6fb5);
+    color: #fff;
   }
-  .post-list-simple time {
-    flex-shrink: 0;
-    color: var(--muted, #777);
-    font-size: 0.9rem;
+  .home-cta-box .section-eyebrow {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .home-cta-box h2 {
+    margin: 0.25rem 0 0.4rem;
+    color: #fff;
+  }
+  .home-cta-box p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .home-cta-box .btn-primary {
+    background: #fff;
+    color: var(--brand-dark);
   }
 </style>
