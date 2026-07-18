@@ -1,0 +1,8 @@
+---
+import { hasHeadScript, getAdsenseConfig } from "../utils/adsense";
+
+const config = getAdsenseConfig();
+const script = hasHeadScript(config) ? config.head_script.trim() : "";
+---
+
+{script && <Fragment set:html={script} />}

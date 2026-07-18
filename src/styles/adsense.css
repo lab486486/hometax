@@ -1,0 +1,47 @@
+.ad-slot {
+  margin: 1.5rem auto;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+.ad-slot-display {
+  margin: 0 0 2rem;
+}
+
+.ad-slot-display-above-title {
+  margin: 0 0 1.25rem;
+}
+
+.ad-slot-display-before-content {
+  margin: 0 0 2rem;
+}
+
+.ad-slot-inarticle {
+  margin: 2rem 0;
+}
+
+.memori-infeed-ad {
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  justify-content: center;
+}
+
+.memori-infeed-ad .ad-slot-infeed {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.post-grid-ad {
+  grid-column: 1 / -1;
+  list-style: none;
+}
+
+.post-grid-ad .ad-slot-infeed {
+  margin: 0;
+}
+
+.ad-slot-multiplex {
+  margin: 2.5rem 0 1rem;
+}

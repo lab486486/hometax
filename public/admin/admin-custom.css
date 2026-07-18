@@ -1,0 +1,348 @@
+#nc-root .adsense-toggle-host {
+  display: block;
+  box-sizing: border-box;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+#nc-root .adsense-toggle-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0;
+  padding: 14px 4px 10px;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #31343d;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.4;
+  cursor: default;
+}
+
+#nc-root li:has(.adsense-toggle-host),
+#nc-root div:has(> .adsense-toggle-host) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.adsense-toggle-main {
+  width: 100%;
+  min-height: 48px;
+  padding: 14px 0;
+  box-sizing: border-box;
+}
+
+.adsense-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.adsense-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.adsense-toggle-label {
+  flex: 0 0 auto;
+  font-weight: 400;
+  text-align: left;
+  color: inherit;
+}
+
+.adsense-switch {
+  position: relative;
+  display: inline-flex;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.adsense-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.adsense-switch-slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #c7c7cc;
+  transition: background 0.2s ease;
+}
+
+.adsense-switch-slider::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.adsense-toggle-input:checked + .adsense-switch-slider {
+  background: #2ea44f;
+}
+
+.adsense-toggle-input:checked + .adsense-switch-slider::before {
+  transform: translateX(20px);
+}
+
+.adsense-toggle-input:disabled + .adsense-switch-slider {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.adsense-toggle-status {
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #6b6b6b;
+  width: 100%;
+  text-align: left;
+}
+
+.adsense-toggle-hint {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #6b6b6b;
+}
+
+.adsense-toggle-status.is-error {
+  color: #cf222e;
+}
+
+.cms-admin-title {
+  color: #1565c0 !important;
+  font-weight: 600;
+  cursor: default;
+  user-select: none;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: center !important;
+  line-height: 1.2;
+}
+
+.cms-site-info-wrap {
+  display: block;
+  margin: 2px 0 10px;
+  padding-right: 12px;
+  box-sizing: border-box;
+}
+
+.cms-site-info-trigger {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 6px 0;
+  margin: 0;
+  color: #1a237e;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cms-site-info-trigger:hover {
+  color: #0d47a1;
+  text-decoration: underline;
+}
+
+.cms-site-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 4px 0 2px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.cms-site-info-panel[hidden] {
+  display: none !important;
+}
+
+.cms-site-info-url {
+  display: block;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #1a237e;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cms-site-info-url:hover {
+  text-decoration: underline;
+}
+
+#nc-root header .cms-admin-title,
+#nc-root [class*="AppHeader"] .cms-admin-title,
+#nc-root [class*="TopBar"] .cms-admin-title {
+  min-height: 100%;
+}
+
+.cms-site-home-wrap {
+  display: none !important;
+}
+
+.cms-collection-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.cms-collection-icon {
+  box-sizing: border-box;
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: none !important;
+  flex-shrink: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 0 !important;
+  color: inherit;
+}
+
+.cms-collection-icon svg {
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0;
+}
+
+#nc-root aside .cms-collection-icon,
+#nc-root [class*="Sidebar"] .cms-collection-icon,
+#nc-root .cms-collection-link > .cms-collection-icon {
+  display: inline-flex !important;
+}
+
+/* Hide leftover Decap icons; our svg lives inside .cms-collection-icon */
+#nc-root aside .cms-collection-link > svg,
+#nc-root [class*="Sidebar"] .cms-collection-link > svg,
+#nc-root .cms-collection-link > svg {
+  display: none !important;
+}
+
+/* Hide collection folder icon in list/entry page headers — not the markdown editor toolbar */
+#nc-root [class*="CollectionTop"] svg,
+#nc-root [class*="EditorContainer"] [class*="AppHeader"] svg[class*="icon"] {
+  display: none !important;
+}
+
+[data-cms-quick-add-hidden="1"] {
+  display: none !important;
+}
+
+.cms-quick-add-menu {
+  display: block !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 220px !important;
+  max-width: calc(100vw - 16px) !important;
+  min-width: 0 !important;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #c9cccf;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.12);
+}
+
+.cms-quick-add-menu[role="menu"] {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.cms-quick-add-menu[role="menu"] .cms-quick-add-row {
+  border: 1px solid #c9cccf;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.12);
+  overflow: hidden;
+  background: #fff;
+}
+
+.cms-quick-add-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.cms-quick-add-row .cms-quick-add-cell-link {
+  border-right: none;
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.cms-quick-add-row .cms-quick-add-cell-link:last-child {
+  border-bottom: none;
+}
+
+.cms-quick-add-cell-link {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  color: #31343d !important;
+  text-decoration: none !important;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.35;
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+  background: #fff;
+}
+
+.cms-quick-add-cell-link:hover {
+  background: #f3f5f9;
+  color: #1565c0 !important;
+}
+
+@media (max-width: 768px) {
+  .cms-quick-add-menu {
+    width: min(240px, calc(100vw - 12px)) !important;
+  }
+
+  .cms-quick-add-cell-link {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+}

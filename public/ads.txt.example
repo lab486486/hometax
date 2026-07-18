@@ -1,0 +1,5 @@
+# AdSense ads.txt — 이 파일은 예시입니다.
+# 실제 값은 Decap CMS → 애드센스 → ads.txt 에 입력하세요.
+# 빌드 시 dist/ads.txt 가 자동 생성됩니다.
+#
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

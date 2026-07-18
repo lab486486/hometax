@@ -1,0 +1,23 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# env
+.env
+.env.*
+!.env.example
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# wrangler
+.wrangler/
+
+# import artifacts
+scripts/import-report.json

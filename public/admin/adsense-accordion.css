@@ -1,0 +1,241 @@
+.adsense-accordion-card {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.adsense-accordion-chevron {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: #6b6b6b;
+  transition: transform 0.25s ease;
+}
+
+.adsense-accordion-card.is-open .adsense-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.adsense-accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease;
+  margin: 0 0 10px;
+}
+
+.adsense-accordion-panel.is-open {
+  grid-template-rows: 1fr;
+}
+
+.adsense-accordion-inner {
+  overflow: hidden;
+}
+
+.adsense-accordion-form {
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding: 16px 20px 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.adsense-accordion-panel.is-open + .adsense-accordion-card,
+.adsense-accordion-card.is-open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.adsense-accordion-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.adsense-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adsense-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #31343d;
+}
+
+.adsense-input,
+.adsense-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 14px;
+  color: #24292f;
+  background: #fff;
+}
+
+.adsense-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.adsense-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #31343d;
+  cursor: pointer;
+}
+
+.adsense-field-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #6b6b6b;
+}
+
+.adsense-accordion-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.adsense-btn {
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  background: #f6f8fa;
+  color: #24292f;
+}
+
+.adsense-btn-save {
+  background: #2ea44f;
+  border-color: #2ea44f;
+  color: #fff;
+}
+
+.adsense-btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adsense-btn-cancel:hover,
+.adsense-btn-save:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.adsense-accordion-status {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+.adsense-accordion-status.is-error {
+  color: #cf222e;
+}
+
+.adsense-accordion-loading {
+  margin: 0;
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+#nc-root .adsense-accordion-card--required {
+  background: #1a1a1a !important;
+  background-color: #1a1a1a !important;
+  color: #ffd600 !important;
+  border-color: #333 !important;
+}
+
+#nc-root .adsense-accordion-card--required:hover,
+#nc-root .adsense-accordion-card--required.is-open,
+#nc-root .adsense-accordion-card--required:focus,
+#nc-root .adsense-accordion-card--required:focus-visible {
+  background: #1a1a1a !important;
+  background-color: #1a1a1a !important;
+  color: #ffd600 !important;
+}
+
+#nc-root a.adsense-accordion-card--required .adsense-accordion-title,
+#nc-root a.adsense-accordion-card--required h2,
+#nc-root a.adsense-accordion-card--required h3,
+#nc-root a.adsense-accordion-card--required h4 {
+  color: #ffd600 !important;
+  -webkit-text-fill-color: #ffd600 !important;
+  margin: 0;
+}
+
+#nc-root a.adsense-accordion-card--required:hover .adsense-accordion-title,
+#nc-root a.adsense-accordion-card--required:hover h2,
+#nc-root a.adsense-accordion-card--required:hover h3,
+#nc-root a.adsense-accordion-card--required:hover h4,
+#nc-root a.adsense-accordion-card--required.is-open .adsense-accordion-title,
+#nc-root a.adsense-accordion-card--required.is-open h2,
+#nc-root a.adsense-accordion-card--required.is-open h3,
+#nc-root a.adsense-accordion-card--required.is-open h4 {
+  color: #ffd600 !important;
+  -webkit-text-fill-color: #ffd600 !important;
+}
+
+#nc-root .adsense-accordion-card--required .adsense-accordion-chevron {
+  color: #ffd600 !important;
+  -webkit-text-fill-color: #ffd600 !important;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-accordion-form {
+  background: #1a1a1a !important;
+  border-color: #333 !important;
+  color: #fff !important;
+  box-shadow: none;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-label,
+#nc-root .adsense-accordion-panel--required .adsense-field-hint,
+#nc-root .adsense-accordion-panel--required .adsense-check,
+#nc-root .adsense-accordion-panel--required .adsense-check span,
+#nc-root .adsense-accordion-panel--required .adsense-accordion-loading,
+#nc-root .adsense-accordion-panel--required .adsense-accordion-status {
+  color: #fff !important;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-accordion-status.is-error {
+  color: #ff8a8a !important;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-input,
+#nc-root .adsense-accordion-panel--required .adsense-textarea {
+  background: #2d2d2d !important;
+  border-color: #555 !important;
+  color: #fff !important;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-input::placeholder,
+#nc-root .adsense-accordion-panel--required .adsense-textarea::placeholder {
+  color: #bdbdbd !important;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-btn {
+  background: #3a3a3a !important;
+  border-color: #555 !important;
+  color: #fff !important;
+}
+
+#nc-root .adsense-accordion-panel--required .adsense-btn-save {
+  background: #2ea44f !important;
+  border-color: #2ea44f !important;
+  color: #fff !important;
+}

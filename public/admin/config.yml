@@ -1,0 +1,300 @@
+# Decap CMS — hometax.me
+# GitHub OAuth: Pages secrets GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET
+
+backend:
+  name: github
+  repo: lab486486/hometax
+  branch: main
+  base_url: https://hometax.me
+  auth_endpoint: api/oauth/auth
+  auth_scope: repo
+
+media_library:
+  name: r2
+  config:
+    upload_url: /api/upload
+    public_base_url: ""
+
+local_backend: false
+
+media_folder: ""
+public_folder: ""
+
+slug:
+  encoding: unicode
+  clean_accents: true
+
+x-blog-fields: &blog_fields
+  - { label: 제목, name: title, widget: string }
+  - label: 퍼머링크 (슬러그)
+    name: slug
+    widget: string
+    required: true
+    hint: "글 URL입니다. 예: 블로그-소제목-짓는-방법 → /블로그-소제목-짓는-방법/"
+  - { label: 날짜, name: date, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+  - { label: 설명, name: description, widget: text }
+  - { label: 태그, name: tags, widget: list, default: ["홈택스"], required: false, hint: "예: 홈택스 → /category/홈택스/" }
+  - { label: 커버 이미지, name: cover_image, widget: image, required: false }
+  - label: 본문
+    name: body
+    widget: markdown
+    hint: "쿠팡 박스: [coupang url=\"단축링크\" keyword=\"상품명\"]"
+
+collections:
+  - name: site
+    label: 사이트 설정
+    files:
+      - name: general
+        label: 사이트 상세 설정하기
+        file: src/data/site.json
+        format: json
+        fields:
+          - label: 사이트 제목
+            name: title
+            widget: string
+            hint: "상단 로고·브라우저 탭 제목에 표시됩니다."
+          - label: 사이트 주소
+            name: site_url
+            widget: string
+            hint: "이 주소를 변경해도 사이트 설정에는 영향이 없습니다."
+          - label: 카피라이트 이름
+            name: copyright_name
+            widget: string
+            hint: "하단 © 옆에 표시되는 이름입니다. 클릭하면 사이트 주소로 이동합니다."
+
+      - name: google_search_console
+        label: 구글 서치콘솔
+        file: src/data/site/google-search-console.json
+        format: json
+        fields:
+          - label: 소유권 확인 코드
+            name: code
+            widget: text
+            required: false
+            hint: "Search Console → HTML 태그 방식의 meta 태그 전체 또는 content 값을 입력하세요."
+
+      - name: naver_search_advisor
+        label: 네이버 서치어드바이저
+        file: src/data/site/naver-search-advisor.json
+        format: json
+        fields:
+          - label: 소유권 확인 코드
+            name: code
+            widget: text
+            required: false
+            hint: "서치어드바이저 → HTML 태그의 meta 태그 전체 또는 content 값을 입력하세요."
+
+      - name: bing_webmaster
+        label: 빙 웹마스터도구
+        file: src/data/site/bing-webmaster.json
+        format: json
+        fields:
+          - label: 소유권 확인 코드
+            name: code
+            widget: text
+            required: false
+            hint: "Bing Webmaster → meta 태그 전체 또는 content 값을 입력하세요."
+
+      - name: daum_webmaster
+        label: 다음 웹마스터 도구
+        file: src/data/site/daum-webmaster.json
+        format: json
+        fields:
+          - label: 소유권 확인 코드
+            name: code
+            widget: text
+            required: false
+            hint: "Daum 웹마스터 → meta 태그 전체 또는 content 값을 입력하세요."
+
+      - name: analytics
+        label: 애널리틱스
+        file: src/data/site/analytics.json
+        format: json
+        fields:
+          - label: 추적 코드
+            name: code
+            widget: text
+            required: false
+            hint: "Google Analytics gtag.js script 태그 전체 또는 측정 ID(G-XXXXXXXX)를 입력하세요."
+
+  - name: nav
+    label: 상단메뉴 설정
+    files:
+      - name: main
+        label: 상단메뉴 설정하기
+        file: src/data/nav.json
+        format: json
+        fields:
+          - label: 상단 메뉴
+            name: nav
+            widget: list
+            hint: "태그 유형은 글의 tags와 같아야 하며 /category/태그/ 로 연결됩니다."
+            fields:
+              - label: 메뉴 이름
+                name: label
+                widget: string
+              - label: 연결 유형
+                name: type
+                widget: select
+                options:
+                  - { label: "홈", value: "home" }
+                  - { label: "태그", value: "tag" }
+                  - { label: "직접URL", value: "url" }
+              - label: 태그/URL
+                name: value
+                widget: string
+                required: false
+                hint: "태그: 글에 입력한 태그 이름과 동일하게. 메뉴 이름과 달라도 됩니다. URL: https://... 전체 주소."
+
+  - name: adsense
+    label: 애드센스 설정
+    files:
+      - name: head_script
+        label: 애드센스 코드 입력
+        file: src/data/adsense/head-script.json
+        format: json
+        fields:
+          - label: 기본 script 코드
+            name: script
+            widget: text
+            required: false
+            hint: "AdSense → 코드 가져오기 → 사이트 전체 태그의 script를 붙여넣으세요. 모든 페이지 head에 삽입됩니다. 저장 후 1~3분 뒤 반영됩니다."
+
+      - name: ads_txt
+        label: ads.txt 입력
+        file: src/data/adsense/ads-txt.json
+        format: json
+        fields:
+          - label: ads.txt 한 줄
+            name: content
+            widget: string
+            required: false
+            hint: "AdSense → 사이트 → ads.txt 에서 복사한 한 줄. 예) google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0"
+
+      - name: display
+        label: 디스플레이 광고
+        file: src/data/adsense/display.json
+        format: json
+        fields:
+          - label: 광고 코드
+            name: code
+            widget: text
+            required: false
+            hint: "코드를 입력하고 표시 위치를 선택하면, 상단 광고 활성화가 켜진 상태에서 자동으로 노출됩니다."
+          - label: 제목 위
+            name: above_title
+            widget: boolean
+            default: false
+            hint: "글 제목(h1) 바로 위에 표시합니다."
+          - label: 본문 시작 전 (날짜·태그 아래)
+            name: before_content
+            widget: boolean
+            default: false
+            hint: "메타 정보 아래, 본문 마크다운 시작 전에 표시합니다."
+          - label: H2 소제목 다음
+            name: after_h2
+            widget: boolean
+            default: false
+          - label: H3 소제목 다음
+            name: after_h3
+            widget: boolean
+            default: false
+          - label: H4 소제목 다음
+            name: after_h4
+            widget: boolean
+            default: false
+            hint: "본문 안 소제목(##, ###, ####) 바로 아래에 표시합니다. 여러 개를 켜면 각 위치마다 삽입됩니다."
+
+      - name: infeed
+        label: 인피드 광고
+        file: src/data/adsense/infeed.json
+        format: json
+        fields:
+          - label: 광고 코드
+            name: code
+            widget: text
+            required: false
+            hint: "코드를 입력하면 상단 광고 활성화가 켜진 상태에서 카테고리(/category/...) 글 목록에 표시됩니다."
+          - label: 삽입 위치 (몇 번째 글 뒤)
+            name: position
+            widget: number
+            default: 2
+            min: 1
+            max: 20
+            hint: "카테고리 목록에서 N번째 글 카드 바로 아래에 표시됩니다. 2이면 두 번째 글 뒤."
+
+      - name: inarticle
+        label: 인아티클 광고
+        file: src/data/adsense/inarticle.json
+        format: json
+        fields:
+          - label: 광고 코드
+            name: code
+            widget: text
+            required: false
+            hint: "코드를 입력하면 상단 광고 활성화가 켜진 상태에서 본문 안에 표시됩니다."
+          - label: 최소 문단 수
+            name: min_paragraphs
+            widget: number
+            default: 6
+            min: 1
+            max: 50
+            hint: "본문 문단이 이 개수 이상일 때만 광고가 표시됩니다. 짧은 글에는 광고가 나오지 않습니다."
+          - label: 삽입 위치 (몇 번째 문단 아래)
+            name: insert_after_paragraph
+            widget: number
+            default: 3
+            min: 1
+            max: 50
+            hint: "조건을 만족하면 해당 문단 바로 아래에 광고 1개만 삽입됩니다. 기본값: 6문단 이상일 때 3번째 문단 아래."
+
+      - name: multiplex
+        label: 멀티플렉스 광고
+        file: src/data/adsense/multiplex.json
+        format: json
+        fields:
+          - label: 광고 코드
+            name: code
+            widget: text
+            required: false
+            hint: "코드를 입력하면 상단 광고 활성화가 켜진 상태에서 글 본문 맨 아래에 표시됩니다."
+
+  - name: blog
+    label: 세금 가이드 (기존)
+    label_singular: 글
+    folder: src/content/blog
+    create: false
+    slug: "{{fields.slug}}"
+    extension: md
+    format: frontmatter
+    fields: *blog_fields
+
+  - name: blog_new
+    label: 세금 가이드 새 글
+    label_singular: 글
+    folder: src/content/blog
+    create: true
+    slug: "{{fields.slug}}"
+    extension: md
+    format: frontmatter
+    fields: *blog_fields
+
+  - name: gunmart
+    label: 군마트 (자산)
+    label_singular: 글
+    folder: src/content/gunmart
+    create: false
+    slug: "{{fields.slug}}"
+    extension: md
+    format: frontmatter
+    fields: *blog_fields
+
+  - name: gunmart_new
+    label: 군마트 새 글
+    label_singular: 글
+    folder: src/content/gunmart
+    create: true
+    slug: "{{fields.slug}}"
+    extension: md
+    format: frontmatter
+    fields: *blog_fields

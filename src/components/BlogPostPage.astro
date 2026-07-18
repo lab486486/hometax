@@ -1,0 +1,133 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import AdSlot from "./AdSlot.astro";
+import { site } from "../site.config";
+import { absoluteAssetUrl, formatDate, type Post } from "../utils/posts";
+import { renderPostHtml } from "../lib/render-post";
+import {
+  getAdsenseConfig,
+  displayAboveTitle,
+  displayBeforeContent,
+  hasMultiplexAd,
+} from "../utils/adsense";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const html = await renderPostHtml(post.body || "");
+const dateIso = post.data.date.toISOString().split("T")[0];
+const ogImage = absoluteAssetUrl(post.data.cover_image, site.baseUrl);
+const tag = post.data.tags[0];
+const adsense = getAdsenseConfig();
+const showDisplayAboveTitle = displayAboveTitle(adsense);
+const showDisplayBeforeContent = displayBeforeContent(adsense);
+const showMultiplex = hasMultiplexAd(adsense);
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  solidHeader
+  ogType="article"
+  ogImage={ogImage}
+  articlePublishedTime={post.data.date.toISOString()}
+>
+  <Header />
+  <main id="main" class="post-page">
+    <article class="container post-article" itemscope itemtype="https://schema.org/Article">
+      {
+        showDisplayAboveTitle && (
+          <AdSlot html={adsense.display.code} class="ad-slot-display ad-slot-display-above-title" />
+        )
+      }
+      <header class="post-header">
+        {
+          tag && (
+            <p class="section-eyebrow">
+              <a href={`/category/${encodeURIComponent(tag.toLowerCase())}/`}>{tag}</a>
+            </p>
+          )
+        }
+        <h1 itemprop="headline">{post.data.title}</h1>
+        <p class="post-meta">
+          <time datetime={dateIso} itemprop="datePublished">
+            {formatDate(post.data.date)}
+          </time>
+        </p>
+      </header>
+      {
+        showDisplayBeforeContent && (
+          <AdSlot html={adsense.display.code} class="ad-slot-display ad-slot-display-before-content" />
+        )
+      }
+      <div class="post-content" itemprop="articleBody" set:html={html} />
+      {
+        showMultiplex && (
+          <AdSlot html={adsense.multiplex.code} class="ad-slot-multiplex" />
+        )
+      }
+    </article>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  document.querySelectorAll(".lite-yt").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
+      if (!id) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.title = btn.getAttribute("aria-label") || "YouTube video";
+      iframe.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      iframe.loading = "eager";
+      iframe.className = "lite-yt-iframe";
+      btn.replaceWith(iframe);
+    });
+  });
+
+  async function hydrateCoupangBoxes() {
+    const boxes = document.querySelectorAll(".cp-box-v5[data-coupang-url]");
+    for (const box of boxes) {
+      const el = box as HTMLElement;
+      const url = el.dataset.coupangUrl || "";
+      const keyword = el.dataset.coupangKeyword || "";
+      if (!url) continue;
+      try {
+        const res = await fetch("/api/coupang", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url, keyword }),
+        });
+        if (!res.ok) continue;
+        const data = await res.json();
+        const titleEl = el.querySelector(".cp-title");
+        const descEl = el.querySelector(".cp-desc");
+        const img = el.querySelector("img");
+        const btn = el.querySelector(".cp-btn");
+        if (titleEl && data.title) {
+          titleEl.textContent = data.title;
+          titleEl.setAttribute("title", data.title);
+        }
+        if (descEl && data.description) {
+          descEl.textContent = data.description;
+          descEl.setAttribute("title", data.description);
+        }
+        if (img && data.image) {
+          img.src = data.image;
+          if (data.title) img.alt = data.title;
+        }
+        if (btn instanceof HTMLAnchorElement && data.url) btn.href = data.url;
+      } catch {
+        /* keep placeholder */
+      }
+    }
+  }
+  hydrateCoupangBoxes();
+</script>

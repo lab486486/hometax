@@ -1,0 +1,17 @@
+---
+import { getSiteSettings } from "../utils/site-settings";
+
+const year = new Date().getFullYear();
+const settings = getSiteSettings();
+---
+
+<footer class="site-footer">
+  <div class="container footer-row">
+    <p>© {year} {settings.copyright_name}</p>
+    <div class="footer-links">
+      <a href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드</a>
+      <a href="/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/">군마트</a>
+      <a class="footer-admin" href="/admin/" aria-label="관리자 페이지">·</a>
+    </div>
+  </div>
+</footer>

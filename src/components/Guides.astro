@@ -1,0 +1,72 @@
+---
+import { media, site } from "../site.config";
+
+const guides = [
+  {
+    title: "월 4,900원의 기적",
+    text: "스타벅스 한 잔 값이면 충분합니다. 케미클라우드 가입부터 셋팅까지 초보자도 따라만 하면 완성됩니다.",
+    icon: "images/icon-chemi.webp",
+    href: site.chemicloud,
+    cta: "호스팅 시작",
+    external: true,
+  },
+  {
+    title: "티스토리 탈출하기",
+    text: "광고 제한과 자체 규제에서 벗어나, 내 콘텐츠를 안전하게 지키며 워드프레스로 이사하는 방법을 정리했습니다.",
+    icon: "images/icon-wordpress.webp",
+    href: site.ebook,
+    cta: "이전 가이드",
+  },
+  {
+    title: "블로그스팟 갈아타기",
+    text: "2차 도메인은 그대로, 검색 노출(SEO)은 더 강하게. 데이터를 워드프레스로 옮기는 실전 노하우입니다.",
+    icon: "images/icon-blogspot.webp",
+    href: site.ebook,
+    cta: "이전 가이드",
+  },
+  {
+    title: "워드프레스 특강",
+    text: "무작정 쓰기 전에 알아야 할 구조와 전략. 6강으로 최단기간 애드센스 승인 로드맵을 제시합니다.",
+    icon: "images/icon-youtube.webp",
+    href: site.lecture,
+    cta: "특강 보기",
+  },
+];
+---
+
+<section class="section" id="guides">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-eyebrow">Guides</p>
+      <h2>지금 필요한 가이드만 모았습니다</h2>
+      <p>호스팅 선택부터 플랫폼 이전, 승인 전략까지 — 목적에 맞는 길만 골라 가세요.</p>
+    </div>
+
+    <div class="feature-grid">
+      {
+        guides.map((g) => (
+          <article class="feature">
+            <div class="feature-icon">
+              <img
+                src={media(g.icon)}
+                alt=""
+                width="82"
+                height="82"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <h3>{g.title}</h3>
+            <p>{g.text}</p>
+            <a
+              href={g.href}
+              {...(g.external ? { rel: "noopener noreferrer" } : {})}
+            >
+              {g.cta} →
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

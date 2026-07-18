@@ -1,0 +1,96 @@
+.adsense-toggle-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 6px 4px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: #31343d;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: none;
+  cursor: default;
+}
+
+.adsense-toggle-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 24px;
+}
+
+.adsense-toggle-label {
+  flex: 1;
+  font-weight: 600;
+  color: inherit;
+}
+
+.adsense-switch {
+  position: relative;
+  display: inline-flex;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.adsense-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.adsense-switch-slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #c7c7cc;
+  transition: background 0.2s ease;
+}
+
+.adsense-switch-slider::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.adsense-toggle-input:checked + .adsense-switch-slider {
+  background: #2ea44f;
+}
+
+.adsense-toggle-input:checked + .adsense-switch-slider::before {
+  transform: translateX(20px);
+}
+
+.adsense-toggle-input:disabled + .adsense-switch-slider {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.adsense-toggle-status {
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #6b6b6b;
+  width: 100%;
+}
+
+.adsense-toggle-status.is-error {
+  color: #cf222e;
+}

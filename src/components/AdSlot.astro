@@ -1,0 +1,11 @@
+---
+interface Props {
+  html?: string;
+  class?: string;
+}
+
+const { html, class: className } = Astro.props;
+const markup = html?.trim() ?? "";
+---
+
+{markup && <div class:list={["ad-slot", className]} set:html={markup} />}

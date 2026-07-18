@@ -1,0 +1,355 @@
+body.cms-shortlinks-page {
+  margin: 0;
+  min-height: 100vh;
+  background: #f2f5f7;
+}
+
+#nc-root aside a.cms-shortlinks-nav,
+#nc-root [class*="Sidebar"] a.cms-shortlinks-nav,
+a.cms-shortlinks-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  text-decoration: none !important;
+  color: inherit;
+  cursor: pointer;
+}
+
+.cms-shortlinks-label {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.cms-shortlinks-external {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  opacity: 0.55;
+  color: inherit;
+  line-height: 0;
+}
+
+.cms-shortlinks-external svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.cms-shortlinks-nav:hover .cms-shortlinks-external {
+  opacity: 0.9;
+}
+
+.cms-shortlinks-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.cms-shortlinks-top .cms-shortlinks-head {
+  margin-bottom: 0;
+}
+
+.cms-shortlinks-back {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+  padding-top: 8px;
+}
+
+.cms-shortlinks-back:hover {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+.cms-shortlinks-pane {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 72rem;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 28px 32px 48px;
+  background: #f2f5f7;
+  color: #31343d;
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.cms-shortlinks-pane * {
+  box-sizing: border-box;
+}
+
+.cms-shortlinks-head {
+  margin-bottom: 18px;
+}
+
+.cms-shortlinks-head h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1e2530;
+}
+
+.cms-shortlinks-head p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.cms-shortlinks-card {
+  background: #fff;
+  border: 1px solid #d5dbe3;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+}
+
+.cms-shortlinks-form-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cms-shortlinks-form-head strong {
+  font-size: 15px;
+}
+
+.cms-shortlinks-cancel {
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cms-shortlinks-cancel:hover {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+.cms-shortlinks-form {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 900px) {
+  .cms-shortlinks-form {
+    grid-template-columns: 11rem 1fr 9rem auto;
+    align-items: end;
+  }
+}
+
+.cms-shortlinks-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.cms-shortlinks-form input {
+  min-height: 38px;
+  width: 100%;
+  border: 1px solid #d5dbe3;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font: inherit;
+  color: #31343d;
+  background: #fff;
+}
+
+.cms-shortlinks-form input[readonly] {
+  background: #f3f5f8;
+  color: #6b7280;
+}
+
+.cms-shortlinks-btn {
+  min-height: 38px;
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1565c0;
+  color: #fff;
+}
+
+.cms-shortlinks-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cms-shortlinks-btn.ghost {
+  background: #fff;
+  color: #31343d;
+  border: 1px solid #d5dbe3;
+}
+
+.cms-shortlinks-btn.ok {
+  background: #0c6e6b;
+}
+
+.cms-shortlinks-btn.danger {
+  background: #fff;
+  color: #b42318;
+  border: 1px solid #ffcdc7;
+}
+
+.cms-shortlinks-hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.cms-shortlinks-status {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #1565c0;
+}
+
+.cms-shortlinks-status.is-error {
+  color: #b42318;
+}
+
+.cms-shortlinks-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.cms-shortlinks-table th,
+.cms-shortlinks-table td {
+  border-top: 1px solid #e5e9ef;
+  padding: 10px 6px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.cms-shortlinks-table th {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.cms-shortlinks-table th.slug,
+.cms-shortlinks-table td.slug {
+  width: 8.5rem;
+}
+
+.cms-shortlinks-table th.status,
+.cms-shortlinks-table td.status {
+  width: 4.5rem;
+}
+
+.cms-shortlinks-table th.note,
+.cms-shortlinks-table td.note {
+  width: 8rem;
+}
+
+.cms-shortlinks-table th.actions,
+.cms-shortlinks-table td.actions {
+  width: 15.5rem;
+}
+
+.cms-shortlinks-table td.url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 0;
+}
+
+.cms-shortlinks-table td.url a {
+  color: #1565c0;
+  text-decoration: none;
+}
+
+.cms-shortlinks-table td.note {
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cms-shortlinks-table .row-off {
+  background: #fafbfc;
+}
+
+.cms-shortlinks-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.cms-shortlinks-actions .cms-shortlinks-btn {
+  min-height: 32px;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.cms-shortlinks-table code {
+  background: #eef5f4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.cms-shortlinks-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.cms-shortlinks-badge.on {
+  background: #e6f4f3;
+  color: #085552;
+}
+
+.cms-shortlinks-badge.off {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+@media (max-width: 900px) {
+  .cms-shortlinks-pane {
+    padding: 18px 14px 36px;
+  }
+
+  .cms-shortlinks-table {
+    table-layout: auto;
+  }
+
+  .cms-shortlinks-table td.url,
+  .cms-shortlinks-table td.note {
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  .cms-shortlinks-actions {
+    flex-wrap: wrap;
+  }
+}

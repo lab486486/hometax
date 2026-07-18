@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Manager | hometax.me</title>
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
+    <link href="/admin/adsense-accordion.css?v=1" rel="stylesheet" />
+    <link href="/admin/admin-custom.css?v=2" rel="stylesheet" />
+    <link href="/admin/shortlinks.css?v=5" rel="stylesheet" />
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <script>
+      window.CMS_MANUAL_INIT = true;
+      (function () {
+        if (window.__decapDomPatch) return;
+        window.__decapDomPatch = true;
+        var origRemove = Node.prototype.removeChild;
+        Node.prototype.removeChild = function (child) {
+          if (child && child.parentNode === this) {
+            return origRemove.call(this, child);
+          }
+          return child;
+        };
+        var origInsert = Node.prototype.insertBefore;
+        Node.prototype.insertBefore = function (newNode, ref) {
+          try {
+            return origInsert.call(this, newNode, ref);
+          } catch (e) {
+            if (e.name === "NotFoundError") return this.appendChild(newNode);
+            throw e;
+          }
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
+    <script src="/admin/r2-media-library.js"></script>
+    <script src="/admin/adsense-github.js"></script>
+    <script src="/admin/cms-slug-field.js?v=1"></script>
+    <script>
+      CMS.registerMediaLibrary(window.R2MediaLibrary);
+      CMS.init();
+    </script>
+    <script src="/admin/adsense-toggle.js"></script>
+    <script src="/admin/adsense-accordion.js"></script>
+    <script src="/admin/site-accordion.js?v=1"></script>
+    <script src="/admin/cms-routing.js"></script>
+    <script src="/admin/cms-branding.js?v=4"></script>
+    <script src="/admin/cms-quick-links.js?v=1"></script>
+    <script src="/admin/blog-new-redirect.js"></script>
+    <script src="/admin/shortlinks.js?v=5"></script>
+  </body>
+</html>

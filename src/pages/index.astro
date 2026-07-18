@@ -1,0 +1,159 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { getAllPosts, getBlogPosts, getGunmartPosts, postUrl, formatDate } from "../utils/posts";
+import { site } from "../site.config";
+
+const posts = await getAllPosts();
+const taxPosts = (await getBlogPosts()).slice(0, 8);
+const gunPosts = (await getGunmartPosts()).slice(0, 6);
+const latest = posts.slice(0, 12);
+---
+
+<Layout solidHeader>
+  <Header />
+  <main id="main" class="home-page">
+    <section class="container home-hero">
+      <p class="section-eyebrow">hometax.me</p>
+      <h1>{site.name}</h1>
+      <p class="home-lead">{site.description}</p>
+      <div class="home-cta-row">
+        <a class="btn btn-primary" href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드</a>
+        <a class="btn btn-ghost" href="/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/">군마트 정보</a>
+      </div>
+    </section>
+
+    <section class="container home-section">
+      <header class="category-head">
+        <p class="section-eyebrow">최신글</p>
+        <h2>최근 업데이트</h2>
+      </header>
+      <ul class="post-grid">
+        {
+          latest.map((post) => (
+            <li>
+              <a class="post-card" href={postUrl(post)}>
+                <div class="post-card-media">
+                  {post.data.cover_image ? (
+                    <img src={post.data.cover_image} alt="" width="640" height="360" loading="lazy" />
+                  ) : (
+                    <div class="post-card-fallback" aria-hidden="true">홈</div>
+                  )}
+                </div>
+                <div class="post-card-body">
+                  <span class="post-card-tag">{post.data.tags[0] || "가이드"}</span>
+                  <h2>{post.data.title}</h2>
+                  <p class="post-card-excerpt">{post.data.description}</p>
+                  <div class="post-card-author">
+                    <span class="post-card-avatar" aria-hidden="true">홈</span>
+                    <div>
+                      <strong>{site.name}</strong>
+                      <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                        {formatDate(post.data.date)}
+                      </time>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      taxPosts.length > 0 && (
+        <section class="container home-section">
+          <header class="category-head">
+            <p class="section-eyebrow">본체</p>
+            <h2>세금·지원금 가이드</h2>
+            <p class="category-lead">홈택스·연말정산·신고 실무 글</p>
+          </header>
+          <ul class="post-list-simple">
+            {taxPosts.map((post) => (
+              <li>
+                <a href={postUrl(post)}>
+                  <span>{post.data.title}</span>
+                  <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                    {formatDate(post.data.date)}
+                  </time>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      gunPosts.length > 0 && (
+        <section class="container home-section">
+          <header class="category-head">
+            <p class="section-eyebrow">자산</p>
+            <h2>군마트 위치·영업시간</h2>
+            <p class="category-lead">기존 검색 유입용 정보 페이지 (별도 관리)</p>
+          </header>
+          <ul class="post-list-simple">
+            {gunPosts.map((post) => (
+              <li>
+                <a href={postUrl(post)}>
+                  <span>{post.data.title}</span>
+                  <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                    {formatDate(post.data.date)}
+                  </time>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .home-hero {
+    padding: 4rem 0 2rem;
+  }
+  .home-hero h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin: 0.35rem 0 0.75rem;
+  }
+  .home-lead {
+    max-width: 40rem;
+    color: var(--muted, #555);
+    line-height: 1.6;
+  }
+  .home-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .home-section {
+    padding: 2rem 0 3rem;
+  }
+  .post-list-simple {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .post-list-simple a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    color: inherit;
+  }
+  .post-list-simple time {
+    flex-shrink: 0;
+    color: var(--muted, #777);
+    font-size: 0.9rem;
+  }
+</style>

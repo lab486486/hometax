@@ -1,0 +1,86 @@
+---
+import { site } from "../site.config";
+import { getSiteSettings, resolveNavHref, isExternalHref } from "../utils/site-settings";
+
+const settings = getSiteSettings();
+const links = settings.nav.length
+  ? settings.nav.map((item) => {
+      const href = resolveNavHref(item);
+      return { href, label: item.label, external: isExternalHref(href) };
+    })
+  : [
+      { href: "/#about", label: "소개", external: false },
+      { href: "/#benefits", label: "회원 혜택", external: false },
+      { href: "/#guides", label: "가이드", external: false },
+      { href: "/category/seo/", label: "블로그", external: false },
+      { href: site.youtube, label: "유튜브", external: true },
+    ];
+---
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label={settings.title || site.title}>
+      <span class="brand-mark" aria-hidden="true">홈</span>
+      <span>{site.name}</span>
+    </a>
+
+    <nav class="nav-links" aria-label="주요 메뉴">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a class="nav-cta btn btn-primary btn-sm" href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">
+      세금 가이드
+    </a>
+
+    <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="mobile-panel" aria-label="메뉴 열기">
+      <span></span>
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="mobile-panel" id="mobile-panel" data-open="false" hidden>
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-link"
+            {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a class="btn btn-primary" href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById("menu-btn");
+  const panel = document.getElementById("mobile-panel");
+  if (btn && panel) {
+    const toggle = () => {
+      const open = panel.dataset.open !== "true";
+      panel.dataset.open = String(open);
+      panel.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "메뉴 닫기" : "메뉴 열기");
+    };
+    btn.addEventListener("click", toggle);
+    panel.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => {
+      panel.dataset.open = "false";
+      panel.hidden = true;
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-label", "메뉴 열기");
+    }));
+  }
+</script>

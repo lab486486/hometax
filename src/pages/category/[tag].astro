@@ -1,0 +1,125 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import AdSlot from "../../components/AdSlot.astro";
+import { getAllPosts, postUrl, formatDate } from "../../utils/posts";
+import { site } from "../../site.config";
+import { getAdsenseConfig, hasInfeedAd } from "../../utils/adsense";
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  const tags = new Set<string>();
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      tags.add(tag.toLowerCase());
+    }
+  }
+  return [...tags].map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const tagKey = (tag || "").toLowerCase();
+const posts = (await getAllPosts()).filter((p) =>
+  p.data.tags.some((t) => t.toLowerCase() === tagKey),
+);
+
+const categoryMeta: Record<string, { heading: string; description: string; label: string }> = {
+  홈택스: {
+    heading: "세금 가이드",
+    description: "홈택스·종합소득세·서류 발급 등 세금 실무 가이드",
+    label: "홈택스",
+  },
+  연말정산: {
+    heading: "연말정산",
+    description: "연말정산 자료제공동의, 공제, 환급 관련 안내",
+    label: "연말정산",
+  },
+  군마트: {
+    heading: "군마트",
+    description: "전국 군마트 위치·영업시간·전화번호 정보",
+    label: "군마트",
+  },
+  국군복지단: {
+    heading: "국군복지단",
+    description: "국군복지단·군 복지 관련 정보",
+    label: "국군복지단",
+  },
+};
+
+const meta = categoryMeta[tagKey] ?? {
+  heading: tag || tagKey,
+  description: `${site.name} ${tag || tagKey} 카테고리 글 목록입니다.`,
+  label: tag || tagKey,
+};
+const title = meta.heading;
+const description = meta.description;
+const adsense = getAdsenseConfig();
+const showInfeed = hasInfeedAd(adsense);
+const infeedPosition = Math.max(1, adsense.infeed.position ?? 2);
+---
+
+<Layout title={title} description={description} solidHeader>
+  <Header />
+  <main id="main" class="category-page">
+    <div class="container category-inner">
+      <header class="category-head">
+        <p class="section-eyebrow">카테고리</p>
+        <h1>{meta.heading}</h1>
+        <p class="category-lead">{meta.description}</p>
+      </header>
+
+      <ul class="post-grid">
+        {
+          posts.flatMap((post, index) => {
+            const tagLabel = post.data.tags[0] || meta.label;
+            const card = (
+              <li>
+                <a class="post-card" href={postUrl(post)}>
+                  <div class="post-card-media">
+                    {post.data.cover_image ? (
+                      <img
+                        src={post.data.cover_image}
+                        alt=""
+                        width="640"
+                        height="360"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="post-card-fallback" aria-hidden="true">홈</div>
+                    )}
+                  </div>
+                  <div class="post-card-body">
+                    <span class="post-card-tag">{tagLabel}</span>
+                    <h2>{post.data.title}</h2>
+                    <p class="post-card-excerpt">{post.data.description}</p>
+                    <div class="post-card-author">
+                      <span class="post-card-avatar" aria-hidden="true">홈</span>
+                      <div>
+                        <strong>{site.name}</strong>
+                        <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                          {formatDate(post.data.date)}
+                        </time>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            );
+
+            if (showInfeed && index + 1 === infeedPosition) {
+              return [
+                card,
+                <li class="post-grid-ad">
+                  <AdSlot html={adsense.infeed.code} class="ad-slot-infeed" />
+                </li>,
+              ];
+            }
+            return [card];
+          })
+        }
+      </ul>
+    </div>
+  </main>
+  <Footer />
+</Layout>

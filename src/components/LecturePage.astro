@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import LiteYouTube from "./LiteYouTube.astro";
+import { getAdjacent, getLecture } from "../data/lectures";
+
+interface Props {
+  slug: string;
+}
+
+const lecture = getLecture(Astro.props.slug)!;
+const { prev, next } = getAdjacent(lecture.slug);
+const pageTitle = `특강${lecture.id}. ${lecture.title}`;
+---
+
+<Layout title={pageTitle} description={lecture.summary} solidHeader noindex>
+  <Header />
+  <main id="main" class="lecture-detail">
+    <div class="container lecture-detail-inner">
+      <p class="section-eyebrow">
+        <a href="/free-lecture/">무료특강</a> · {lecture.id}강
+      </p>
+      <h1>{pageTitle}</h1>
+
+      <LiteYouTube
+        videoId={lecture.youtubeId}
+        title={pageTitle}
+        poster={`https://i.ytimg.com/vi/${lecture.youtubeId}/hqdefault.jpg`}
+      />
+
+      <div class="lecture-copy">
+        <h2>{lecture.title}</h2>
+        {lecture.body.map((p) => <p>{p}</p>)}
+      </div>
+
+      <nav class="lecture-nav" aria-label="강의 이동">
+        {
+          prev ? (
+            <a class="btn btn-secondary" href={`/${prev.slug}/`}>
+              ← {prev.id}강
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        <a class="btn btn-secondary" href="/free-lecture/">목록</a>
+        {
+          next ? (
+            <a class="btn btn-primary" href={`/${next.slug}/`}>
+              {next.id}강 →
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </div>
+  </main>
+  <Footer />
+</Layout>

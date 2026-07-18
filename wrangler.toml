@@ -1,0 +1,11 @@
+name = "hometax"
+compatibility_date = "2026-07-13"
+pages_build_output_dir = "dist"
+
+[[r2_buckets]]
+binding = "MEDIA_BUCKET"
+bucket_name = "hometax-media"
+
+[vars]
+R2_PUBLIC_BASE_URL = ""
+FORM_TO_EMAIL = "lab486486@gmail.com"

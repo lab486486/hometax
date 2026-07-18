@@ -1,0 +1,8 @@
+{
+  "nav": [
+    { "label": "세금 가이드", "type": "tag", "value": "홈택스" },
+    { "label": "연말정산", "type": "tag", "value": "연말정산" },
+    { "label": "군마트", "type": "tag", "value": "군마트" },
+    { "label": "국군복지단", "type": "tag", "value": "국군복지단" }
+  ]
+}
