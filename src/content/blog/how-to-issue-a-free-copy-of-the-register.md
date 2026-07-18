@@ -38,7 +38,7 @@ cover_image: "/images/wp/2023/06/28a.png"
 
 로그인을 하고나면 닥집 제공기능 3개가 보이는 화면으로 이동합니다. 여기서 중앙에 있는 표준계약서를 클릭하고 조회를 원하는 건물명, 주소를 검색하면 자동으로 정확한 주소가 입력됩니다.
 [![표준계약서](https://blogger.googleusercontent.com/img/a/AVvXsEjMQJR6yM1ceBFaJj_25lFw9lGlRh9ZG1_u5NlbA0jCNvnAp6PpIbDSLN90fWlaSdcYWnruFObPoQVbSqxXaFYs_zvDmMtW58vxXkL7j0xRCHgBP5-p25w0n6sIJ6KCB75gjWyWxa3SeJhqXkOoWqPSHuqdJDAt5J8aVxoyignArnfXiQmWBIRX1p9pSA=w400-h185)](https://blogger.googleusercontent.com/img/a/AVvXsEjMQJR6yM1ceBFaJj_25lFw9lGlRh9ZG1_u5NlbA0jCNvnAp6PpIbDSLN90fWlaSdcYWnruFObPoQVbSqxXaFYs_zvDmMtW58vxXkL7j0xRCHgBP5-p25w0n6sIJ6KCB75gjWyWxa3SeJhqXkOoWqPSHuqdJDAt5J8aVxoyignArnfXiQmWBIRX1p9pSA=s720)
-&nbsp;
+
 [![표준계약서 선택](https://blogger.googleusercontent.com/img/a/AVvXsEjt64qNOTq1tsbKF42OieLH-XjDqqym37GDM_ec6dlFya6DZQFTzFSsdxpGwDNpiOl0Nqk6H3DbfkyxNI_3Ibz29Ovl3Y728I59LoSxe_WBBUOSSazd8NEYxN1sKeSiQlalM3BEYzC5Qo67vdsTxntazoWLk_c9zh_Su3bfQ5AH-owcfdJeCwyRQc1vBA=w400-h180)](https://blogger.googleusercontent.com/img/a/AVvXsEjt64qNOTq1tsbKF42OieLH-XjDqqym37GDM_ec6dlFya6DZQFTzFSsdxpGwDNpiOl0Nqk6H3DbfkyxNI_3Ibz29Ovl3Y728I59LoSxe_WBBUOSSazd8NEYxN1sKeSiQlalM3BEYzC5Qo67vdsTxntazoWLk_c9zh_Su3bfQ5AH-owcfdJeCwyRQc1vBA=s720)
 그리고 하단의 문서작성 버튼을 누르면 부동산 매매 계약서가 하나 나오는데요! 만약 화면으로 넘어가지 않는다면 현재 무료열람 가능한 횟수가 1회가 맞는지 확인하시기 바랍니다.
 

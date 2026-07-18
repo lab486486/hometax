@@ -61,7 +61,6 @@ cover_image: "/images/wp/2023/06/25a.png"
 
 이제부터 변호사님이 칭찬해주신 내용증명서(실제 이름과 회사명은 수정)와 함께 작성방법에 대해 알아보겠습니다.
 [내용증명서 양식(구글 드라이브)](https://drive.google.com/file/d/1Awj6ylznt4lKZuKp9JKn6J-BNjYhz1Se/view?usp=sharing)
-&nbsp;
 
 ### 1. 수신자, 발신자, 제목 작성
 

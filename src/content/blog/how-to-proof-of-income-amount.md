@@ -65,7 +65,6 @@ cover_image: "/images/wp/2023/06/29a.png"
 
 다음은 과세기간 선택인데 몇년치 과세기간에 대해 출력할 것인지 기간을 선택해야 합니다. 보통 2년을 많이 선택하는데 신용대출, 보금자리론 등의 경우 최근 2개년 소득을 은행에서 확인합니다.
 [![과세기간](https://blogger.googleusercontent.com/img/a/AVvXsEjxhX5tobMoqGa3hC6tpzuexvovuLQmjNJy-SsAnnybJc4fFVW_zgbprGSu_KYmbC5DxW-1uZiVFzTUVgXL633aR4LCgHWvA2U3d42N9tLtN7YEUuGNJKtNdKsNeaOPpxWnR3sBR1VskOolVGhL--1LHI7kAgWBdk5HZHBP1ko_8k9snQQtYgRaFMsvFQ=w320-h91)](https://blogger.googleusercontent.com/img/a/AVvXsEjxhX5tobMoqGa3hC6tpzuexvovuLQmjNJy-SsAnnybJc4fFVW_zgbprGSu_KYmbC5DxW-1uZiVFzTUVgXL633aR4LCgHWvA2U3d42N9tLtN7YEUuGNJKtNdKsNeaOPpxWnR3sBR1VskOolVGhL--1LHI7kAgWBdk5HZHBP1ko_8k9snQQtYgRaFMsvFQ=s720)
-&nbsp;
 
 #### 2-3. 사용용도
 
@@ -78,8 +77,6 @@ cover_image: "/images/wp/2023/06/29a.png"
 대신 한도조회, 신용평가 등의 이유로 발급하는 것이라면 대출이 아닌 금융기관 제출용으로 선택하면 되구요!
 
 사실 큰 의미는 없지만 목적에 맞게 선택하는 것이 서류의 신뢰성을 높이는 방법 중 하나가 아닐까 싶습니다.
-
-&nbsp;
 
 #### 2-4. 제출처
 
@@ -102,8 +99,6 @@ cover_image: "/images/wp/2023/06/29a.png"
 - PC에서 출력(발급번호만 부여) : 프린트를 통해 인쇄(출력) 가능할때 사용
 - 팩스발송 : 소득금액증명원 팩스 발송하고자 할때 사용
 
-&nbsp;
-
 #### 2-6. 주민번호 및 주소 공개여부 선택
 
 - 주민번호 공개여부 : 비공개 시 주민등록번호 뒷자리
@@ -123,7 +118,6 @@ cover_image: "/images/wp/2023/06/29a.png"
 
 열람방법은 소득금액 증명원 옆의 번호나 처리완료 옆의 번호를 누르시면 됩니다. 참고로 수령방법 선택 시 열람을 체크해야 열람이 가능합니다.
 
-&nbsp;
 [![소액금액 증명서 저장](https://blogger.googleusercontent.com/img/a/AVvXsEgVIqGVF5Ws5Lbnzs5euf_u4O0k_bCGXx9NfOlCGuKH1beWP9HLNnMLOkOM1NDd3Ssvfcg1LbhhbsrUdymnLWJ41oRDaTfnbjd6zSwebxxaK1ycpQdp85uH7MLUDSQbscXD8TsaTBwKoOuthGq_isS-JcSKcfwW6b81yqQmyuw8n4o1ZXGY3kt4WA-vCg=w320-h310)](https://blogger.googleusercontent.com/img/a/AVvXsEgVIqGVF5Ws5Lbnzs5euf_u4O0k_bCGXx9NfOlCGuKH1beWP9HLNnMLOkOM1NDd3Ssvfcg1LbhhbsrUdymnLWJ41oRDaTfnbjd6zSwebxxaK1ycpQdp85uH7MLUDSQbscXD8TsaTBwKoOuthGq_isS-JcSKcfwW6b81yqQmyuw8n4o1ZXGY3kt4WA-vCg=s720)
 이렇게해서 소득금액 증명서(증명원) 인터넷발급 방법에 대해 알아봤습니다. 스마트폰 번호만으로 간편하게 로그인하여 소득금액 증명원을 발급받았습니다.
 

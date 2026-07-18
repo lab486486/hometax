@@ -1196,7 +1196,48 @@ body.solid-header .site-header {
 
 .post-content ul,
 .post-content ol {
-  padding-left: 1.25rem;
+  padding-left: 1.35rem;
+  margin: 0.85rem 0 1.25rem;
+}
+
+.post-content li {
+  margin: 0.35rem 0;
+  line-height: 1.6;
+}
+
+.post-content li > p {
+  margin: 0;
+}
+
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.post-content thead,
+.post-content tbody,
+.post-content tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.post-content th,
+.post-content td {
+  border: 1px solid var(--line);
+  padding: 0.65rem 0.75rem;
+  vertical-align: top;
+  word-break: keep-all;
+}
+
+.post-content th {
+  background: var(--brand-soft);
+  font-weight: 700;
+  text-align: left;
 }
 
 .category-inner {

@@ -9,186 +9,109 @@ cover_image: "/images/wp/2023/06/20a.png"
 ---
 # 2023 근로장려금 신청 기준과 자격요건
 
-
 과연 내 소득으로 근로장려금 신청이 가능할까? 라는 생각에 신청을 포기하시는 분들이 많은데요!
 가구유형에 따라 총소득기준금액이 달라지기 때문에 정확히 알아보는 것이 중요하겠습니다.
-
-&nbsp;
-
 ## 근로장려금 신청 기준
-
-
 
 #### 1. 가구 유형
 
-
-
 #### 2. 총 소득
-
-
 
 #### 3. 재산
 
-
 2023 근로장려금 신청 기준은 3가지 항목만 충족한다면 얼마든지 신청이 가능합니다.
 신청에 앞서 예외 조건이 한가지 있는데요! 바로 대한민국 국적을 보유하지 않은 분은 신청이 불가능합니다.
-&nbsp;
 하지만, 대한민국 국적을 가진 자와 혼인한 자, 대한민국 국적의 부양자녀가 있는 자는 신청이 가능합니다.
 결론은 대한민국과 연관이 있다면 신청 기준 3가지만 확인하면 됩니다.
-&nbsp;
-
 ### 1. 가구 유형
-
 
 첫번째 근로장려금 신청 기준은 가구 유형입니다.
 가구 유형에 따라 총 소득 조건이 달라지기 때문에 매우 중요한데 본인이 어떤 가구에 속하는지 아래 표를 통해 확인하겠습니다.
-&nbsp;
-
-<table style="table-layout: fixed; width: 100%;">   
+<table>
 <thead>
 <tr>
-<th style="text-align: center;">가구명칭</th>
-<th style="text-align: center;">가구 구성</th>
-</tr>
-</thead>
+<th>가구명칭</th>
+<th>가구 구성</th></tr></thead>
 <tbody>
 <tr>
-<td style="text-align: center;">단독가구</td>
-<td>배우자, 부양자녀, 70세 이상 직계존속이 모두 없는 가구</td>
-</tr>
+<td>단독가구</td>
+<td>배우자, 부양자녀, 70세 이상 직계존속이 모두 없는 가구</td></tr>
 <tr>
 <td>
 홑벌이 가구
 (외벌이 가구)</td>
 <td>배우자 또는 부양자녀, 70세 이상 직계존속이 있는 가구
-(배우자가 있다면 신청인 또는 배우자의 총 급여액 등이 3백만원 미만)</td>
-</tr>
+(배우자가 있다면 신청인 또는 배우자의 총 급여액 등이 3백만원 미만)</td></tr>
 <tr>
-<td style="text-align: center;">맞벌이 가구</td>
-<td>신청인과 배우자 각각의 총 급여액 등이 3백만원 이상인 가구</td>
-</tr>
-</tbody>
-</table>
-
+<td>맞벌이 가구</td>
+<td>신청인과 배우자 각각의 총 급여액 등이 3백만원 이상인 가구</td></tr></tbody></table>
 가구 유형의 기준일은 2021년 12월 31일 기준으로, 여기서 배우자란 법률상 배우자를 말하며 사실혼은 인정하지 않습니다.
 그리고 부양자녀는 18세 미만이며 입양자녀를 포함합니다.
-
 직계존속이란? 나를 중심으로 부모, 조부모 등 윗 세대를 의미
-
 주의사항으로 부양자녀와 70세 이상 직계존속의 연간 소득 금액 합계액은 100만원 이하여야 합니다.
 즉, 아르바이트 등을 통해서 소득이 연 100만원 이상 된다면 조건에 부합되지 않습니다.
-&nbsp;
 [근로장려금 신청 바로가기](https://www.gov.kr/main?a=AA020InfoCappViewApp&amp;HighCtgCD=A09002&amp;CappBizCD=12100000338&amp;tp_seq=)
-&nbsp;
-
 ### 2. 총 소득
 
-
 두번째 근로장려금 신청 기준은 총 소득입니다. 근로장려금은 근로를 장려하고, 실질적인 소득을 지원하는 근로연계형 소득지원 제도이기에 소득을 가장 중요하게 보고 있습니다.
-&nbsp;
-
-<table style="table-layout: fixed; width: 100%;">     
+<table>
 <thead>
 <tr>
-<th style="text-align: center;">구분</th>
-<th style="text-align: center;">단독가구</th>
-<th style="text-align: center;">홑벌이(외벌이)가구</th>
-<th style="text-align: center;">맞벌이 가구</th>
-</tr>
-</thead>
+<th>구분</th>
+<th>단독가구</th>
+<th>홑벌이(외벌이)가구</th>
+<th>맞벌이 가구</th></tr></thead>
 <tbody>
 <tr>
-<td style="text-align: center;">소득기준</td>
-<td style="text-align: center;">2,200만원</td>
-<td style="text-align: center;">3,200만원</td>
-<td style="text-align: center;">3,800만원</td>
-</tr>
-</tbody>
-</table>
-
+<td>소득기준</td>
+<td>2,200만원</td>
+<td>3,200만원</td>
+<td>3,800만원</td></tr></tbody></table>
 총 소득금액에 포함되는 사항은 신청자와 배우자의 소득을 모두 합한 금액으로 근로소득을 포함하여 사업소득, 이자/배당,연금, 기타 소득까지 포함됩니다.
-
 총 소득금액 : 근로소득 + 사업소득 + 종교인소득 + 이자/배당/연금 + 기타소득
-
-
 #### 1) 근로소득(총 급여액)
-
-
 
 #### 2) 사업소득(사업수입금액 x 업종별 조정률)
 
-
-
-
 #### 3) 종교인 소득(총 수입금액)
-
-
 
 #### 4) 이자/배당/연금(총 수입금액)
 
-
-
 #### 5) 기타소득(총 수입금액 - 필요경비)
 
-
-
-&nbsp;
-
-<table style="table-layout: fixed; width: 100%;">   
+<table>
 <thead>
 <tr>
-<th style="text-align: center;">업종구분</th>
-<th style="text-align: center;">조정률</th>
-</tr>
-</thead>
+<th>업종구분</th>
+<th>조정률</th></tr></thead>
 <tbody>
 <tr>
 <td>도매업</td>
-<td style="text-align: center;">20%</td>
-</tr>
+<td>20%</td></tr>
 <tr>
 <td>소매업, 자동차/부품 판매업, 부동산 매매업, 농임어업, 광업</td>
-<td style="text-align: center;">30%</td>
-</tr>
+<td>30%</td></tr>
 <tr>
 <td>음식점업, 제조업, 건설업, 전기/가스/증기/수도 사업</td>
-<td style="text-align: center;">45%</td>
-</tr>
+<td>45%</td></tr>
 <tr>
 <td>숙박업, 운수업, 금융보험업, 상품중개업, 출판/영상/방송통신/정보서비스업, 하수/폐기물처리, 원료/재생/환경복원업</td>
-<td style="text-align: center;">60%</td>
-</tr>
+<td>60%</td></tr>
 <tr>
 <td>서비스업(부동산, 전문과학기술, 사업시설관리, 사업지원, 교육, 보건, 사회복지, 예술, 스포츠, 여가, 수리 및 기타 개인)</td>
-<td style="text-align: center;">75%</td>
-</tr>
+<td>75%</td></tr>
 <tr>
 <td>부동산 임대업, 기타 임대업, 인적용역, 개인 가사 서비스</td>
-<td style="text-align: center;">90%</td>
-</tr>
-</tbody>
-</table>
-
+<td>90%</td></tr></tbody></table>
 [근로장려금 신청 바로가기](https://www.gov.kr/main?a=AA020InfoCappViewApp&amp;HighCtgCD=A09002&amp;CappBizCD=12100000338&amp;tp_seq=)
-&nbsp;
-
 ### 3. 재산
 
-
 가구 유형, 총 소득의 관문을 넘었다면 남은 근로장려금 신청 기준은 재산입니다.
-&nbsp;
 소득이 적더라도 재산이 많다면 소득을 지원해주는 것이 무의미하겠죠! 현재 가구원의 재산 합계액이 2억원 이하여야 합니다.
-&nbsp;
 주택/토지/건축물은 시가 표준액을 따르며, 승용자동차도 마찬가지이지만 영업용은 제외합니다.
-&nbsp;
 주의사항은 내 집이 아니고 전세인데도 재산으로 본다는 점입니다. 전세금은 기준 시가의 55%와 실제 전세금 중 작은 금액으로 계산합니다.
-&nbsp;
 상가는 실제 전세금 100%로 평가하고, 신청인 또는 배우자의 직계존비속으로부터 임차한 경우에는 기준 시가의 100%로 계산합니다.
-&nbsp;
 금융자산, 유가증권, 회원권(골프 등), 분양권 등도 재산으로 포함되며, 가구원 재산 합계액이 1억 4천만원 이상 2억원 미만인 경우 근로장려금의 50%만 지급되니 참고하시기 바랍니다.
-&nbsp;
 [![근로장려금 신청기준](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEie_8b_EjHYsbQK1vF8UDlDmGxVNj3nvSD-uE9m8vziR_h3bgYBzfvc_3vSE53EVqWUkIAOdbwTXeT2tJBEDeb5CULHuI_3XEvdzH8ePxwTuBA3Fhd6epkC_uI97xoGCfYqXiNzF5APqpejjyDGOhqPuy9ZvVPhRs3QTzknc6tA6GNfqyoJpmz2lgYT/w200-h200/%E1%84%80%E1%85%B3%E1%86%AB%E1%84%85%E1%85%A9%E1%84%8C%E1%85%A1%E1%86%BC%E1%84%85%E1%85%A7%E1%84%80%E1%85%B3%E1%86%B7_%E1%84%89%E1%85%B5%E1%86%AB%E1%84%8E%E1%85%A5%E1%86%BC%E1%84%80%E1%85%B5%E1%84%8C%E1%85%AE%E1%86%AB.png)](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEie_8b_EjHYsbQK1vF8UDlDmGxVNj3nvSD-uE9m8vziR_h3bgYBzfvc_3vSE53EVqWUkIAOdbwTXeT2tJBEDeb5CULHuI_3XEvdzH8ePxwTuBA3Fhd6epkC_uI97xoGCfYqXiNzF5APqpejjyDGOhqPuy9ZvVPhRs3QTzknc6tA6GNfqyoJpmz2lgYT/s400/%E1%84%80%E1%85%B3%E1%86%AB%E1%84%85%E1%85%A9%E1%84%8C%E1%85%A1%E1%86%BC%E1%84%85%E1%85%A7%E1%84%80%E1%85%B3%E1%86%B7_%E1%84%89%E1%85%B5%E1%86%AB%E1%84%8E%E1%85%A5%E1%86%BC%E1%84%80%E1%85%B5%E1%84%8C%E1%85%AE%E1%86%AB.png)
-&nbsp;
 이렇게해서 2023년 근로장려금 신청 기준과 자격요건에 대해 알아봤는데요!
-&nbsp;
 본인이 어떤 가구에 속하는지, 소득은 얼마인지, 재산은 얼마를 가지고 있는지 잘 확인하셔서 신청하시기 바랍니다.

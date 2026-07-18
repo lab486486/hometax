@@ -25,8 +25,6 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 정부24 사이트에 접속하는 방법은 구글(Google) 포털에서 정부24를 입력하면 검색결과로 사이트 주소가 나옵니다.
 정부24 홈페이지 바로가기 : [https://www.gov.kr](https://www.gov.kr)
 
-&nbsp;
-
 정부24 사이트에 접속했다면 사이트 정중앙에 있는 자주 찾는 서비스로 시선을 돌립니다.
 
 두번째 줄에 지방세 세목별 과세증명 아이콘이 보인다면 클릭해서 메뉴로 이동하겠습니다.
@@ -34,8 +32,6 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 아이콘을 클릭하면 지방세 세목별 과세증명 신청 전 신청방법과 처리기간, 수수료 등에 대해 안내를 하고 있습니다.
 
 다행히 지방세 세목별 과세증명서의 경우 전자민원(인터넷) 신청시 무료이니 부담없이 신청하시면 될것 같네요
-
-&nbsp;
 
 ### 2. 정부24(민원24) 로그인 하기
 
@@ -53,8 +49,6 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 휴대폰 번호를 입력하고 인증번호를 받아서 별도의 인증과정을 거치는 간편인증 방식보다는 저는 공동인증서가 편했습니다.
 
 정부24 인터넷 발급 바로가기
-
-&nbsp;
 
 ### 3. 지방세 세목별 과세증명서 신청
 
@@ -76,15 +70,12 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 - 영업장 : 개인은 패스
 - 수령방법 : 온라인발급(본인출력)
 
-&nbsp;
 [![](https://blogger.googleusercontent.com/img/a/AVvXsEhHt_suBmHFAH-XrOOoC70GdZHaGYU_sOUTsULax33TS5bdDDk_SMHVWKkReyQkCyrqt4a3xs3xnHzpVvawRpe-YhWOd5glvy_4jd6KEAa_U_1v-aFGTuz8o9FRL9FwgI5gvALX2laWdky0sQgwdMPiJ5mmLeUjoREwXHpuRxoB13PxOljRhhhtEcoy8w=w200-h131)](https://blogger.googleusercontent.com/img/a/AVvXsEhHt_suBmHFAH-XrOOoC70GdZHaGYU_sOUTsULax33TS5bdDDk_SMHVWKkReyQkCyrqt4a3xs3xnHzpVvawRpe-YhWOd5glvy_4jd6KEAa_U_1v-aFGTuz8o9FRL9FwgI5gvALX2laWdky0sQgwdMPiJ5mmLeUjoREwXHpuRxoB13PxOljRhhhtEcoy8w=s720)[![](https://blogger.googleusercontent.com/img/a/AVvXsEiKtq3FRVU2FzUxvT-tLGBCX7-VGaFx1pi0SCv7yDpnROrz1A62ahYGrVlk2HQPkcvvbLe1Mrx6XC0DQSdlAkKR6zy9jii3ceXex75kGCdh6oVTlPnC-8LHDf0olnoChdt0ivfjTVuhtisiZwmrLM6nNNnZzQUgaZsP52kEDavE33np1yqs9KfBxPtmvQ=w200-h119)](https://blogger.googleusercontent.com/img/a/AVvXsEiKtq3FRVU2FzUxvT-tLGBCX7-VGaFx1pi0SCv7yDpnROrz1A62ahYGrVlk2HQPkcvvbLe1Mrx6XC0DQSdlAkKR6zy9jii3ceXex75kGCdh6oVTlPnC-8LHDf0olnoChdt0ivfjTVuhtisiZwmrLM6nNNnZzQUgaZsP52kEDavE33np1yqs9KfBxPtmvQ=s720)
 이렇게 확인했으면 '민원신청하기'버튼을 눌러줍니다. 그러면 작은 팝업이 뜨면서 과세내역이 나오게 되는데요!
 
 여기서 자세히 보고자 하는 항목을 체크한 후에 확인 버튼을 눌러줍니다.
 [![](https://blogger.googleusercontent.com/img/a/AVvXsEg5am5_02K_PXb0C7rlsqmQqS8S0_7BwFFO1LA6bW6yHE5-X7R4ogUE8tyqdmPSYW_vSWR2Ith3MJoxRYI65azVyJTQ2M4ZF5uI9XqJmmaM6PLXj3phfXoC2DV6rPVGsZnB7sRoTyb6x0P0KIimXkXGapKx2MBMxDldEzUWJCSqAqF0syLoC2540a4TPQ=s320)](https://blogger.googleusercontent.com/img/a/AVvXsEg5am5_02K_PXb0C7rlsqmQqS8S0_7BwFFO1LA6bW6yHE5-X7R4ogUE8tyqdmPSYW_vSWR2Ith3MJoxRYI65azVyJTQ2M4ZF5uI9XqJmmaM6PLXj3phfXoC2DV6rPVGsZnB7sRoTyb6x0P0KIimXkXGapKx2MBMxDldEzUWJCSqAqF0syLoC2540a4TPQ=s947)[![](https://blogger.googleusercontent.com/img/a/AVvXsEgAgx-Vqi93mxjQ0B9wgsn1bE8Cy05lh8rLLziJN28EbjtAI5jTJM2XzaTjihP7tyt3avhyxcUwAGm5SxYoKLgLEjCMiOT_IWn3lSy_JQ9mRJJdQiL8PAOu8IHfizmHhSkZ6o_E30Y36mpn-0cqxm9VvnQfAtubRxhcL20lVjRp8hqLpW77FirfLg_Hag=s320)](https://blogger.googleusercontent.com/img/a/AVvXsEgAgx-Vqi93mxjQ0B9wgsn1bE8Cy05lh8rLLziJN28EbjtAI5jTJM2XzaTjihP7tyt3avhyxcUwAGm5SxYoKLgLEjCMiOT_IWn3lSy_JQ9mRJJdQiL8PAOu8IHfizmHhSkZ6o_E30Y36mpn-0cqxm9VvnQfAtubRxhcL20lVjRp8hqLpW77FirfLg_Hag=s720)
 그러면 다시 서비스 신청내역 화면으로 돌아오는데, 세부 항목이 입력된 상태이니 한번더 확인한 후 신청버튼을 누르면 지방세 세목별 과세증명서 신청이 완료됩니다.
-
-&nbsp;
 
 ### 4. 지방세 세목별 과세증명서 출력 및 PDF 저장하기
 

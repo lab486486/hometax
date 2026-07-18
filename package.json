@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "import:wp": "node scripts/import-wxr.mjs"
+    "import:wp": "node scripts/import-wxr.mjs && node scripts/fix-content.mjs",
+    "fix:content": "node scripts/fix-content.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",
