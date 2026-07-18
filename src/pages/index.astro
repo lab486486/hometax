@@ -9,17 +9,15 @@ import "../styles/calculators.css";
 
 const taxPosts = await getBlogPosts();
 const gunPosts = await getGunmartPosts();
-const calcs = popularCalculators();
+const calcs = popularCalculators().slice(0, 4);
 const featured = taxPosts.filter((p) => p.data.cover_image).slice(0, 6);
 const latestTax = taxPosts.slice(0, 6);
 
 const topics = [
-  { label: "종합소득세", desc: "신고·추계·장부 유형", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
-  { label: "연말정산", desc: "공제·자료제공동의", href: "/category/%EC%97%B0%EB%A7%90%EC%A0%95%EC%82%B0/" },
-  { label: "근로·지원금", desc: "장려금·환급 실무", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
-  { label: "부동산·명의", desc: "취득·증여·명의변경", href: "/category/%EB%AA%85%EC%9D%98%EB%B3%80%EA%B2%BD/" },
-  { label: "서류 발급", desc: "증명서·납세증명", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
-  { label: "군마트", desc: "위치·영업시간", href: "/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/" },
+  { label: "종합소득세", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
+  { label: "연말정산", href: "/category/%EC%97%B0%EB%A7%90%EC%A0%95%EC%82%B0/" },
+  { label: "근로·지원금", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
+  { label: "군마트", href: "/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/" },
 ];
 ---
 
@@ -33,11 +31,14 @@ const topics = [
         <p class="hero-lead">
           연봉 실수령액부터 종합소득세·취득세까지. 자주 쓰는 계산기와 홈택스 실무 글을 한곳에서 확인하세요.
         </p>
-        <div class="hero-actions" style="margin-top: 1.5rem;">
+        <div class="hero-actions home-hero-actions">
           <a class="btn btn-primary" href="/calculator/salary/">연봉 실수령액 계산</a>
           <a class="btn btn-secondary" href="#calculators">인기 계산기</a>
         </div>
-        <p class="home-disclaimer">국세청 홈택스와 무관한 독립 정보 사이트 · 계산 결과는 참고용입니다</p>
+        <p class="home-disclaimer">
+          국세청 홈택스와 무관한 독립 정보 사이트입니다.<br />
+          계산 결과는 참고용입니다.
+        </p>
       </div>
     </section>
 
@@ -48,7 +49,7 @@ const topics = [
           <h2>인기 계산기</h2>
           <p>가장 많이 찾는 세금·생활 계산기만 추렸습니다.</p>
         </div>
-        <div class="calc-grid">
+        <div class="calc-grid calc-grid-home">
           {
             calcs.map((c, i) => (
               <a class="calc-tile" href={`/calculator/${c.slug}/`}>
@@ -72,12 +73,11 @@ const topics = [
           <h2>주제별 가이드</h2>
           <p>궁금한 세금을 골라 바로 들어가 보세요.</p>
         </div>
-        <div class="topic-grid">
+        <div class="topic-grid topic-grid-home">
           {
             topics.map((t) => (
-              <a class="topic-card" href={t.href}>
+              <a class="topic-card topic-card-title" href={t.href}>
                 <strong>{t.label}</strong>
-                <span>{t.desc}</span>
               </a>
             ))
           }
