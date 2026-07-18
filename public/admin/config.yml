@@ -5,7 +5,8 @@ backend:
   name: github
   repo: lab486486/hometax
   branch: main
-  base_url: https://hometax.me
+  # CMS OAuth origin — switch to https://hometax.me after custom domain cutover
+  base_url: https://hometax-cfl.pages.dev
   auth_endpoint: api/oauth/auth
   auth_scope: repo
 
