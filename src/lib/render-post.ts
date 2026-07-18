@@ -188,15 +188,17 @@ function enhanceTables(html: string): string {
     });
 
     const isStore = /\bstore-info\b/i.test(t) || /\barmy-store\b/i.test(t);
-    const cls = isStore ? "post-table store-info" : "post-table";
 
     if (/class=["'][^"']*["']/i.test(t)) {
-      t = t.replace(/class=["']([^"']*)["']/i, (_m, c) => {
-        const merged = `${c} ${cls}`.replace(/\s+/g, " ").trim();
-        return `class="${merged}"`;
+      t = t.replace(/class=["']([^"']*)["']/i, (_m, c: string) => {
+        const parts = new Set(`${c} post-table${isStore ? " store-info" : ""}`.split(/\s+/).filter(Boolean));
+        return `class="${[...parts].join(" ")}"`;
       });
     } else {
-      t = t.replace(/<table/i, `<table class="${cls}"`);
+      t = t.replace(
+        /<table/i,
+        `<table class="post-table${isStore ? " store-info" : ""}"`,
+      );
     }
 
     return `<div class="table-wrap">${t}</div>`;
