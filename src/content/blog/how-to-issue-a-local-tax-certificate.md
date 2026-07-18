@@ -10,18 +10,13 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 ---
 # 지방세 세목별 과세증명서 발급 방법과 PDF 저장하기
 
-
 은행에서 대출을 받거나 파산 등 행정 절차를 거치다보면 지방세 세목별 과세증명서가 필요할 때가 있는데요!
 
 만약 시간이 없어서 주민센터 방문할 시간이 없거나 주말에는 인터넷 발급을 해야 합니다.
 
-
 ![지방세 세목별 과세증명서](/images/wp/2022/07/지방세-세목별-과세증명서.png)
 
-
-
 ### 1. 지방세 세목별 과세증명서 발급
-
 
 지방세 세목별 과세증명서란 지방세를 과목별로 과세한 사실을 증빙하는 서류로 아파트부터 자동차까지 지방세 과세 및 납부에 대해 기록된 증명서입니다.
 [![](https://blogger.googleusercontent.com/img/a/AVvXsEjRmQU3q1i4Km0IV4_dijFD9u2y-7rbKh0M_dNjY8Bnv6BKHdLRLQnYHuGU3yNJth3ngUFMkqu6hngKqEbwRbljXh-767AfzNZ48ZxfPmk1xqOSnJkMT6TmXtQD_Ju8i-36LUE6Op5SSPuxSPPb11cBAQMwXPAEjNejTRHMYmbN0Aov74Q6TUAyWl_Uvg=s320)](https://blogger.googleusercontent.com/img/a/AVvXsEjRmQU3q1i4Km0IV4_dijFD9u2y-7rbKh0M_dNjY8Bnv6BKHdLRLQnYHuGU3yNJth3ngUFMkqu6hngKqEbwRbljXh-767AfzNZ48ZxfPmk1xqOSnJkMT6TmXtQD_Ju8i-36LUE6Op5SSPuxSPPb11cBAQMwXPAEjNejTRHMYmbN0Aov74Q6TUAyWl_Uvg=s720)
@@ -29,7 +24,6 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 
 정부24 사이트에 접속하는 방법은 구글(Google) 포털에서 정부24를 입력하면 검색결과로 사이트 주소가 나옵니다.
 정부24 홈페이지 바로가기 : [https://www.gov.kr](https://www.gov.kr)
-
 
 &nbsp;
 
@@ -45,14 +39,8 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 
 ### 2. 정부24(민원24) 로그인 하기
 
-
-
-
- 	- 공동(공인)인증서 또는 금융인증서
-
- 	- 간편인증
-
-
+- 공동(공인)인증서 또는 금융인증서
+- 간편인증
 
 지방세 세목별 과세증명서를 신청하기 위해서는 회원 또는 비회원으로 선택하여 본인인증을 해야합니다.
 
@@ -64,16 +52,11 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 
 휴대폰 번호를 입력하고 인증번호를 받아서 별도의 인증과정을 거치는 간편인증 방식보다는 저는 공동인증서가 편했습니다.
 
-
-
 정부24 인터넷 발급 바로가기
-
-
 
 &nbsp;
 
 ### 3. 지방세 세목별 과세증명서 신청
-
 
 인증서를 통한 정상적인 인증절차가 진행되었다면 신청화면으로 이동합니다.
 
@@ -87,21 +70,11 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 
 이렇게해서 기본적인 신청인 정보가 입력된 것을 확인했다면 *(빨간별) 표시된 부분에 대해 하나씩 입력해 줍니다.
 
-
-
-
-
- 	- 과세물건지 주소선택 : 확인하고자 하는 물건지의 주소를 입력합니다(도로명)
-
- 	- 과세년도 : 자동입력됨(패스)
-
- 	- 사용목적 : 단순 조회(저는 확인목적이므로 단순조회라 적었습니다)
-
- 	- 영업장 : 개인은 패스
-
- 	- 수령방법 : 온라인발급(본인출력)
-
-
+- 과세물건지 주소선택 : 확인하고자 하는 물건지의 주소를 입력합니다(도로명)
+- 과세년도 : 자동입력됨(패스)
+- 사용목적 : 단순 조회(저는 확인목적이므로 단순조회라 적었습니다)
+- 영업장 : 개인은 패스
+- 수령방법 : 온라인발급(본인출력)
 
 &nbsp;
 [![](https://blogger.googleusercontent.com/img/a/AVvXsEhHt_suBmHFAH-XrOOoC70GdZHaGYU_sOUTsULax33TS5bdDDk_SMHVWKkReyQkCyrqt4a3xs3xnHzpVvawRpe-YhWOd5glvy_4jd6KEAa_U_1v-aFGTuz8o9FRL9FwgI5gvALX2laWdky0sQgwdMPiJ5mmLeUjoREwXHpuRxoB13PxOljRhhhtEcoy8w=w200-h131)](https://blogger.googleusercontent.com/img/a/AVvXsEhHt_suBmHFAH-XrOOoC70GdZHaGYU_sOUTsULax33TS5bdDDk_SMHVWKkReyQkCyrqt4a3xs3xnHzpVvawRpe-YhWOd5glvy_4jd6KEAa_U_1v-aFGTuz8o9FRL9FwgI5gvALX2laWdky0sQgwdMPiJ5mmLeUjoREwXHpuRxoB13PxOljRhhhtEcoy8w=s720)[![](https://blogger.googleusercontent.com/img/a/AVvXsEiKtq3FRVU2FzUxvT-tLGBCX7-VGaFx1pi0SCv7yDpnROrz1A62ahYGrVlk2HQPkcvvbLe1Mrx6XC0DQSdlAkKR6zy9jii3ceXex75kGCdh6oVTlPnC-8LHDf0olnoChdt0ivfjTVuhtisiZwmrLM6nNNnZzQUgaZsP52kEDavE33np1yqs9KfBxPtmvQ=w200-h119)](https://blogger.googleusercontent.com/img/a/AVvXsEiKtq3FRVU2FzUxvT-tLGBCX7-VGaFx1pi0SCv7yDpnROrz1A62ahYGrVlk2HQPkcvvbLe1Mrx6XC0DQSdlAkKR6zy9jii3ceXex75kGCdh6oVTlPnC-8LHDf0olnoChdt0ivfjTVuhtisiZwmrLM6nNNnZzQUgaZsP52kEDavE33np1yqs9KfBxPtmvQ=s720)
@@ -114,7 +87,6 @@ cover_image: "/images/wp/2022/07/지방세-세목별-과세증명서.png"
 &nbsp;
 
 ### 4. 지방세 세목별 과세증명서 출력 및 PDF 저장하기
-
 
 지방세 세목별 과세증명서 신청이 완료되면 서비스 신청내역으로 이동합니다.
 

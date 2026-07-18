@@ -133,10 +133,14 @@ function htmlToMarkdown(html) {
     (_, href, text) => `[${stripHtml(text)}](${href})`,
   );
 
-  // lists
-  s = s.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, (_, t) => `- ${stripHtml(t)}\n`);
-  s = s.replace(/<\/?ul[^>]*>/gi, "\n");
-  s = s.replace(/<\/?ol[^>]*>/gi, "\n");
+  // lists — convert whole <ul>/<ol> blocks first so <p> wrapping doesn't split them
+  s = s.replace(/<(ul|ol)[^>]*>([\s\S]*?)<\/\1>/gi, (_, _tag, inner) => {
+    const items = [...inner.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi)].map((m) =>
+      stripHtml(m[1]).trim(),
+    );
+    if (!items.length) return "\n";
+    return `\n\n${items.map((t) => `- ${t}`).join("\n")}\n\n`;
+  });
 
   // bold / italic
   s = s.replace(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/gi, "**$2**");
@@ -152,7 +156,44 @@ function htmlToMarkdown(html) {
   s = s.replace(/<(?!\/?(table|thead|tbody|tr|th|td)\b)[^>]+>/gi, "");
 
   s = s.replace(/\n{3,}/g, "\n\n").trim() + "\n";
+  // WP sometimes stored bullets as "<p>- item</p>" → rejoin into one list
+  s = normalizeDashedLists(s);
   return s;
+}
+
+/** Turn spaced "- item" paragraphs into a contiguous markdown list. */
+function normalizeDashedLists(text) {
+  const bullet = /^[ \t]*-\s+(\S.*)$/;
+  const lines = text.split("\n");
+  const out = [];
+  let i = 0;
+  while (i < lines.length) {
+    if (!bullet.test(lines[i])) {
+      out.push(lines[i]);
+      i += 1;
+      continue;
+    }
+    const items = [];
+    while (i < lines.length) {
+      if (lines[i].trim() === "") {
+        let j = i + 1;
+        while (j < lines.length && lines[j].trim() === "") j += 1;
+        if (j < lines.length && bullet.test(lines[j])) {
+          i = j;
+          continue;
+        }
+        break;
+      }
+      const m = lines[i].match(bullet);
+      if (!m) break;
+      items.push(m[1].trim());
+      i += 1;
+    }
+    if (out.length && out[out.length - 1].trim() !== "") out.push("");
+    for (const it of items) out.push(`- ${it}`);
+    out.push("");
+  }
+  return out.join("\n").replace(/\n{3,}/g, "\n\n");
 }
 
 function rewriteImageUrls(md, urlMap) {

@@ -9,7 +9,6 @@ cover_image: "/images/wp/2023/06/19a.png"
 ---
 ## 내보험찾아줌 홈페이지로 숨은보험금 100만원 찾기
 
-
 최근 몸이 아파서 병원진료를 받고 보험을 청구하려고 했는데 저도 모르게 가입된 보험이 있다는 것을 알게 되었습니다.
 
 바로 내 보험 찾아줌 홈페이지를 통해서 확인하게 되었는데요!
@@ -18,12 +17,7 @@ cover_image: "/images/wp/2023/06/19a.png"
 
 ### 1. 내보험찾아줌 홈페이지 주소
 
-
-
-
- 	- 내 보험 찾아줌 : [https://cont.insure.or.kr](https://cont.insure.or.kr/)
-
-
+- 내 보험 찾아줌 : [https://cont.insure.or.kr](https://cont.insure.or.kr/)
 
 먼저 내 보험 찾아줌 홈페이지 주소는 네이버, 구글에서 '내 보험 찾아줌 홈페이지'라고 입력합니다.
 
@@ -43,17 +37,11 @@ cover_image: "/images/wp/2023/06/19a.png"
 
 ### 2. 내 숨은 보험금 찾는 방법
 
-
-
-
- 	- 본인인증(휴대폰, 아이핀) &gt; 개인정보 동의 &gt; 조회
-
-
+- 본인인증(휴대폰, 아이핀) &gt; 개인정보 동의 &gt; 조회
 
 숨은 보험금을 찾기 위해서는 먼저 본인인증 절차를 거쳐야합니다. 별도의 회원가입 없이 본인인증만 하면 보험금 조회가 가능합니다.
 &nbsp;
 [![본인인증](https://blogger.googleusercontent.com/img/a/AVvXsEiAYDiTHwWihhz_80RxzaaximvEoodIo6JRXTIle2ETEF-wNW_Bv5GqZWBTNqD6uZTaKDKKjUCtNi6zxMcRmJSIOxwAwsDKNd9FfnGb1gxHT-sV4xvg-7mj6f4s0_ph5fi3CIzC5tumlOMV6j1e3_ZevBrnjQMSExlf86Xry8JfTt1LcVo6V1Ul3SeeHw=w200-h100)](https://blogger.googleusercontent.com/img/a/AVvXsEiAYDiTHwWihhz_80RxzaaximvEoodIo6JRXTIle2ETEF-wNW_Bv5GqZWBTNqD6uZTaKDKKjUCtNi6zxMcRmJSIOxwAwsDKNd9FfnGb1gxHT-sV4xvg-7mj6f4s0_ph5fi3CIzC5tumlOMV6j1e3_ZevBrnjQMSExlf86Xry8JfTt1LcVo6V1Ul3SeeHw=s720)[![휴대폰 본인인증](https://blogger.googleusercontent.com/img/a/AVvXsEiyEXXr-g4BDhSPjFtQ3BeWZ9lCksR2EB0KvrWpdOdayKG5OM2SyUvZVuWJS1AKD-rd3broLZdhqVdKptFn0LxoktM9hqqI7WOBxl9_SdoF5uyLlVf4fJCHYujfdUbPPkIuaLObmNNJISNhl7ySkKp-WlYvIh5oX-l4iLJaMBaaCrsJJcbmgvsDO59t2A=w200-h100)](https://blogger.googleusercontent.com/img/a/AVvXsEiyEXXr-g4BDhSPjFtQ3BeWZ9lCksR2EB0KvrWpdOdayKG5OM2SyUvZVuWJS1AKD-rd3broLZdhqVdKptFn0LxoktM9hqqI7WOBxl9_SdoF5uyLlVf4fJCHYujfdUbPPkIuaLObmNNJISNhl7ySkKp-WlYvIh5oX-l4iLJaMBaaCrsJJcbmgvsDO59t2A=s720)
-
 
 &nbsp;
 
@@ -72,11 +60,9 @@ cover_image: "/images/wp/2023/06/19a.png"
 
 ### 3. 내 보험 찾기 결과 조회
 
-
 개인(신용)정보 동의를 완료하였다면 가입한 보험들이 한 페이지에 다 나옵니다.
 
 저의 경우 총 21건의 보험이 조회되었는데 제가 모르는 사이 많은 보험에 가입했었다는 생각이 들어 놀라웠습니다.
-
 
 &nbsp;
 
@@ -84,7 +70,6 @@ cover_image: "/images/wp/2023/06/19a.png"
 &nbsp;
 
 프로모션, 이벤트 성격으로 가입했던 무료 보험들까지도 모두 조회가 되면서 마지막 하단에는 미청구 보험금과 휴면보험금 결과까지 종합되어 보였습니다.
-
 
 &nbsp;
 
@@ -94,7 +79,6 @@ cover_image: "/images/wp/2023/06/19a.png"
 아쉽게도 저는 돌려받은 숨은 보험금이 없었는데요!
 
 숨은 보험금 찾는 방법은 휴대폰 인증 과정만 넘어가면 거의 바로 확인이 가능해서 짧은 시간에 확인할 수 있는 만큼 숨은 보험금 꼭 찾아보시기 바랍니다.
-
 
 [숨은 보험금 찾기 바로가기](https://cont.insure.or.kr/)
 &nbsp;
