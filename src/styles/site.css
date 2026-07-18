@@ -1209,35 +1209,197 @@ body.solid-header .site-header {
   margin: 0;
 }
 
-.post-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.25rem 0;
-  font-size: 0.95rem;
-  overflow-x: auto;
-  display: block;
+/* ---- Table of contents ---- */
+.post-toc {
+  margin: 0 0 1.75rem;
+  padding: 0.85rem 1.1rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #f3faf9 0%, #fff 55%);
 }
 
-.post-content thead,
-.post-content tbody,
-.post-content tr {
-  display: table;
+.post-toc summary {
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.post-toc summary::-webkit-details-marker {
+  display: none;
+}
+
+.post-toc summary::after {
+  content: "접기";
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.post-toc details:not([open]) summary::after {
+  content: "펼치기";
+}
+
+.post-toc ol {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: toc;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.post-toc li {
+  margin: 0;
+  counter-increment: toc;
+}
+
+.post-toc li > a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: baseline;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.55rem;
+  color: var(--ink);
+  text-decoration: none;
+  line-height: 1.45;
+}
+
+.post-toc li > a::before {
+  content: counter(toc);
+  min-width: 1.35rem;
+  height: 1.35rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.post-toc li.toc-h3 > a {
+  padding-left: 1.35rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.post-toc li.toc-h3 > a::before {
+  content: "·";
+  background: transparent;
+  color: var(--brand);
+  font-size: 1.1rem;
+}
+
+.post-toc li > a:hover {
+  background: rgba(12, 110, 107, 0.08);
+  color: var(--brand-dark);
+}
+
+/* ---- Tables ---- */
+.post-content .table-wrap {
   width: 100%;
-  table-layout: fixed;
+  overflow-x: auto;
+  margin: 1.35rem 0 1.6rem;
+  border: 1px solid #c5d5e0;
+  border-radius: 0.9rem;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(15, 39, 68, 0.05);
+}
+
+.post-content table,
+.post-content table.post-table {
+  width: 100%;
+  min-width: 280px;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 0.95rem;
+  display: table;
+  table-layout: auto;
+}
+
+.post-content thead {
+  display: table-header-group;
+}
+
+.post-content tbody {
+  display: table-row-group;
+}
+
+.post-content tr {
+  display: table-row;
 }
 
 .post-content th,
 .post-content td {
-  border: 1px solid var(--line);
-  padding: 0.65rem 0.75rem;
-  vertical-align: top;
+  display: table-cell;
+  border: 1px solid #d0dde8;
+  padding: 0.8rem 0.95rem;
+  vertical-align: middle;
   word-break: keep-all;
+  line-height: 1.5;
 }
 
-.post-content th {
-  background: var(--brand-soft);
-  font-weight: 700;
+.post-content thead th,
+.post-content tr:first-child th {
+  background: #e8f4f3;
+  color: var(--brand-dark);
+  font-weight: 800;
   text-align: left;
+}
+
+.post-content tbody tr:nth-child(even) td {
+  background: #f8fbfc;
+}
+
+.post-content tbody tr:hover td,
+.post-content tbody tr:hover th {
+  background: #eef7f6;
+}
+
+/* Gunmart store info — key/value card table */
+.post-content table.store-info {
+  table-layout: fixed;
+}
+
+.post-content table.store-info th {
+  width: 32%;
+  background: #0c6e6b;
+  color: #fff;
+  border-color: #0a5c59;
+  font-weight: 700;
+}
+
+.post-content table.store-info td {
+  background: #fff;
+  border-color: #d0dde8;
+  font-weight: 600;
+}
+
+.post-content table.store-info tr:nth-child(even) td {
+  background: #f4faf9;
+}
+
+.post-content table.store-info tr:hover th {
+  background: #085552;
+}
+
+.post-content table.store-info tr:hover td {
+  background: #eaf6f5;
+}
+
+.post-content .cell-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.post-content .cell-list li {
+  margin: 0.2rem 0;
 }
 
 .category-inner {
