@@ -17,6 +17,8 @@ const topics = [
   { label: "종합소득세", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
   { label: "연말정산", href: "/category/%EC%97%B0%EB%A7%90%EC%A0%95%EC%82%B0/" },
   { label: "근로·지원금", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
+  { label: "부동산·명의", href: "/category/%EB%AA%85%EC%9D%98%EB%B3%80%EA%B2%BD/" },
+  { label: "서류 발급", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
   { label: "군마트", href: "/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/" },
 ];
 ---
@@ -127,24 +129,24 @@ const topics = [
     </section>
 
     <section class="section home-section-tight">
-      <div class="container" style="display:grid;gap:2rem;">
+      <div class="container home-lists">
         <div>
           <div class="section-head">
             <p class="section-eyebrow">Latest</p>
             <h2>최신 글</h2>
           </div>
-          <ul class="home-feed">
+          <ul class="home-link-list">
             {
               latestTax.map((post) => (
                 <li>
-                  <a href={postUrl(post)} style="display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:baseline;padding:.85rem 0;border-bottom:1px solid var(--line);">
-                    <span class="home-feed-tag" style="font-size:.78rem;font-weight:700;color:var(--brand-dark);background:var(--brand-soft);padding:.2rem .5rem;border-radius:.4rem;">
-                      {post.data.tags[0] || "홈택스"}
+                  <a class="home-link-item" href={postUrl(post)}>
+                    <span class="home-link-meta">
+                      <span class="home-link-tag">{post.data.tags[0] || "홈택스"}</span>
+                      <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                        {formatDate(post.data.date)}
+                      </time>
                     </span>
-                    <span style="font-weight:600;">{post.data.title}</span>
-                    <time datetime={post.data.date.toISOString().slice(0, 10)} style="color:var(--muted);font-size:.85rem;white-space:nowrap;">
-                      {formatDate(post.data.date)}
-                    </time>
+                    <span class="home-link-title">{post.data.title}</span>
                   </a>
                 </li>
               ))
@@ -160,16 +162,16 @@ const topics = [
                 <h2>군마트 정보</h2>
                 <p>검색 유입용으로 별도 관리하는 페이지입니다.</p>
               </div>
-              <ul style="list-style:none;margin:0;padding:0;display:grid;gap:.35rem;">
+              <ul class="home-link-list">
                 {gunPosts.slice(0, 4).map((post) => (
                   <li>
-                    <a href={postUrl(post)} style="display:block;padding:.85rem 0;border-bottom:1px solid var(--line);font-weight:600;">
-                      {post.data.title}
+                    <a class="home-link-item home-link-item-title" href={postUrl(post)}>
+                      <span class="home-link-title home-link-title-ellipsis">{post.data.title}</span>
                     </a>
                   </li>
                 ))}
               </ul>
-              <p style="margin-top:1rem;text-align:right;">
+              <p class="home-more">
                 <a class="section-link" href="/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/">군마트 목록 →</a>
               </p>
             </div>

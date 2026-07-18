@@ -231,6 +231,70 @@ a.calc-tile:hover {
   grid-template-columns: repeat(2, 1fr);
 }
 
+.home-lists {
+  display: grid;
+  gap: 2rem;
+}
+
+.home-link-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.home-link-item {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-link-item-title {
+  gap: 0;
+}
+
+.home-link-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.home-link-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  background: var(--brand-soft);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.home-link-meta time {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.home-link-title {
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.home-link-title-ellipsis {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.home-more {
+  margin-top: 1rem;
+  text-align: right;
+}
+
 @media (min-width: 1000px) {
   .topic-grid:not(.topic-grid-home) {
     grid-template-columns: repeat(4, 1fr);
