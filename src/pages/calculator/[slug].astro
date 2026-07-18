@@ -1,0 +1,160 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { calculators, getCalculator } from "../../data/calculators";
+import "../../styles/calculators.css";
+
+export function getStaticPaths() {
+  return calculators.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const calc = getCalculator(slug || "");
+if (!calc) throw new Error("calculator not found");
+
+const fields: Record<string, { html: string }> = {
+  salary: {
+    html: `
+      <div class="calc-field">
+        <label for="annual">연봉 (세전, 원)</label>
+        <input id="annual" name="annual" type="number" inputmode="numeric" value="50000000" min="0" step="100000" />
+      </div>
+    `,
+  },
+  "income-tax": {
+    html: `
+      <div class="calc-field">
+        <label for="taxBase">과세표준 (원)</label>
+        <input id="taxBase" name="taxBase" type="number" inputmode="numeric" value="50000000" min="0" step="100000" />
+        <span class="calc-hint">소득공제 후 금액 기준으로 입력하세요.</span>
+      </div>
+      <div class="calc-field">
+        <label for="local">지방소득세 포함</label>
+        <select id="local" name="local">
+          <option value="yes" selected>포함 (10%)</option>
+          <option value="no">미포함</option>
+        </select>
+      </div>
+    `,
+  },
+  "capital-gains": {
+    html: `
+      <div class="calc-field">
+        <label for="sell">양도가액 (원)</label>
+        <input id="sell" name="sell" type="number" value="800000000" min="0" step="1000000" />
+      </div>
+      <div class="calc-field">
+        <label for="buy">취득가액 (원)</label>
+        <input id="buy" name="buy" type="number" value="500000000" min="0" step="1000000" />
+      </div>
+      <div class="calc-field">
+        <label for="expense">필요경비 (원)</label>
+        <input id="expense" name="expense" type="number" value="10000000" min="0" step="100000" />
+      </div>
+    `,
+  },
+  "acquisition-tax": {
+    html: `
+      <div class="calc-field">
+        <label for="price">취득가액 (원)</label>
+        <input id="price" name="price" type="number" value="500000000" min="0" step="1000000" />
+      </div>
+      <div class="calc-field">
+        <label for="type">물건 유형</label>
+        <select id="type" name="type">
+          <option value="house85" selected>주택 (85㎡ 이하 참고)</option>
+          <option value="houseOver">주택 (일반)</option>
+          <option value="other">주택 외 (토지·건물 등)</option>
+        </select>
+      </div>
+    `,
+  },
+  "gift-tax": {
+    html: `
+      <div class="calc-field">
+        <label for="amount">증여재산가액 (원)</label>
+        <input id="amount" name="amount" type="number" value="100000000" min="0" step="1000000" />
+      </div>
+      <div class="calc-field">
+        <label for="relation">증여자와의 관계</label>
+        <select id="relation" name="relation">
+          <option value="spouse">배우자 (6억 공제)</option>
+          <option value="lineal" selected>직계존비속 (5천만 공제)</option>
+          <option value="minor">미성년 직계비속 (2천만 공제)</option>
+          <option value="other">기타 친족 (1천만 공제)</option>
+        </select>
+      </div>
+    `,
+  },
+  severance: {
+    html: `
+      <div class="calc-field">
+        <label for="avgDaily">1일 평균임금 (원)</label>
+        <input id="avgDaily" name="avgDaily" type="number" value="150000" min="0" step="1000" />
+      </div>
+      <div class="calc-field">
+        <label for="years">근속연수 (년)</label>
+        <input id="years" name="years" type="number" value="5" min="1" step="0.5" />
+      </div>
+    `,
+  },
+  brokerage: {
+    html: `
+      <div class="calc-field">
+        <label for="deal">거래금액 (원)</label>
+        <input id="deal" name="deal" type="number" value="800000000" min="0" step="1000000" />
+      </div>
+      <div class="calc-field">
+        <label for="kind">거래 종류</label>
+        <select id="kind" name="kind">
+          <option value="sale" selected>매매</option>
+          <option value="rent">임대차(전월세)</option>
+        </select>
+      </div>
+    `,
+  },
+  insurance: {
+    html: `
+      <div class="calc-field">
+        <label for="monthly">월 급여 (원)</label>
+        <input id="monthly" name="monthly" type="number" value="3500000" min="0" step="10000" />
+      </div>
+    `,
+  },
+};
+---
+
+<Layout title={calc.title} description={calc.description} solidHeader>
+  <Header />
+  <main id="main" class="calc-page">
+    <div class="container" data-calculator={calc.slug}>
+      <header class="calc-hero">
+        <p class="section-eyebrow">
+          <a href="/calculator/">계산기</a>
+        </p>
+        <h1>{calc.title}</h1>
+        <p>{calc.description}</p>
+      </header>
+
+      <div class="calc-layout">
+        <section class="calc-card">
+          <h2>입력</h2>
+          <form data-calc-form>
+            <div set:html={fields[calc.slug]?.html || ""} />
+            <div class="calc-actions">
+              <button class="btn btn-primary" type="submit">계산하기</button>
+              <a class="btn btn-secondary" href="/calculator/">다른 계산기</a>
+            </div>
+          </form>
+        </section>
+        <section class="calc-result">
+          <h2>결과</h2>
+          <div data-calc-out></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <Footer />
+  <script src="/scripts/calculators.js" defer></script>
+</Layout>

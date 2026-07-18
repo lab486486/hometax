@@ -10,6 +10,7 @@ interface Props {
   title?: string;
   description?: string;
   solidHeader?: boolean;
+  inverseHeader?: boolean;
   noindex?: boolean;
   ogType?: string;
   ogImage?: string;
@@ -24,6 +25,7 @@ const {
   title = siteTitle,
   description = site.description,
   solidHeader = false,
+  inverseHeader = false,
   noindex = false,
   ogType = "website",
   ogImage,
@@ -63,7 +65,7 @@ const r2Origin = mediaOrigin();
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0c6e6b" />
   </head>
-  <body class:list={[{ "solid-header": solidHeader }]}>
+  <body class:list={[{ "solid-header": solidHeader, "inverse-header": inverseHeader }]}>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <slot />
   </body>
