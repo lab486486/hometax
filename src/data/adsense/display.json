@@ -1,8 +1,11 @@
 {
-  "code": "",
+  "code": "<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-8094444885520451\" data-ad-slot=\"3393041327\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>",
+  "code_after_toc": "<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-8094444885520451\" data-ad-slot=\"8308318472\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>",
+  "code_home": "<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-8094444885520451\" data-ad-slot=\"4604043035\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>",
   "above_title": false,
   "before_content": false,
-  "after_h2": false,
-  "after_h3": false,
+  "after_toc": false,
+  "after_h2": true,
+  "after_h3": true,
   "after_h4": false
 }

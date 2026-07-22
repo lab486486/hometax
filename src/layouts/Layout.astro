@@ -47,6 +47,13 @@ const r2Origin = mediaOrigin();
     {integrations.map((snippet) => <Fragment set:html={snippet} />)}
     <AdSenseHead />
     <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${siteTitle} RSS`}
+      href={new URL("/rss.xml", settings.site_url || site.baseUrl).href}
+    />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:site_name" content={siteTitle} />
@@ -59,11 +66,13 @@ const r2Origin = mediaOrigin();
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
-    <link rel="icon" type="image/webp" href="/favicon.webp" />
+    <link rel="icon" href="/images/brand/hometax-mark.png" type="image/png" sizes="256x256" />
+    <link rel="icon" href="/favicon.webp" type="image/webp" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {r2Origin && <link rel="preconnect" href={r2Origin} crossorigin />}
     {r2Origin && <link rel="dns-prefetch" href={r2Origin} />}
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#0c6e6b" />
+    <meta name="theme-color" content="#2466EB" />
   </head>
   <body class:list={[{ "solid-header": solidHeader, "inverse-header": inverseHeader }]}>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>

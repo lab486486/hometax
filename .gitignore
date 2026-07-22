@@ -19,5 +19,8 @@ node_modules/
 # wrangler
 .wrangler/
 
+# local QA artifacts
+.tmp-rss-check/
+
 # import artifacts
 scripts/import-report.json

@@ -2,6 +2,8 @@ import { marked } from "marked";
 import { expandCoupangShortcodes } from "./coupang";
 import {
   getAdsenseConfig,
+  getAfterTocAdCode,
+  hasAfterTocAd,
   hasDisplayInBody,
   hasInarticleAd,
   type AdsenseConfig,
@@ -64,11 +66,20 @@ function injectBodyAds(html: string, config: AdsenseConfig): string {
 
   if (hasDisplayInBody(config)) {
     const { display } = config;
-    const slot = adSlotHtml(display.code, "ad-slot-display");
-    if (slot) {
-      if (display.after_h2) out = out.replace(/<\/h2>/gi, `</h2>${slot}`);
-      if (display.after_h3) out = out.replace(/<\/h3>/gi, `</h3>${slot}`);
-      if (display.after_h4) out = out.replace(/<\/h4>/gi, `</h4>${slot}`);
+    // First h2: prefer code_after_toc (former TOC unit); first h3: display.code
+    if (display.after_h2) {
+      const h2Code = (display.code_after_toc || display.code || "").trim();
+      const slot = adSlotHtml(h2Code, "ad-slot-display ad-slot-after-h2");
+      if (slot) out = out.replace(/<\/h2>/i, `</h2>${slot}`);
+    }
+    if (display.after_h3) {
+      const h3Code = (display.code || "").trim();
+      const slot = adSlotHtml(h3Code, "ad-slot-display ad-slot-after-h3");
+      if (slot) out = out.replace(/<\/h3>/i, `</h3>${slot}`);
+    }
+    if (display.after_h4) {
+      const slot = adSlotHtml(display.code, "ad-slot-display");
+      if (slot) out = out.replace(/<\/h4>/i, `</h4>${slot}`);
     }
   }
 
@@ -157,15 +168,49 @@ function injectToc(html: string): string {
   return withIds.slice(0, firstHeading) + toc + withIds.slice(firstHeading);
 }
 
+function injectBeforeTocAd(html: string, config: AdsenseConfig): string {
+  if (!hasAfterTocAd(config)) return html;
+  const slot = adSlotHtml(getAfterTocAdCode(config), "ad-slot-display ad-slot-before-toc");
+  if (!slot) return html;
+  if (/class=["'][^"']*post-toc/i.test(html)) {
+    return html.replace(/(<nav class="post-toc"[\s\S]*?<\/nav>)/i, `${slot}$1`);
+  }
+  return html;
+}
+
+function cellText(html: string): string {
+  return html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+}
+
 function enhanceTables(html: string): string {
   return html.replace(/<table(\s[^>]*)?>[\s\S]*?<\/table>/gi, (table) => {
     let t = table;
+
+    const lat = t.match(/<th[^>]*>\s*위도\s*<\/th>\s*<td[^>]*>([\s\S]*?)<\/td>/i)?.[1];
+    const lng = t.match(/<th[^>]*>\s*경도\s*<\/th>\s*<td[^>]*>([\s\S]*?)<\/td>/i)?.[1];
+    const latNum = Number.parseFloat(cellText(lat || ""));
+    const lngNum = Number.parseFloat(cellText(lng || ""));
+    const nameFromClass = t.match(
+      /<th[^>]*class=["'][^"']*store-name[^"']*["'][^>]*>([\s\S]*?)<\/th>/i,
+    )?.[1];
+    const nameFromFirst = t.match(/<th[^>]*>([\s\S]*?)<\/th>/i)?.[1];
+    const storeName = cellText(nameFromClass || nameFromFirst || "") || "군마트";
 
     // Drop noisy store meta rows (lat/lng / hidden detail links)
     t = t.replace(
       /<tr[^>]*>\s*<th[^>]*>\s*(위도|경도|세부정보)\s*<\/th>[\s\S]*?<\/tr>/gi,
       "",
     );
+
+    if (Number.isFinite(latNum) && Number.isFinite(lngNum)) {
+      const mapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(storeName)}/${latNum},${lngNum}`;
+      const mapRow = `<tr><th>지도</th><td><a class="store-map-link" href="${mapUrl}" target="_blank" rel="noopener noreferrer">카카오맵에서 보기</a></td></tr>`;
+      if (/<\/tbody>/i.test(t)) {
+        t = t.replace(/<\/tbody>/i, `${mapRow}</tbody>`);
+      } else {
+        t = t.replace(/<\/table>/i, `${mapRow}</table>`);
+      }
+    }
 
     // Convert dash lines inside table cells into mini lists
     t = t.replace(/<(td|th)([^>]*)>([\s\S]*?)<\/\1>/gi, (_m, tag, attrs, inner) => {
@@ -213,6 +258,8 @@ export async function renderPostHtml(body: string): Promise<string> {
   html = hydrateYouTubeAnchors(html);
   html = enhanceTables(html);
   html = injectToc(html);
-  html = injectBodyAds(html, getAdsenseConfig());
+  const adsense = getAdsenseConfig();
+  html = injectBeforeTocAd(html, adsense);
+  html = injectBodyAds(html, adsense);
   return html;
 }

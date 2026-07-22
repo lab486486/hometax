@@ -1,3 +1,12 @@
+# SEO — force XML endpoints (no trailing slash HTML 404)
+/sitemap.xml/ /sitemap.xml 301
+/rss.xml/ /rss.xml 301
+/sitemap-index.xml/ /sitemap-index.xml 301
+/sitemap-0.xml/ /sitemap-0.xml 301
+/rss /rss.xml 301
+/feed /rss.xml 301
+/feed/ /rss.xml 301
+
 # Legacy WordPress lecture hub → Astro
 /워드프레스-무료특강 /free-lecture/ 301
 /워드프레스-무료특강/ /free-lecture/ 301

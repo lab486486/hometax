@@ -4,8 +4,8 @@
 - [x] Astro + Decap site scaffolded from blogincome
 - [x] WXR import (99 posts → blog 72 / gunmart 27)
 - [x] Repo: https://github.com/lab486486/hometax.git
-- [ ] Push `main` to GitHub
-- [ ] Cloudflare Pages connected to GitHub (build: `npm run build`, output: `dist`, Node 20)
+- [x] Cloudflare Pages ↔ GitHub (`lab486486/hometax`, branch `main`, `NODE_VERSION=20`)
+- [ ] Confirm production deploy after push
 
 ## GitHub OAuth App (Decap CMS)
 Callback URL must be:

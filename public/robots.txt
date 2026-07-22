@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://blogincome.kr/sitemap-index.xml
+Sitemap: https://hometax.me/sitemap.xml

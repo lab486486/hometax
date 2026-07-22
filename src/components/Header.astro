@@ -1,6 +1,7 @@
 ---
 import { site } from "../site.config";
 import { getSiteSettings, resolveNavHref, isExternalHref } from "../utils/site-settings";
+import HomeIcon from "./HomeIcon.astro";
 
 const settings = getSiteSettings();
 const links = settings.nav.length
@@ -21,12 +22,7 @@ const links = settings.nav.length
   <div class="container nav">
     <a class="brand" href="/" aria-label={settings.title || site.title}>
       <span class="brand-mark" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-          <path d="M5 12l-2 0l9 -9l9 9l-2 0"></path>
-          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
-        </svg>
+        <HomeIcon size={32} />
       </span>
       <span>{site.name}</span>
     </a>

@@ -3,6 +3,8 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import AdSlot from "../../components/AdSlot.astro";
+import HomeIcon from "../../components/HomeIcon.astro";
+import PostCardImage from "../../components/PostCardImage.astro";
 import { getAllPosts, postUrl, formatDate } from "../../utils/posts";
 import { site } from "../../site.config";
 import { getAdsenseConfig, hasInfeedAd } from "../../utils/adsense";
@@ -78,15 +80,11 @@ const infeedPosition = Math.max(1, adsense.infeed.position ?? 2);
                 <a class="post-card" href={postUrl(post)}>
                   <div class="post-card-media">
                     {post.data.cover_image ? (
-                      <img
-                        src={post.data.cover_image}
-                        alt=""
-                        width="640"
-                        height="360"
-                        loading="lazy"
-                      />
+                      <PostCardImage src={post.data.cover_image} />
                     ) : (
-                      <div class="post-card-fallback" aria-hidden="true">홈</div>
+                      <div class="post-card-fallback" aria-hidden="true">
+                        <HomeIcon size={40} />
+                      </div>
                     )}
                   </div>
                   <div class="post-card-body">
@@ -94,7 +92,9 @@ const infeedPosition = Math.max(1, adsense.infeed.position ?? 2);
                     <h2>{post.data.title}</h2>
                     <p class="post-card-excerpt">{post.data.description}</p>
                     <div class="post-card-author">
-                      <span class="post-card-avatar" aria-hidden="true">홈</span>
+                      <span class="post-card-avatar" aria-hidden="true">
+                        <HomeIcon size={18} />
+                      </span>
                       <div>
                         <strong>{site.name}</strong>
                         <time datetime={post.data.date.toISOString().slice(0, 10)}>

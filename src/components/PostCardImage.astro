@@ -1,0 +1,26 @@
+---
+import { resolveCardImage } from "../utils/card-image";
+
+interface Props {
+  src?: string | null;
+  alt?: string;
+  eager?: boolean;
+}
+
+const { src, alt = "", eager = false } = Astro.props;
+const resolved = resolveCardImage(src);
+---
+
+{
+  resolved ? (
+    <img
+      src={resolved}
+      alt={alt}
+      width="640"
+      height="360"
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      sizes="(max-width: 720px) 100vw, 340px"
+    />
+  ) : null
+}

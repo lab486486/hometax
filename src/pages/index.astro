@@ -2,8 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import HomeIcon from "../components/HomeIcon.astro";
+import AdSlot from "../components/AdSlot.astro";
+import PostCardImage from "../components/PostCardImage.astro";
 import { getBlogPosts, getGunmartPosts, postUrl, formatDate } from "../utils/posts";
 import { popularCalculators } from "../data/calculators";
+import { getAdsenseConfig, getHomeAdCode, hasHomeAd } from "../utils/adsense";
 import { site } from "../site.config";
 import "../styles/calculators.css";
 
@@ -12,6 +16,9 @@ const gunPosts = await getGunmartPosts();
 const calcs = popularCalculators().slice(0, 4);
 const featured = taxPosts.filter((p) => p.data.cover_image).slice(0, 6);
 const latestTax = taxPosts.slice(0, 6);
+const adsense = getAdsenseConfig();
+const showHomeAd = hasHomeAd(adsense);
+const homeAdCode = getHomeAdCode(adsense);
 
 const topics = [
   { label: "종합소득세", href: "/category/%ED%99%88%ED%83%9D%EC%8A%A4/" },
@@ -29,20 +36,42 @@ const topics = [
     <section class="home-hero-band" id="home">
       <div class="container">
         <p class="hero-kicker">세금 계산기 & 실무 가이드</p>
-        <h1>{site.name}</h1>
-        <p class="hero-lead">
-          연봉 실수령액부터 종합소득세·취득세까지. 자주 쓰는 계산기와 홈택스 실무 글을 한곳에서 확인하세요.
-        </p>
-        <div class="hero-actions home-hero-actions">
-          <a class="btn btn-primary" href="/calculator/salary/">연봉 실수령액 계산</a>
-          <a class="btn btn-secondary" href="#calculators">인기 계산기</a>
+        <div class="home-hero-layout">
+          <div class="home-hero-copy">
+            <h1>{site.name}</h1>
+            <p class="hero-lead">
+              연봉 실수령액부터 종합소득세·취득세까지. 자주 쓰는 계산기와 홈택스 실무 글을 한곳에서 확인하세요.
+            </p>
+            <div class="hero-actions home-hero-actions">
+              <a class="btn btn-primary" href="/calculator/salary/">연봉 실수령액 계산</a>
+              <a class="btn btn-secondary" href="#calculators">인기 계산기</a>
+            </div>
+          </div>
+
+          <aside class="home-hero-topics" aria-label="주제별 가이드">
+            <div class="topic-grid topic-grid-home topic-grid-hero">
+              {
+                topics.map((t) => (
+                  <a class="topic-card topic-card-title topic-card-hero" href={t.href}>
+                    <strong>{t.label}</strong>
+                  </a>
+                ))
+              }
+            </div>
+          </aside>
         </div>
-        <p class="home-disclaimer">
-          국세청 홈택스와 무관한 독립 정보 사이트입니다.<br />
-          계산 결과는 참고용입니다.
-        </p>
       </div>
     </section>
+
+    {
+      showHomeAd && (
+        <section class="home-ad-band" aria-label="광고">
+          <div class="container">
+            <AdSlot html={homeAdCode} class="ad-slot-home" />
+          </div>
+        </section>
+      )
+    }
 
     <section class="section home-section-tight" id="calculators">
       <div class="container">
@@ -68,7 +97,7 @@ const topics = [
       </div>
     </section>
 
-    <section class="section home-section-tight" style="padding-top:0;">
+    <section class="section home-section-tight home-topics-mobile" style="padding-top:0;">
       <div class="container">
         <div class="section-head">
           <p class="section-eyebrow">Topics</p>
@@ -101,9 +130,11 @@ const topics = [
                 <a class="post-card" href={postUrl(post)}>
                   <div class="post-card-media">
                     {post.data.cover_image ? (
-                      <img src={post.data.cover_image} alt="" width="640" height="360" loading="lazy" />
+                      <PostCardImage src={post.data.cover_image} />
                     ) : (
-                      <div class="post-card-fallback" aria-hidden="true">홈</div>
+                      <div class="post-card-fallback" aria-hidden="true">
+                        <HomeIcon size={40} />
+                      </div>
                     )}
                   </div>
                   <div class="post-card-body">
@@ -111,7 +142,9 @@ const topics = [
                     <h2>{post.data.title}</h2>
                     <p class="post-card-excerpt">{post.data.description}</p>
                     <div class="post-card-author">
-                      <span class="post-card-avatar" aria-hidden="true">홈</span>
+                      <span class="post-card-avatar" aria-hidden="true">
+                        <HomeIcon size={18} />
+                      </span>
                       <div>
                         <strong>{site.name}</strong>
                         <time datetime={post.data.date.toISOString().slice(0, 10)}>
@@ -146,7 +179,7 @@ const topics = [
                         {formatDate(post.data.date)}
                       </time>
                     </span>
-                    <span class="home-link-title">{post.data.title}</span>
+                    <span class="home-link-title home-link-title-ellipsis">{post.data.title}</span>
                   </a>
                 </li>
               ))

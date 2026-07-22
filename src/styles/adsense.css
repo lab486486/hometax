@@ -17,6 +17,14 @@
   margin: 0 0 2rem;
 }
 
+.ad-slot-before-toc {
+  margin: 0 0 1rem;
+}
+
+.ad-slot-home {
+  margin: 0 auto;
+}
+
 .ad-slot-inarticle {
   margin: 2rem 0;
 }

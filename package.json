@@ -5,11 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "python3 scripts/optimize-covers.py && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "import:wp": "node scripts/import-wxr.mjs && node scripts/fix-content.mjs",
-    "fix:content": "node scripts/fix-content.mjs"
+    "fix:content": "node scripts/fix-content.mjs",
+    "optimize:covers": "python3 scripts/optimize-covers.py"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",

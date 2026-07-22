@@ -38,6 +38,10 @@ node scripts/import-wxr.mjs "hometax 2026-07-18.xml"
 
 ## 배포 (Cloudflare Pages)
 
-1. GitHub에 이 저장소 연결
-2. Build: `npm run build` / Output: `dist` / Node 20
-3. 커스텀 도메인: `hometax.me`
+GitHub `lab486486/hometax` ↔ Cloudflare Pages `hometax` 연결됨. `main` push 시 자동 배포.
+
+- Build command: `npm run build`
+- Build output: `dist`
+- Env: `NODE_VERSION=20`
+- 도메인: `hometax.me`
+

@@ -8,8 +8,11 @@ import multiplexData from "../data/adsense/multiplex.json";
 
 export interface AdsenseDisplayConfig {
   code: string;
+  code_after_toc?: string;
+  code_home?: string;
   above_title: boolean;
   before_content: boolean;
+  after_toc?: boolean;
   after_h2: boolean;
   after_h3: boolean;
   after_h4: boolean;
@@ -86,7 +89,32 @@ export function displayBeforeContent(config: AdsenseConfig = getAdsenseConfig())
 
 export function hasDisplayInBody(config: AdsenseConfig = getAdsenseConfig()): boolean {
   const { display } = config;
-  return displayReady(config) && (display.after_h2 || display.after_h3 || display.after_h4);
+  if (!isAdsenseActive(config)) return false;
+  const hasH2 = display.after_h2 && hasAdCode(display.code_after_toc || display.code);
+  const hasH3 = display.after_h3 && hasAdCode(display.code);
+  const hasH4 = display.after_h4 && hasAdCode(display.code);
+  return Boolean(hasH2 || hasH3 || hasH4);
+}
+
+export function hasAfterTocAd(config: AdsenseConfig = getAdsenseConfig()): boolean {
+  const { display } = config;
+  return (
+    isAdsenseActive(config) &&
+    Boolean(display.after_toc) &&
+    hasAdCode(display.code_after_toc || display.code)
+  );
+}
+
+export function getAfterTocAdCode(config: AdsenseConfig = getAdsenseConfig()): string {
+  return (config.display.code_after_toc || config.display.code || "").trim();
+}
+
+export function hasHomeAd(config: AdsenseConfig = getAdsenseConfig()): boolean {
+  return isAdsenseActive(config) && hasAdCode(config.display.code_home);
+}
+
+export function getHomeAdCode(config: AdsenseConfig = getAdsenseConfig()): string {
+  return (config.display.code_home || "").trim();
 }
 
 export function hasInarticleAd(config: AdsenseConfig = getAdsenseConfig()): boolean {

@@ -17,6 +17,8 @@ export const RESERVED = new Set([
   "robots.txt",
   "sitemap-index.xml",
   "sitemap-0.xml",
+  "sitemap.xml",
+  "rss.xml",
   "404",
   "index",
   "_astro",

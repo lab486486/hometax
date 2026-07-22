@@ -177,11 +177,21 @@ collections:
         file: src/data/adsense/display.json
         format: json
         fields:
-          - label: 광고 코드
+          - label: 광고 코드 (H3 소제목 아래)
             name: code
             widget: text
             required: false
-            hint: "코드를 입력하고 표시 위치를 선택하면, 상단 광고 활성화가 켜진 상태에서 자동으로 노출됩니다."
+            hint: "H3 소제목 아래에 넣을 디스플레이 코드."
+          - label: H2 소제목 아래 광고 코드
+            name: code_after_toc
+            widget: text
+            required: false
+            hint: "첫 번째 H2 소제목 바로 아래에 넣을 디스플레이 코드. 비우면 위 광고 코드를 사용합니다."
+          - label: 홈 광고 코드
+            name: code_home
+            widget: text
+            required: false
+            hint: "메인 홈의 인기 계산기 섹션 위에 표시됩니다."
           - label: 제목 위
             name: above_title
             widget: boolean
@@ -192,6 +202,11 @@ collections:
             widget: boolean
             default: false
             hint: "메타 정보 아래, 본문 마크다운 시작 전에 표시합니다."
+          - label: 목차 위 (사용 안 함)
+            name: after_toc
+            widget: boolean
+            default: false
+            hint: "비활성. 본문 광고는 H2/H3 아래를 사용합니다."
           - label: H2 소제목 다음
             name: after_h2
             widget: boolean

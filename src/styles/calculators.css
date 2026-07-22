@@ -337,19 +337,38 @@ a.topic-card span {
   justify-content: flex-start;
 }
 
-.home-disclaimer {
-  display: block;
-  width: 100%;
-  max-width: 36rem;
-  margin-top: 1.1rem;
-  padding: 0.85rem 1rem;
-  border-radius: 0.65rem;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(0, 0, 0, 0.18);
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 0.84rem;
-  line-height: 1.5;
-  text-align: left;
+.home-hero-layout {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+.home-hero-topics {
+  display: none;
+}
+
+.topic-grid-hero {
+  gap: 0.7rem;
+}
+
+a.topic-card-hero {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  min-height: 3.1rem;
+  padding: 0.85rem 0.9rem;
+  backdrop-filter: blur(6px);
+}
+
+a.topic-card-hero:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+a.topic-card-hero strong {
+  color: #fff;
+  font-size: 0.95rem;
 }
 
 .home-hero-band {
@@ -358,6 +377,48 @@ a.topic-card span {
   padding: 7.2rem 0 3.2rem;
   position: relative;
   overflow: hidden;
+}
+
+.home-ad-band {
+  padding: 0.25rem 0;
+}
+
+.home-ad-band .ad-slot-home {
+  margin: 0 auto;
+  min-height: 0;
+}
+
+.home-ad-band + #calculators.home-section-tight {
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 960px) {
+  .home-hero-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    gap: 2.75rem;
+    align-items: start;
+  }
+
+  .home-hero-topics {
+    display: block;
+    padding-top: 0.75rem;
+  }
+
+  .home-topics-mobile {
+    display: none;
+  }
+
+  .home-hero-band {
+    padding: 7.2rem 0 3.6rem;
+  }
+
+  .home-ad-band {
+    padding: 0.35rem 0;
+  }
+
+  .home-ad-band + #calculators.home-section-tight {
+    padding-top: 1.75rem;
+  }
 }
 
 .home-hero-band::after {
@@ -376,6 +437,7 @@ a.topic-card span {
 
 .home-hero-band .hero-kicker {
   display: inline-flex;
+  margin: 0 0 0.15rem;
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.14);
@@ -384,7 +446,7 @@ a.topic-card span {
 }
 
 .home-hero-band h1 {
-  margin: 0.9rem 0 0.8rem;
+  margin: 0.75rem 0 0.8rem;
   font-size: clamp(2.2rem, 5vw, 3.3rem);
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -416,6 +478,19 @@ a.topic-card span {
   padding: 2.75rem 0;
 }
 
+/* Tighten gap between popular calculators and featured guides (~half) */
+#calculators.home-section-tight {
+  padding-bottom: 1.35rem;
+}
+
+.home-topics-mobile.home-section-tight {
+  padding-bottom: 1.35rem;
+}
+
+#featured.section {
+  padding-top: 2.25rem;
+}
+
 .section-link {
   color: var(--brand-dark);
   font-weight: 700;
@@ -432,8 +507,8 @@ body.inverse-header .menu-btn {
 }
 
 body.inverse-header .brand-mark {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  background: #2466EB;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
 body.inverse-header .nav-cta.btn-primary {

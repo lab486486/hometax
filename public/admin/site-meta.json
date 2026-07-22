@@ -2,6 +2,6 @@
   "title": "홈택스 가이드",
   "site_url": "https://hometax.me",
   "copyright_name": "홈택스 가이드",
-  "rss_url": "https://hometax.me/",
-  "sitemap_url": "https://hometax.me/sitemap-index.xml"
+  "rss_url": "https://hometax.me/rss.xml",
+  "sitemap_url": "https://hometax.me/sitemap.xml"
 }

@@ -1,18 +1,31 @@
 ---
+import { site } from "../site.config";
 import { getSiteSettings } from "../utils/site-settings";
 
 const year = new Date().getFullYear();
 const settings = getSiteSettings();
+const host = (() => {
+  try {
+    return new URL(settings.site_url || site.baseUrl).hostname;
+  } catch {
+    return "hometax.me";
+  }
+})();
+const brand = settings.copyright_name || site.name;
 ---
 
 <footer class="site-footer">
-  <div class="container footer-row">
-    <p>© {year} {settings.copyright_name}</p>
+  <div class="container footer-inner">
     <div class="footer-links">
       <a href="/calculator/">계산기</a>
       <a href="/category/%ED%99%88%ED%83%9D%EC%8A%A4/">세금 가이드</a>
       <a href="/category/%EA%B5%B0%EB%A7%88%ED%8A%B8/">군마트</a>
       <a class="footer-admin" href="/admin/" aria-label="관리자 페이지">·</a>
     </div>
+    <p class="footer-copy">© {year} {host} · {brand}</p>
+    <p class="footer-note">
+      국세청 홈택스와 무관한 독립 정보 사이트입니다. 계산기 결과와 가이드 내용은 참고용이며, 실제
+      신고·납부·발급은 공식 안내를 확인해 주세요.
+    </p>
   </div>
 </footer>
