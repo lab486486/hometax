@@ -3,6 +3,13 @@
   max-width: 100%;
   overflow: hidden;
   text-align: center;
+  /* Avoid late ad injection shoving content (CLS). */
+  min-height: 90px;
+  contain: layout;
+}
+
+.ad-slot ins.adsbygoogle {
+  min-height: inherit;
 }
 
 .ad-slot-display {

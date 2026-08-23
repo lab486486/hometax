@@ -152,7 +152,7 @@
 a.calc-tile {
   display: grid;
   gap: 0.35rem;
-  min-height: 0;
+  min-height: 7.25rem;
   padding: 1rem 0.9rem;
   border-radius: var(--radius);
   border: 1px solid var(--line);
@@ -380,12 +380,17 @@ a.topic-card-hero strong {
 }
 
 .home-ad-band {
-  padding: 0.25rem 0;
+  padding: 0.75rem 0;
 }
 
 .home-ad-band .ad-slot-home {
   margin: 0 auto;
-  min-height: 0;
+  /* Reserve space before AdSense paints so #calculators does not shift (CLS). */
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout;
 }
 
 .home-ad-band + #calculators.home-section-tight {
@@ -413,7 +418,11 @@ a.topic-card-hero strong {
   }
 
   .home-ad-band {
-    padding: 0.35rem 0;
+    padding: 0.85rem 0;
+  }
+
+  .home-ad-band .ad-slot-home {
+    min-height: 100px;
   }
 
   .home-ad-band + #calculators.home-section-tight {
@@ -474,9 +483,13 @@ a.topic-card-hero strong {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.home-section-tight {
-  padding: 2.75rem 0;
+#featured,
+.home-topics-mobile,
+.home-lists {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
+
 
 /* Tighten gap between popular calculators and featured guides (~half) */
 #calculators.home-section-tight {

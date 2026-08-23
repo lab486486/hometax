@@ -2,17 +2,34 @@
 interface Props {
   size?: number;
   class?: string;
+  loading?: "eager" | "lazy";
 }
 
-const { size = 20, class: className = "" } = Astro.props;
+const { size = 20, class: className = "", loading = "lazy" } = Astro.props;
+
+/** Prefer a near-display-size asset; keep 2x for retina. */
+const src =
+  size <= 24
+    ? "/images/brand/hometax-mark-36.webp"
+    : size <= 40
+      ? "/images/brand/hometax-mark-48.webp"
+      : "/images/brand/hometax-mark-96.webp";
+const srcset =
+  size <= 24
+    ? "/images/brand/hometax-mark-36.webp 36w, /images/brand/hometax-mark-72.webp 72w"
+    : size <= 40
+      ? "/images/brand/hometax-mark-48.webp 48w, /images/brand/hometax-mark-96.webp 96w"
+      : "/images/brand/hometax-mark-96.webp 96w, /images/brand/hometax-mark.webp 256w";
 ---
 
 <img
-  src="/images/brand/hometax-mark.webp"
+  src={src}
+  srcset={srcset}
+  sizes={`${size}px`}
   alt=""
   width={size}
   height={size}
   class={`brand-logo ${className}`.trim()}
   decoding="async"
-  loading="eager"
+  loading={loading}
 />

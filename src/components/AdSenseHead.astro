@@ -27,10 +27,11 @@ const deferAds = Boolean(client);
           s.crossOrigin = "anonymous";
           document.head.appendChild(s);
         }
+        /* Load after first paint / interaction to keep TBT + early CLS low. */
         if ("requestIdleCallback" in window) {
-          requestIdleCallback(loadAds, { timeout: 3000 });
+          requestIdleCallback(loadAds, { timeout: 4500 });
         } else {
-          setTimeout(loadAds, 2200);
+          setTimeout(loadAds, 3500);
         }
         ["scroll", "pointerdown", "keydown", "touchstart"].forEach(function (type) {
           window.addEventListener(type, loadAds, { once: true, passive: true });
