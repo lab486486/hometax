@@ -38,8 +38,8 @@ x-blog-fields: &blog_fields
   - { label: 커버 이미지, name: cover_image, widget: image, required: false }
   - label: 본문
     name: body
-    widget: markdown
-    hint: "쿠팡 박스: [coupang url=\"단축링크\" keyword=\"상품명\"]"
+    widget: toastui
+    hint: "토스트 UI 에디터(마크다운/위지윅). 쿠팡 박스: [coupang url=\"단축링크\" keyword=\"상품명\"]"
 
 collections:
   - name: site

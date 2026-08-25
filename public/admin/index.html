@@ -8,8 +8,12 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.webp" type="image/webp" sizes="32x32" />
     <link href="/admin/adsense-accordion.css?v=1" rel="stylesheet" />
-    <link href="/admin/admin-custom.css?v=2" rel="stylesheet" />
+    <link href="/admin/admin-custom.css?v=3" rel="stylesheet" />
     <link href="/admin/shortlinks.css?v=5" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://uicdn.toast.com/editor/3.2.2/toastui-editor.min.css"
+    />
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <script>
       window.CMS_MANUAL_INIT = true;
@@ -37,9 +41,13 @@
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
+    <script src="https://uicdn.toast.com/editor/3.2.2/toastui-editor-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@toast-ui/editor@3.2.2/dist/i18n/ko-kr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/admin/r2-media-library.js"></script>
     <script src="/admin/adsense-github.js"></script>
     <script src="/admin/cms-slug-field.js?v=1"></script>
+    <script src="/admin/cms-toastui-widget.js?v=1"></script>
     <script>
       CMS.registerMediaLibrary(window.R2MediaLibrary);
       CMS.init();

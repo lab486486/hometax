@@ -346,3 +346,56 @@
     font-size: 15px;
   }
 }
+
+/* Toast UI Editor — match post body width (~42rem) */
+.cms-toastui-wrap {
+  max-width: 42rem;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.cms-toastui-host {
+  border: 1px solid #c9cccf;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.cms-toastui-host .toastui-editor-defaultUI {
+  border: 0 !important;
+}
+
+.cms-toastui-host .toastui-editor-contents {
+  font-size: 16px;
+  line-height: 1.75;
+  font-family: "Apple SD Gothic Neo", Pretendard, "Noto Sans KR", system-ui, sans-serif;
+  word-break: keep-all;
+}
+
+.cms-toastui-host .toastui-editor-md-container .CodeMirror,
+.cms-toastui-host .toastui-editor-ww-container .ProseMirror {
+  font-size: 16px;
+  line-height: 1.75;
+  font-family: "Apple SD Gothic Neo", Pretendard, "Noto Sans KR", system-ui, sans-serif;
+}
+
+.cms-toastui-preview {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1rem 0;
+  font-size: 16px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+.cms-toastui-preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+.cms-toastui-preview-raw {
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
