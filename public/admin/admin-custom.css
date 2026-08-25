@@ -347,11 +347,11 @@
   }
 }
 
-/* Toast UI Editor — match post body width (~42rem), use tall viewport height */
+/* Toast UI Editor — use available horizontal width */
 .cms-toastui-wrap {
-  max-width: 42rem;
+  max-width: none;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   box-sizing: border-box;
 }
 
@@ -360,7 +360,7 @@
   border-radius: 6px;
   overflow: hidden;
   background: #fff;
-  min-height: min(78vh, 920px);
+  min-height: 0;
 }
 
 .cms-toastui-host .toastui-editor-defaultUI {
@@ -382,8 +382,8 @@
 }
 
 .cms-toastui-preview {
-  max-width: 42rem;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   padding: 1rem 0;
   font-size: 16px;
   line-height: 1.75;

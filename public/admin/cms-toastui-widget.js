@@ -159,7 +159,7 @@
 
       this.editor = new Editor({
         el: this._host,
-        height: Math.min(Math.round(window.innerHeight * 0.78), 920) + "px",
+        height: Math.min(Math.round(window.innerHeight * 0.55), 640) + "px",
         initialValue: this.props.value || "",
         initialEditType: "wysiwyg",
         previewStyle: "vertical",
