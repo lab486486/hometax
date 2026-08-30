@@ -14,6 +14,7 @@
   let builderKeyword = "";
   let generatedCode = "";
   let copyHint = "";
+  let urlClearedOnce = false;
 
   function getToken() {
     const keys = ["decap-cms-user", "netlify-cms-user"];
@@ -90,8 +91,28 @@
   }
 
   function bindHelpActions() {
+    const urlInput = document.getElementById("builderUrl");
     const genBtn = document.getElementById("builderGenerate");
     const copyBtn = document.getElementById("builderCopy");
+
+    if (urlInput) {
+      urlInput.addEventListener("focus", function () {
+        if (urlClearedOnce) return;
+        urlClearedOnce = true;
+        urlInput.value = "";
+        builderUrl = "";
+      });
+      urlInput.addEventListener("mousedown", function (event) {
+        if (urlClearedOnce) return;
+        // Clear before browser places caret into existing text.
+        event.preventDefault();
+        urlClearedOnce = true;
+        urlInput.value = "";
+        builderUrl = "";
+        urlInput.focus();
+      });
+    }
+
     if (genBtn) {
       genBtn.addEventListener("click", function () {
         readBuilderFields();
@@ -160,7 +181,8 @@
       "</div>" +
       loginHint +
       statusHtml +
-      '<section class="cms-coupang-card">' +
+      '<div class="cms-coupang-grid">' +
+      '<section class="cms-coupang-card cms-coupang-card-keys">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">' +
       '<h2 style="margin:0">API 키</h2>' +
       '<span class="cms-coupang-badge ' +
@@ -172,13 +194,13 @@
       '<form id="coupang-form">' +
       '<div class="cms-coupang-field">' +
       '<label for="accessKey">Access Key</label>' +
-      '<input id="accessKey" name="accessKey" type="text" autocomplete="off" spellcheck="false" placeholder="Access Key" value="' +
+      '<input id="accessKey" name="accessKey" class="cms-coupang-key-input" type="text" autocomplete="off" spellcheck="false" placeholder="Access Key" value="' +
       escapeHtml(accessKey) +
       '" />' +
       "</div>" +
       '<div class="cms-coupang-field">' +
       '<label for="secretKey">Secret Key</label>' +
-      '<input id="secretKey" name="secretKey" type="password" autocomplete="off" spellcheck="false" placeholder="Secret Key" value="' +
+      '<input id="secretKey" name="secretKey" class="cms-coupang-key-input" type="password" autocomplete="off" spellcheck="false" placeholder="Secret Key" value="' +
       escapeHtml(secretKey) +
       '" />' +
       "</div>" +
@@ -207,7 +229,7 @@
       "<li><strong>keyword</strong> — 이 키워드를 기반으로 쿠팡 내에서 상품 썸네일을 불러옴</li>" +
       "</ol>" +
       '<div class="cms-coupang-builder">' +
-      "<p class=\"cms-coupang-builder-title\">예시 · 본문 코드 만들기</p>" +
+      '<p class="cms-coupang-builder-title">예시 · 본문 코드 만들기</p>' +
       '<div class="cms-coupang-field">' +
       '<label for="builderUrl">단축 링크 (url)</label>' +
       '<input id="builderUrl" type="url" autocomplete="off" spellcheck="false" placeholder="https://link.coupang.com/a/xxxxx" value="' +
@@ -216,7 +238,7 @@
       "</div>" +
       '<div class="cms-coupang-field">' +
       '<label for="builderKeyword">keyword</label>' +
-      '<input id="builderKeyword" type="text" autocomplete="off" spellcheck="false" placeholder="예: 높이조절 책상" value="' +
+      '<input id="builderKeyword" type="text" autocomplete="off" spellcheck="false" placeholder="예 : 입력한 키워드의 사진이 썸네일로 나옵니다" value="' +
       escapeHtml(builderKeyword) +
       '" />' +
       "</div>" +
@@ -226,7 +248,8 @@
       resultHtml +
       hintHtml +
       "</div>" +
-      "</section>";
+      "</section>" +
+      "</div>";
 
     const form = document.getElementById("coupang-form");
     if (form) form.addEventListener("submit", onSubmit);

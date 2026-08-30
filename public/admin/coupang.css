@@ -9,9 +9,37 @@ body.cms-coupang-page {
 .cms-coupang-pane {
   box-sizing: border-box;
   width: 100%;
-  max-width: 44rem;
+  max-width: 72rem;
   margin: 0 auto;
   padding: 28px 20px 48px;
+}
+
+.cms-coupang-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(360px, 1.4fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.cms-coupang-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  min-width: 0;
+}
+
+.cms-coupang-card-keys .cms-coupang-key-input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .cms-coupang-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cms-coupang-top {
@@ -47,18 +75,6 @@ body.cms-coupang-page {
 .cms-coupang-back:hover {
   color: #1565c0;
   text-decoration: underline;
-}
-
-.cms-coupang-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
-.cms-coupang-card + .cms-coupang-card {
-  margin-top: 16px;
 }
 
 .cms-coupang-card h2 {
