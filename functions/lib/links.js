@@ -1,55 +1,32 @@
 const LINKS_KEY = "config/links.json";
-const GITHUB_REPO = "lab486486/blogincome";
+const GITHUB_REPO = "lab486486/hometax";
 
 export const RESERVED = new Set([
   "",
-  "free-lecture",
-  "lecture01",
-  "lecture02",
-  "lecture03",
-  "lecture04",
-  "lecture05",
-  "lecture06",
-  "x-links",
   "api",
   "images",
   "favicon.webp",
+  "favicon.svg",
   "robots.txt",
   "sitemap-index.xml",
   "sitemap-0.xml",
   "sitemap.xml",
   "rss.xml",
+  "og.jpg",
   "404",
   "index",
   "_astro",
   "_headers",
   "_redirects",
-  "wordpress",
-  "cafe24",
-  "cloudways",
   "admin",
   "category",
-  "posts",
-  "kadence-css",
+  "calculator",
+  "m",
+  "guide",
 ]);
 
-export const DEFAULT_LINKS = {
-  "news-letter": {
-    to: "https://blogincome.kr/",
-    note: "뉴스레터 (목적지 수정 필요)",
-    enabled: true,
-  },
-  signup: {
-    to: "https://chemicloud.com/wordpress-hosting#a_aid=6818d638aa861&chan=code3",
-    note: "케미클라우드 가입",
-    enabled: true,
-  },
-  ebook: {
-    to: "https://blogincome.kr/wordpress/",
-    note: "워드프레스 전자책 → /wordpress/",
-    enabled: true,
-  },
-};
+/** Seed only when R2 has no links file yet. Keep empty — user adds links in admin. */
+export const DEFAULT_LINKS = {};
 
 /** Active for redirect? Missing enabled (old data) counts as on. */
 export function isLinkEnabled(item) {
@@ -110,7 +87,7 @@ export function getBearerToken(request) {
   return match ? match[1].trim() : "";
 }
 
-/** Admin access = GitHub token that can read the blogincome repo (same as Decap). */
+/** Admin access = GitHub token that can read the hometax repo (same as Decap). */
 export async function hasAdminAccess(request) {
   const token = getBearerToken(request);
   if (!token) return false;
@@ -120,7 +97,7 @@ export async function hasAdminAccess(request) {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/vnd.github+json",
-        "User-Agent": "blogincome-admin",
+        "User-Agent": "hometax-admin",
       },
     });
     return res.ok;

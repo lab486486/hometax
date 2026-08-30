@@ -3,5 +3,5 @@
  */
 
 export async function onRequest() {
-  return Response.redirect("https://blogincome.kr/admin/shortlinks", 302);
+  return Response.redirect("https://hometax.me/admin/shortlinks", 302);
 }
