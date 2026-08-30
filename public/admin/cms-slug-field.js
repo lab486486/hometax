@@ -12,12 +12,6 @@
       .replace(/^-+|-+$/g, "");
   }
 
-  function getSiteBase() {
-    const meta = window.__cmsSiteBase;
-    if (meta) return meta;
-    return window.location.origin.replace(/\/$/, "");
-  }
-
   function isBlogEditorHash() {
     const hash = location.hash || "";
     return (
@@ -57,30 +51,6 @@
     );
   }
 
-  function ensurePreview(slugInput) {
-    const container = slugInput.closest("[class*='ControlContainer']") || slugInput.parentElement;
-    if (!container) return null;
-
-    let preview = container.querySelector("[data-cms-slug-preview]");
-    if (!preview) {
-      preview = document.createElement("p");
-      preview.dataset.cmsSlugPreview = "1";
-      preview.style.margin = "8px 0 0";
-      preview.style.fontSize = "13px";
-      preview.style.color = "#555";
-      preview.style.wordBreak = "break-all";
-      container.appendChild(preview);
-    }
-    return preview;
-  }
-
-  function updatePreview(slugInput, preview) {
-    const slug = (slugInput.value || "").trim();
-    preview.textContent = slug
-      ? `미리보기: ${getSiteBase()}/posts/${slug}/`
-      : "미리보기: 슬러그를 입력하면 URL이 표시됩니다.";
-  }
-
   function bindEditor(root) {
     const titleInput = findFieldControl(root, "title");
     const slugInput = findFieldControl(root, "slug");
@@ -90,12 +60,13 @@
     slugInput.dataset.cmsSlugBound = "1";
     let slugTouched = Boolean((slugInput.value || "").trim());
 
-    const preview = ensurePreview(slugInput);
-    updatePreview(slugInput, preview);
+    const stalePreview = (slugInput.closest("[class*='ControlContainer']") || slugInput.parentElement)?.querySelector(
+      "[data-cms-slug-preview]"
+    );
+    if (stalePreview) stalePreview.remove();
 
     slugInput.addEventListener("input", function () {
       slugTouched = true;
-      updatePreview(slugInput, preview);
     });
 
     titleInput.addEventListener("input", function () {
@@ -103,7 +74,6 @@
       const next = slugifyTitle(titleInput.value || "");
       slugInput.value = next;
       slugInput.dispatchEvent(new Event("input", { bubbles: true }));
-      updatePreview(slugInput, preview);
     });
 
     return true;
