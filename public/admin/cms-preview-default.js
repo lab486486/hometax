@@ -1,13 +1,13 @@
 /**
  * Decap CMS editor UX:
  * - Keep side-by-side preview off by default (full writing focus).
- * - Place a Publish-shaped "미리보기" button next to Publish (navy).
+ * - Action bar under the body editor: 미리보기 | 발행 (right-aligned).
  * - When preview is on, treat it as a centered modal (not a split pane).
  */
 (function () {
   const STORAGE_KEY = "cms.preview-visible";
   const BTN_ATTR = "data-cms-preview-btn";
-  const PROXY_ATTR = "data-cms-preview-proxy";
+  const BAR_ATTR = "data-cms-editor-actions";
   const OPEN_CLASS = "cms-preview-modal-open";
 
   try {
@@ -29,7 +29,7 @@
   function findPreviewToggle(root) {
     const candidates = root.querySelectorAll("button[title], [role='button'][title]");
     for (const el of candidates) {
-      if (el.getAttribute(PROXY_ATTR) === "1") continue;
+      if (el.closest(`[${BAR_ATTR}]`)) continue;
       if (isPreviewTitle(el.getAttribute("title"))) return el;
     }
     return null;
@@ -47,37 +47,41 @@
     );
   }
 
-  /** Toolbar-level Publish control (dropdown wrapper), so preview sits beside it. */
-  function findPublishControl(root) {
+  function isPublishNowLabel(text) {
+    const t = (text || "").replace(/\s+/g, " ").trim();
+    return (
+      t === "Publish now" ||
+      t === "Publish Now" ||
+      t === "지금 게시" ||
+      /publish\s*now/i.test(t)
+    );
+  }
+
+  function findPublishButton(root) {
     const nodes = root.querySelectorAll("button, [role='button']");
-    let publishBtn = null;
     for (const el of nodes) {
-      if (el.getAttribute(PROXY_ATTR) === "1") continue;
-      if (el.classList.contains("cms-preview-toggle-btn")) continue;
+      if (el.closest(`[${BAR_ATTR}]`)) continue;
       const cls = typeof el.className === "string" ? el.className : "";
       if (/PublishButton/i.test(cls) || isPublishLabel(el.textContent)) {
-        publishBtn = el;
-        break;
+        return el;
       }
     }
-    if (!publishBtn) return null;
+    return null;
+  }
 
-    let el = publishBtn;
-    for (let i = 0; i < 6 && el.parentElement; i++) {
-      const parent = el.parentElement;
-      try {
-        const style = window.getComputedStyle(parent);
-        const flexish =
-          style.display === "flex" || style.display === "inline-flex";
-        if (flexish && parent.childElementCount >= 2) {
-          return el;
-        }
-      } catch {
-        /* ignore */
-      }
-      el = parent;
+  function findBodyAnchor(root) {
+    const byField = root.querySelector('[data-cms-field="body"]');
+    if (byField) return byField;
+    const wrap = root.querySelector(".cms-tui-editor-wrap");
+    if (wrap) {
+      return (
+        wrap.closest('[class*="ControlContainer"]') ||
+        wrap.closest('[class*="ControlPane"]') ||
+        wrap.parentElement ||
+        wrap
+      );
     }
-    return publishBtn;
+    return null;
   }
 
   function hideNativeToggle(btn) {
@@ -88,39 +92,95 @@
     btn.tabIndex = -1;
   }
 
-  function ensureProxyButton(nativeBtn, publishBtn) {
-    if (!nativeBtn || !publishBtn) return null;
-
-    const host = publishBtn.parentElement;
-    if (!host) return null;
-
-    let proxy = host.querySelector(`[${PROXY_ATTR}="1"]`);
-    if (!proxy) {
-      proxy = document.createElement("button");
-      proxy.type = "button";
-      proxy.setAttribute(PROXY_ATTR, "1");
-      proxy.className = "cms-preview-toggle-btn";
-      proxy.setAttribute("title", "미리보기");
-      proxy.setAttribute("aria-label", "미리보기");
-      proxy.textContent = "미리보기";
-      proxy.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        nativeBtn.click();
-      });
+  function clickPublishNow(root) {
+    const items = root.querySelectorAll(
+      '[class*="DropdownItem"], [class*="dropdown"], li, button, a, [role="menuitem"]'
+    );
+    for (const item of items) {
+      if (item.closest(`[${BAR_ATTR}]`)) continue;
+      if (isPublishNowLabel(item.textContent)) {
+        item.click();
+        return true;
+      }
     }
-
-    if (proxy.nextElementSibling !== publishBtn) {
-      host.insertBefore(proxy, publishBtn);
-    }
-
-    return proxy;
+    return false;
   }
 
-  function syncProxyState(proxy, open) {
-    if (!proxy) return;
-    proxy.setAttribute("aria-pressed", open ? "true" : "false");
-    proxy.classList.toggle("is-active", open);
+  function triggerPublish(root) {
+    const publishBtn = findPublishButton(root);
+    if (!publishBtn) return;
+
+    publishBtn.click();
+    window.setTimeout(() => {
+      if (!clickPublishNow(root)) {
+        window.setTimeout(() => clickPublishNow(root), 120);
+      }
+    }, 40);
+  }
+
+  function ensureActionBar(root, nativePreviewBtn) {
+    const anchor = findBodyAnchor(root);
+    if (!anchor || !anchor.parentElement) return null;
+
+    let bar = root.querySelector(`[${BAR_ATTR}]`);
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.className = "cms-editor-actions";
+      bar.setAttribute(BAR_ATTR, "1");
+
+      const previewBtn = document.createElement("button");
+      previewBtn.type = "button";
+      previewBtn.className = "cms-editor-action-btn cms-editor-action-preview";
+      previewBtn.setAttribute("data-cms-action", "preview");
+      previewBtn.setAttribute("title", "미리보기");
+      previewBtn.textContent = "미리보기";
+      previewBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const toggle = findPreviewToggle(root);
+        if (toggle) toggle.click();
+      });
+
+      const sep = document.createElement("span");
+      sep.className = "cms-editor-action-sep";
+      sep.setAttribute("aria-hidden", "true");
+      sep.textContent = "|";
+
+      const publishBtn = document.createElement("button");
+      publishBtn.type = "button";
+      publishBtn.className = "cms-editor-action-btn cms-editor-action-publish";
+      publishBtn.setAttribute("data-cms-action", "publish");
+      publishBtn.setAttribute("title", "발행");
+      publishBtn.textContent = "발행";
+      publishBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        triggerPublish(root);
+      });
+
+      bar.appendChild(previewBtn);
+      bar.appendChild(sep);
+      bar.appendChild(publishBtn);
+    }
+
+    if (bar.previousElementSibling !== anchor) {
+      anchor.insertAdjacentElement("afterend", bar);
+    }
+
+    const previewBtn = bar.querySelector('[data-cms-action="preview"]');
+    if (previewBtn && nativePreviewBtn) {
+      /* keep reference fresh via findPreviewToggle on click */
+    }
+
+    return bar;
+  }
+
+  function syncProxyState(bar, open) {
+    if (!bar) return;
+    const previewBtn = bar.querySelector('[data-cms-action="preview"]');
+    if (!previewBtn) return;
+    previewBtn.setAttribute("aria-pressed", open ? "true" : "false");
+    previewBtn.classList.toggle("is-active", open);
   }
 
   function ensureBackdrop() {
@@ -162,10 +222,10 @@
     );
   }
 
-  function syncModalState(root, proxy) {
+  function syncModalState(root, bar) {
     const open = previewIsVisible(root);
     document.documentElement.classList.toggle(OPEN_CLASS, open);
-    syncProxyState(proxy, open);
+    syncProxyState(bar, open);
     ensureBackdrop();
     ensureCloseButton();
   }
@@ -174,9 +234,8 @@
     const nativeBtn = findPreviewToggle(root);
     if (nativeBtn) hideNativeToggle(nativeBtn);
 
-    const publishBtn = findPublishControl(root);
-    const proxy = ensureProxyButton(nativeBtn, publishBtn);
-    syncModalState(root, proxy);
+    const bar = ensureActionBar(root, nativeBtn);
+    syncModalState(root, bar);
   }
 
   function start() {
