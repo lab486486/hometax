@@ -34,6 +34,7 @@ export async function onRequest(context) {
       secretKey: keys.secretKey,
       source: keys.source,
       updatedAt: keys.updatedAt,
+      encrypted: Boolean(keys.encrypted),
       configured: Boolean(keys.accessKey && keys.secretKey),
     });
   }
@@ -64,6 +65,7 @@ export async function onRequest(context) {
       secretKey: saved.secretKey,
       source: "r2",
       updatedAt: saved.updatedAt,
+      encrypted: Boolean(saved.encrypted),
       configured: true,
     });
   } catch (error) {

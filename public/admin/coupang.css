@@ -174,16 +174,69 @@ body.cms-coupang-page {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-.cms-coupang-badge {
-  display: inline-flex;
-  align-items: center;
-  height: 22px;
-  padding: 0 8px;
-  border-radius: 999px;
-  font-size: 11px;
+.cms-coupang-notes {
+  margin: 4px 0 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.cms-coupang-notes p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #4b5563;
+}
+
+.cms-coupang-notes p + p {
+  margin-top: 6px;
+}
+
+.cms-coupang-btn.ghost {
+  background: #fff;
+  color: #1e3a5f;
+  border: 1px solid #cbd5e1;
+}
+
+.cms-coupang-btn.ghost:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.cms-coupang-builder {
+  margin-top: 8px;
+  padding-top: 4px;
+}
+
+.cms-coupang-builder-title {
+  margin: 0 0 12px;
+  font-size: 14px;
   font-weight: 600;
-  background: #e5e7eb;
-  color: #374151;
+  color: #111827;
+}
+
+.cms-coupang-result {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.cms-coupang-code-result {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.cms-coupang-builder-hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #065f46;
+}
+
+@media (max-width: 640px) {
+  .cms-coupang-result {
+    flex-direction: column;
+  }
 }
 
 .cms-coupang-badge.on {

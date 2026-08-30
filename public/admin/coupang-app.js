@@ -10,7 +10,10 @@
   let statusText = "";
   let statusError = false;
   let busy = false;
-  let loaded = false;
+  let builderUrl = "https://link.coupang.com/a/";
+  let builderKeyword = "";
+  let generatedCode = "";
+  let copyHint = "";
 
   function getToken() {
     const keys = ["decap-cms-user", "netlify-cms-user"];
@@ -40,6 +43,19 @@
     statusError = Boolean(isError);
   }
 
+  function readBuilderFields() {
+    const urlEl = document.getElementById("builderUrl");
+    const keywordEl = document.getElementById("builderKeyword");
+    if (urlEl) builderUrl = String(urlEl.value || "").trim();
+    if (keywordEl) builderKeyword = String(keywordEl.value || "").trim();
+  }
+
+  function buildShortcode(url, keyword) {
+    const safeUrl = String(url || "").trim();
+    const safeKeyword = String(keyword || "").trim();
+    return '[coupang url="' + safeUrl + '" keyword="' + safeKeyword + '"]';
+  }
+
   async function api(method, body) {
     const token = getToken();
     if (!token) throw new Error("GitHub 로그인이 필요합니다. 관리자 페이지에서 먼저 로그인해 주세요.");
@@ -60,7 +76,7 @@
     if (!res.ok || !data?.ok) {
       if (res.status === 401) throw new Error("권한이 없습니다. 관리자 페이지에서 다시 로그인해 주세요.");
       if (data?.error === "both_keys_required") {
-        throw new Error("ACCESS_KEY와 SECRET_KEY를 모두 입력해 주세요.");
+        throw new Error("Access Key와 Secret Key를 모두 입력해 주세요.");
       }
       throw new Error(data?.error || "요청에 실패했습니다.");
     }
@@ -71,6 +87,41 @@
     if (source === "r2") return "관리자 저장값 사용 중";
     if (source === "env") return "Cloudflare 환경변수 사용 중";
     return "미설정";
+  }
+
+  function bindHelpActions() {
+    const genBtn = document.getElementById("builderGenerate");
+    const copyBtn = document.getElementById("builderCopy");
+    if (genBtn) {
+      genBtn.addEventListener("click", function () {
+        readBuilderFields();
+        if (!builderUrl) {
+          copyHint = "단축 링크(url)를 입력해 주세요.";
+          paint();
+          return;
+        }
+        if (!builderKeyword) {
+          copyHint = "keyword를 입력해 주세요.";
+          paint();
+          return;
+        }
+        generatedCode = buildShortcode(builderUrl, builderKeyword);
+        copyHint = "";
+        paint();
+      });
+    }
+    if (copyBtn) {
+      copyBtn.addEventListener("click", async function () {
+        if (!generatedCode) return;
+        try {
+          await navigator.clipboard.writeText(generatedCode);
+          copyHint = "클립보드에 복사되었습니다.";
+        } catch {
+          copyHint = "복사에 실패했습니다. 코드를 직접 선택해 복사해 주세요.";
+        }
+        paint();
+      });
+    }
   }
 
   function paint() {
@@ -86,6 +137,19 @@
         "</p>"
       : "";
 
+    const resultHtml = generatedCode
+      ? '<div class="cms-coupang-result">' +
+        '<pre class="cms-coupang-code cms-coupang-code-result">' +
+        escapeHtml(generatedCode) +
+        "</pre>" +
+        '<button type="button" class="cms-coupang-btn ghost" id="builderCopy">복사</button>' +
+        "</div>"
+      : "";
+
+    const hintHtml = copyHint
+      ? '<p class="cms-coupang-builder-hint">' + escapeHtml(copyHint) + "</p>"
+      : "";
+
     root.innerHTML =
       '<div class="cms-coupang-top">' +
       '<div class="cms-coupang-head">' +
@@ -98,7 +162,7 @@
       statusHtml +
       '<section class="cms-coupang-card">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">' +
-      "<h2 style=\"margin:0\">API 키</h2>" +
+      '<h2 style="margin:0">API 키</h2>' +
       '<span class="cms-coupang-badge ' +
       (configured ? "on" : "off") +
       '">' +
@@ -107,16 +171,20 @@
       "</div>" +
       '<form id="coupang-form">' +
       '<div class="cms-coupang-field">' +
-      '<label for="accessKey">COUPANG_ACCESS_KEY</label>' +
+      '<label for="accessKey">Access Key</label>' +
       '<input id="accessKey" name="accessKey" type="text" autocomplete="off" spellcheck="false" placeholder="Access Key" value="' +
       escapeHtml(accessKey) +
       '" />' +
       "</div>" +
       '<div class="cms-coupang-field">' +
-      '<label for="secretKey">COUPANG_SECRET_KEY</label>' +
+      '<label for="secretKey">Secret Key</label>' +
       '<input id="secretKey" name="secretKey" type="password" autocomplete="off" spellcheck="false" placeholder="Secret Key" value="' +
       escapeHtml(secretKey) +
       '" />' +
+      "</div>" +
+      '<div class="cms-coupang-notes">' +
+      "<p>쿠팡API 키 발급 위치: 쿠팡 파트너스 로그인 → 추가 기능 → 파트너스 API</p>" +
+      "<p>입력하신 Access Key와 Secret Key는 암호화되어 저장됩니다.</p>" +
       "</div>" +
       '<div class="cms-coupang-actions">' +
       '<button type="submit" class="cms-coupang-btn"' +
@@ -133,25 +201,42 @@
       '<section class="cms-coupang-card cms-coupang-help">' +
       "<h2>본문에서 사용 방법</h2>" +
       "<p>글쓰기 본문에 아래 형식으로 넣으면 쿠팡 파트너스 상품 박스가 삽입됩니다.</p>" +
-      '<pre class="cms-coupang-code">[coupang url="https://link.coupang.com/a/xxxxx" keyword="상품검색어"]</pre>' +
+      '<pre class="cms-coupang-code">[coupang url="파트너스단축링크" keyword="상품검색어"]</pre>' +
       "<ol>" +
       "<li><strong>url</strong> — 쿠팡 파트너스에서 만든 추적(단축) 링크</li>" +
-      "<li><strong>keyword</strong> — 상품 제목·이미지를 찾을 검색어 (예: 높이조절 책상)</li>" +
+      "<li><strong>keyword</strong> — 이 키워드를 기반으로 쿠팡 내에서 상품 썸네일을 불러옴</li>" +
       "</ol>" +
-      "<p>예시</p>" +
-      '<pre class="cms-coupang-code">[coupang url="https://link.coupang.com/a/gC1HCuU4mO" keyword="높이조절 책상"]</pre>' +
-      "<p>키를 저장한 뒤 글을 발행하면, 박스가 실제 상품명과 썸네일을 불러옵니다. 키 발급: 쿠팡 파트너스 → 도구 → Open API.</p>" +
+      '<div class="cms-coupang-builder">' +
+      "<p class=\"cms-coupang-builder-title\">예시 · 본문 코드 만들기</p>" +
+      '<div class="cms-coupang-field">' +
+      '<label for="builderUrl">단축 링크 (url)</label>' +
+      '<input id="builderUrl" type="url" autocomplete="off" spellcheck="false" placeholder="https://link.coupang.com/a/xxxxx" value="' +
+      escapeHtml(builderUrl) +
+      '" />' +
+      "</div>" +
+      '<div class="cms-coupang-field">' +
+      '<label for="builderKeyword">keyword</label>' +
+      '<input id="builderKeyword" type="text" autocomplete="off" spellcheck="false" placeholder="예: 높이조절 책상" value="' +
+      escapeHtml(builderKeyword) +
+      '" />' +
+      "</div>" +
+      '<div class="cms-coupang-actions">' +
+      '<button type="button" class="cms-coupang-btn" id="builderGenerate">본문 코드받기</button>' +
+      "</div>" +
+      resultHtml +
+      hintHtml +
+      "</div>" +
       "</section>";
 
     const form = document.getElementById("coupang-form");
-    if (form) {
-      form.addEventListener("submit", onSubmit);
-    }
+    if (form) form.addEventListener("submit", onSubmit);
+    bindHelpActions();
   }
 
   async function onSubmit(event) {
     event.preventDefault();
     if (busy) return;
+    readBuilderFields();
     const form = event.currentTarget;
     const nextAccess = String(form.accessKey.value || "").trim();
     const nextSecret = String(form.secretKey.value || "").trim();
@@ -165,7 +250,7 @@
       source = data.source || "r2";
       updatedAt = data.updatedAt || "";
       configured = Boolean(data.configured);
-      setStatus("저장됨 · 바로 적용됩니다 (글 페이지에서 상품 박스가 키를 사용합니다).", false);
+      setStatus("저장됨 · 바로 적용됩니다 (AES-GCM 암호화 저장).", false);
     } catch (error) {
       setStatus(error.message || "저장 실패", true);
     } finally {
@@ -184,7 +269,6 @@
       source = data.source || "none";
       updatedAt = data.updatedAt || "";
       configured = Boolean(data.configured);
-      loaded = true;
       setStatus("", false);
     } catch (error) {
       setStatus(error.message || "불러오기 실패", true);
