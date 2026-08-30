@@ -1,11 +1,12 @@
 /**
- * Frequent tags as a separate CMS-style section beside the tags field (5:5).
- * Clicking a chip adds it into the Decap tags list.
+ * Frequent tags as text links under the tags input (max 5).
+ * Clicking a link adds it into the Decap tags list.
  * Data: /admin/tag-stats.json (generated on build).
  */
 (function () {
   const WRAP_ATTR = "data-cms-tag-suggestions";
-  const FREQ_ATTR = "data-cms-tag-frequent";
+  const HOST_ATTR = "data-cms-tag-suggest-host";
+  const HINT_TEXT = "예: 블로그 → /category/블로그/";
   const MAX = 5;
   let cachedTags = null;
   let loading = false;
@@ -89,15 +90,14 @@
     var buttons = field.querySelectorAll("button");
     for (var i = 0; i < buttons.length; i++) {
       var btn = buttons[i];
-      if (btn.classList.contains("cms-tag-chip")) continue;
+      if (btn.classList.contains("cms-tag-suggestion-link")) continue;
       var t = (btn.textContent || "").replace(/\s+/g, " ").trim();
       if (/추가|Add/i.test(t) && !/삭제|Delete|Remove|제거/i.test(t)) return btn;
     }
 
-    // Fallback: last non-remove button in the tags field.
     for (var j = buttons.length - 1; j >= 0; j--) {
       var candidate = buttons[j];
-      if (candidate.classList.contains("cms-tag-chip")) continue;
+      if (candidate.classList.contains("cms-tag-suggestion-link")) continue;
       var label = (candidate.textContent || "").replace(/\s+/g, " ").trim();
       if (/삭제|Delete|Remove|제거/i.test(label)) continue;
       return candidate;
@@ -146,13 +146,11 @@
       }
 
       if (!target) {
-        // One more try after React paint.
         await wait(120);
         target = findEmptyOrLastInput(field);
       }
       if (!target) return;
 
-      // If last input already has a different value, click Add again.
       if (String(target.value || "").trim() && String(target.value || "").trim() !== tag) {
         var addAgain = findAddButton(field);
         if (addAgain) {
@@ -177,95 +175,47 @@
     }
   }
 
-  function copySampleClasses(from, to) {
-    if (!from) return;
-    from.classList.forEach(function (cls) {
-      if (cls.indexOf("cms-") === 0) return;
-      to.classList.add(cls);
+  function removeLegacyFrequentSections(root) {
+    root.querySelectorAll("[data-cms-tag-frequent]").forEach(function (node) {
+      node.remove();
     });
   }
 
-  function ensureFrequentSection(tagsField) {
-    var pane = tagsField.parentElement;
-    if (!pane) return null;
-
-    tagsField.querySelectorAll("[" + WRAP_ATTR + "], [data-cms-tag-row]").forEach(function (node) {
+  function ensureHost(tagsField) {
+    // Remove old side-by-side host leftovers inside the field.
+    tagsField.querySelectorAll("[data-cms-tag-row]").forEach(function (node) {
       node.remove();
     });
 
-    var section = pane.querySelector("[" + FREQ_ATTR + "]");
-    if (!section) {
-      section = document.createElement("div");
-      section.setAttribute(FREQ_ATTR, "1");
-      section.dataset.cmsField = "tags_frequent";
-      copySampleClasses(tagsField, section);
+    var host = tagsField.querySelector("[" + HOST_ATTR + "]");
+    if (!host) {
+      host = document.createElement("div");
+      host.setAttribute(HOST_ATTR, "1");
 
-      var sampleLabel = tagsField.querySelector('[class*="FieldLabel"]');
-      var label = document.createElement(sampleLabel ? sampleLabel.tagName : "div");
-      copySampleClasses(sampleLabel, label);
-      if (!label.className) label.className = "cms-tag-frequent-label";
-      label.textContent = "자주 쓰는 태그";
-      section.appendChild(label);
+      var links = document.createElement("div");
+      links.className = "cms-tag-suggestions";
+      links.setAttribute(WRAP_ATTR, "1");
+      host.appendChild(links);
 
-      var body = document.createElement("div");
-      body.className = "cms-tag-suggestions-box";
-      body.setAttribute(WRAP_ATTR, "1");
-      section.appendChild(body);
-
-      if (tagsField.nextSibling) {
-        pane.insertBefore(section, tagsField.nextSibling);
-      } else {
-        pane.appendChild(section);
-      }
-    } else {
-      section.dataset.cmsField = "tags_frequent";
-      if (tagsField.nextElementSibling !== section) {
-        pane.insertBefore(section, tagsField.nextSibling);
-      }
+      var hint = document.createElement("p");
+      hint.className = "cms-tag-hint";
+      hint.textContent = HINT_TEXT;
+      host.appendChild(hint);
     }
 
-    return section;
-  }
-
-  function findTagsControlBox(tagsField) {
-    // Prefer the Decap list/control surface (bordered), ignore hint text below.
-    var nodes = tagsField.querySelectorAll("div");
-    for (var i = 0; i < nodes.length; i++) {
-      var el = nodes[i];
-      if (el.closest("[" + FREQ_ATTR + "]")) continue;
-      var style = window.getComputedStyle(el);
-      if (style.borderTopWidth === "0px" && style.borderLeftWidth === "0px") continue;
-      if (style.display === "none") continue;
-      var h = el.getBoundingClientRect().height;
-      if (h >= 36 && h <= 220) return el;
+    // Place after the main control, before Decap hints if any.
+    var hintEl = tagsField.querySelector('[class*="ControlHints"]');
+    if (hintEl && hintEl.parentElement === tagsField) {
+      tagsField.insertBefore(host, hintEl);
+    } else if (host.parentElement !== tagsField) {
+      tagsField.appendChild(host);
     }
-    var input = tagsField.querySelector("input, textarea");
-    return input ? input.closest("div") : null;
+
+    return host;
   }
 
-  function syncFrequentBoxHeight(tagsField, section) {
-    var box = section.querySelector(".cms-tag-suggestions-box");
-    if (!box) return;
-    var control = findTagsControlBox(tagsField);
-    if (!control) {
-      box.style.height = "";
-      box.style.minHeight = "";
-      box.style.maxHeight = "";
-      return;
-    }
-    box.style.height = "";
-    box.style.minHeight = "";
-    box.style.maxHeight = "";
-    var h = Math.round(control.getBoundingClientRect().height);
-    if (h < 28) return;
-    box.style.boxSizing = "border-box";
-    box.style.height = h + "px";
-    box.style.minHeight = h + "px";
-    box.style.maxHeight = h + "px";
-  }
-
-  function paintSuggestions(section, tagsField, tags) {
-    var wrap = section.querySelector("[" + WRAP_ATTR + "]");
+  function paintSuggestions(host, tagsField, tags) {
+    var wrap = host.querySelector("[" + WRAP_ATTR + "]");
     if (!wrap) return;
 
     var selected = currentTags(tagsField);
@@ -274,60 +224,43 @@
         return item.name + ":" + (selected.indexOf(item.name) !== -1 ? "1" : "0");
       })
       .join("|");
-    if (wrap.dataset.paintKey !== nextKey) {
-      wrap.dataset.paintKey = nextKey;
-      wrap.innerHTML = "";
+    if (wrap.dataset.paintKey === nextKey) return;
+    wrap.dataset.paintKey = nextKey;
+    wrap.innerHTML = "";
 
-      if (!tags.length) {
-        var empty = document.createElement("p");
-        empty.className = "cms-tag-suggestions-empty";
-        empty.textContent = "아직 표시할 태그가 없습니다.";
-        wrap.appendChild(empty);
-      } else {
-        var chips = document.createElement("div");
-        chips.className = "cms-tag-suggestions-chips";
-        wrap.appendChild(chips);
-
-        tags.forEach(function (item) {
-          var btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "cms-tag-chip";
-          btn.textContent = item.name;
-          btn.dataset.tagName = item.name;
-          btn.title = item.count
-            ? item.name + " (" + item.count + ") · 클릭해서 추가"
-            : item.name + " · 클릭해서 추가";
-          if (selected.indexOf(item.name) !== -1) {
-            btn.classList.add("is-selected");
-            btn.disabled = true;
-          }
-          chips.appendChild(btn);
-        });
+    tags.forEach(function (item) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cms-tag-suggestion-link";
+      btn.textContent = "(" + item.name + ")";
+      btn.dataset.tagName = item.name;
+      btn.title = item.name + " · 클릭해서 추가";
+      if (selected.indexOf(item.name) !== -1) {
+        btn.classList.add("is-selected");
+        btn.disabled = true;
       }
-    }
-
-    window.requestAnimationFrame(function () {
-      syncFrequentBoxHeight(tagsField, section);
+      wrap.appendChild(btn);
     });
   }
 
   function scan(force) {
     var root = document.getElementById("nc-root") || document.body;
+    removeLegacyFrequentSections(root);
     var field = root.querySelector('[data-cms-field="tags"]');
     if (!field) return;
     var token = ++paintToken;
     loadTags().then(function (tags) {
       if (!force && token !== paintToken) return;
-      var section = ensureFrequentSection(field);
-      if (!section) return;
-      paintSuggestions(section, field, tags);
+      var host = ensureHost(field);
+      if (!host) return;
+      paintSuggestions(host, field, tags);
     });
   }
 
-  function onChipClick(event) {
-    var btn = event.target && event.target.closest ? event.target.closest(".cms-tag-chip") : null;
+  function onLinkClick(event) {
+    var btn = event.target && event.target.closest ? event.target.closest(".cms-tag-suggestion-link") : null;
     if (!btn) return;
-    if (!btn.closest("[" + FREQ_ATTR + "]")) return;
+    if (!btn.closest("[" + HOST_ATTR + "]")) return;
     if (btn.disabled) return;
 
     event.preventDefault();
@@ -335,13 +268,13 @@
 
     var field = document.querySelector('[data-cms-field="tags"]');
     if (!field) return;
-    var name = (btn.dataset.tagName || btn.textContent || "").trim();
+    var name = (btn.dataset.tagName || "").trim();
     if (!name) return;
     addTag(field, name);
   }
 
   function start() {
-    document.addEventListener("click", onChipClick, true);
+    document.addEventListener("click", onLinkClick, true);
     scan(true);
     var root = document.getElementById("nc-root") || document.body;
     var scheduled = false;

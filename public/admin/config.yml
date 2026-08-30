@@ -36,7 +36,7 @@ x-blog-fields: &blog_fields
     default: "{{now}}"
   - { label: 디스크립션, name: description, widget: text }
   - { label: 커버 이미지, name: cover_image, widget: image, required: false }
-  - { label: 태그, name: tags, widget: list, default: ["홈택스"], required: false, hint: "예: 홈택스 → /category/홈택스/" }
+  - { label: 태그, name: tags, widget: list, default: ["홈택스"], required: false, hint: "예: 블로그 → /category/블로그/" }
   - label: 퍼머링크 (슬러그)
     name: slug
     widget: string
