@@ -252,10 +252,23 @@
       box.style.minHeight = "";
       return;
     }
-    var h = Math.round(control.getBoundingClientRect().height);
-    if (!h) return;
+    control.style.height = "";
+    control.style.minHeight = "";
+    box.style.height = "";
+    box.style.minHeight = "";
+    var h = Math.max(
+      Math.round(control.getBoundingClientRect().height),
+      Math.round(box.getBoundingClientRect().height)
+    );
+    if (h < 28) return;
+    control.style.boxSizing = "border-box";
+    box.style.boxSizing = "border-box";
+    control.style.height = h + "px";
+    control.style.minHeight = h + "px";
     box.style.height = h + "px";
     box.style.minHeight = h + "px";
+    control.dataset.cmsPairBox = "1";
+    box.dataset.cmsPairBox = "1";
   }
 
   function paintSuggestions(section, tagsField, tags) {

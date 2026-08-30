@@ -516,12 +516,24 @@
 /* Row 3: 태그 | 자주 쓰는 태그 (5:5) */
 #nc-root .cms-blog-form-layout > [data-cms-field="tags"] {
   grid-column: 1 / span 5 !important;
-  align-self: start !important;
+  align-self: stretch !important;
 }
 
 #nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] {
   grid-column: 6 / span 5 !important;
-  align-self: start !important;
+  align-self: stretch !important;
+}
+
+/* Field label tabs stay top-left (Decap default) */
+#nc-root .cms-blog-form-layout > [data-cms-field] > [class*="FieldLabel"],
+#nc-root .cms-blog-form-layout > [data-cms-tag-frequent] > [class*="FieldLabel"],
+#nc-root .cms-blog-form-layout > [data-cms-tag-frequent] > .cms-tag-frequent-label {
+  align-self: flex-start !important;
+  display: inline-block !important;
+  float: none !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  text-align: left !important;
 }
 
 #nc-root [data-cms-tag-frequent] {
@@ -614,39 +626,6 @@
   }
 }
 
-/* Paired rows: equal heights (title|date, description|cover) */
-#nc-root .cms-blog-form-layout > [data-cms-field="title"],
-#nc-root .cms-blog-form-layout > [data-cms-field="date"],
-#nc-root .cms-blog-form-layout > [data-cms-field="description"],
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] {
-  align-self: stretch !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="title"] > *:not([class*="FieldLabel"]),
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] > *:not([class*="FieldLabel"]) {
-  flex: 1 1 auto !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-  min-height: 0 !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="title"] input,
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] input,
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] [class*="DateTimeControl"],
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] > div {
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] [class*="DateTimeControl"],
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] > div:last-child {
-  flex: 1 1 auto !important;
-  align-items: stretch !important;
-}
-
 /* Keep date controls usable in the side column */
 #nc-root .cms-blog-form-layout > [data-cms-field="date"] input,
 #nc-root .cms-blog-form-layout > [data-cms-field="date"] button {
@@ -658,34 +637,40 @@
   flex-wrap: wrap !important;
 }
 
-/* Description + cover share the same row height */
+/* Description + cover: fill shared row height (JS also locks equal box heights) */
 #nc-root .cms-blog-form-layout > [data-cms-field="description"],
 #nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] {
   display: flex !important;
   flex-direction: column !important;
+  align-items: flex-start !important;
   align-self: stretch !important;
 }
 
 #nc-root .cms-blog-form-layout > [data-cms-field="description"] > *:last-child,
 #nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] > *:last-child {
   flex: 1 1 auto !important;
+  align-self: stretch !important;
   display: flex !important;
   flex-direction: column !important;
+  width: 100% !important;
   min-height: 148px !important;
+  box-sizing: border-box !important;
 }
 
 #nc-root .cms-blog-form-layout > [data-cms-field="description"] textarea {
   flex: 1 1 auto !important;
+  width: 100% !important;
   min-height: 148px !important;
-  height: 100% !important;
   box-sizing: border-box !important;
   resize: vertical !important;
 }
 
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="ImageControl"],
 #nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="ImageField"],
 #nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="image-card"],
 #nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] > *:last-child > * {
   flex: 1 1 auto !important;
+  width: 100% !important;
   min-height: 148px !important;
   box-sizing: border-box !important;
 }
@@ -695,6 +680,11 @@
   width: 100% !important;
   object-fit: cover;
   border-radius: 6px;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="title"] input {
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 @media (max-width: 900px) {
