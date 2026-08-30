@@ -7,7 +7,7 @@
   const WRAP_ATTR = "data-cms-tag-suggestions";
   const HOST_ATTR = "data-cms-tag-suggest-host";
   const HINT_TEXT = "예: 블로그 → /category/블로그/";
-  const FREQ_LABEL = "자주쓰는 태그:";
+  const FREQ_LABEL = "자주쓰는 카테고리:";
   const MAX = 5;
   let cachedTags = null;
   let loading = false;
