@@ -1,9 +1,11 @@
 /**
- * Tag suggestions under the tags field: top 5 by post count, click to add.
+ * Tag suggestions beside the tags field (5:5): top 5 by post count, click to add.
  * Data: /admin/tag-stats.json (generated on build).
  */
 (function () {
   const WRAP_ATTR = "data-cms-tag-suggestions";
+  const ROW_ATTR = "data-cms-tag-row";
+  const INPUT_ATTR = "data-cms-tag-input";
   const MAX = 5;
   let cachedTags = null;
   let loading = false;
@@ -59,9 +61,6 @@
       var v = String(input.value || "").trim();
       if (v) values.push(v);
     });
-    field.querySelectorAll('[class*="ListItem"] [class*="ObjectWidgetTopBar"], [class*="ListItem"]').forEach(function () {
-      /* inputs cover most cases */
-    });
     return values;
   }
 
@@ -69,7 +68,10 @@
     var buttons = field.querySelectorAll("button");
     for (var i = 0; i < buttons.length; i++) {
       var t = (buttons[i].textContent || "").replace(/\s+/g, " ").trim();
-      if (/추가|Add/i.test(t) && !/삭제|Delete|Remove/i.test(t)) return buttons[i];
+      if (/추가|Add/i.test(t) && !/삭제|Delete|Remove|cms-tag-chip/i.test(t)) {
+        if (buttons[i].classList.contains("cms-tag-chip")) continue;
+        return buttons[i];
+      }
     }
     return null;
   }
@@ -93,7 +95,8 @@
       if (!target && inputs.length) target = inputs[inputs.length - 1];
       if (!target) return;
 
-      var setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value") ||
+      var setter =
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value") ||
         Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value");
       if (setter && setter.set) setter.set.call(target, tag);
       else target.value = tag;
@@ -103,14 +106,49 @@
     }, 40);
   }
 
+  function isFieldLabel(el) {
+    if (!(el instanceof HTMLElement)) return false;
+    var cls = typeof el.className === "string" ? el.className : "";
+    return /FieldLabel/i.test(cls);
+  }
+
+  function ensureRow(field) {
+    var row = field.querySelector("[" + ROW_ATTR + "]");
+    if (row) return row;
+
+    row = document.createElement("div");
+    row.className = "cms-tag-row";
+    row.setAttribute(ROW_ATTR, "1");
+
+    var left = document.createElement("div");
+    left.className = "cms-tag-input-panel";
+    left.setAttribute(INPUT_ATTR, "1");
+
+    var movers = [];
+    Array.prototype.forEach.call(field.children, function (child) {
+      if (isFieldLabel(child)) return;
+      if (child.getAttribute(ROW_ATTR) === "1") return;
+      movers.push(child);
+    });
+    movers.forEach(function (child) {
+      left.appendChild(child);
+    });
+
+    row.appendChild(left);
+    field.appendChild(row);
+    return row;
+  }
+
   function ensureSuggestions(field, tags) {
     if (!(field instanceof HTMLElement)) return;
-    var wrap = field.querySelector("[" + WRAP_ATTR + "]");
+
+    var row = ensureRow(field);
+    var wrap = row.querySelector("[" + WRAP_ATTR + "]");
     if (!wrap) {
       wrap = document.createElement("div");
       wrap.className = "cms-tag-suggestions";
       wrap.setAttribute(WRAP_ATTR, "1");
-      field.appendChild(wrap);
+      row.appendChild(wrap);
     }
 
     var selected = currentTags(field);
@@ -122,10 +160,14 @@
     }
     wrap.hidden = false;
 
-    var label = document.createElement("span");
+    var label = document.createElement("div");
     label.className = "cms-tag-suggestions-label";
     label.textContent = "자주 쓰는 태그";
     wrap.appendChild(label);
+
+    var chips = document.createElement("div");
+    chips.className = "cms-tag-suggestions-chips";
+    wrap.appendChild(chips);
 
     tags.forEach(function (item) {
       var btn = document.createElement("button");
@@ -142,7 +184,7 @@
         event.stopPropagation();
         addTag(field, item.name);
       });
-      wrap.appendChild(btn);
+      chips.appendChild(btn);
     });
   }
 
