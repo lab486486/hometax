@@ -45,9 +45,11 @@ x-blog-fields: &blog_fields
     hint: "글 URL입니다. 예: 블로그-소제목-짓는-방법 → /블로그-소제목-짓는-방법/"
   - label: 본문
     name: body
-    widget: toastui
-    hint: "토스트 UI 에디터(마크다운/위지윅). 쿠팡 박스: [coupang url=\"단축링크\" keyword=\"상품명\"]"
+    widget: tui-markdown
+    hint: "Toast UI 에디터로 작성합니다. 쿠팡 박스: [coupang url=\"단축링크\" keyword=\"상품명\"]"
     height: 420px
+    initial_edit_type: wysiwyg
+    preview_style: tab
 collections:
   - name: site
     label: 사이트 설정
