@@ -7,6 +7,7 @@
   const WRAP_ATTR = "data-cms-tag-suggestions";
   const HOST_ATTR = "data-cms-tag-suggest-host";
   const HINT_TEXT = "예: 블로그 → /category/블로그/";
+  const FREQ_LABEL = "자주쓰는 태그:";
   const MAX = 5;
   let cachedTags = null;
   let loading = false;
@@ -188,14 +189,32 @@
     });
 
     var host = tagsField.querySelector("[" + HOST_ATTR + "]");
-    if (!host) {
+    var needsRebuild =
+      !host ||
+      !host.querySelector(".cms-tag-suggestions-label") ||
+      !host.querySelector("[data-cms-tag-links]") ||
+      !host.querySelector(".cms-tag-hint");
+
+    if (needsRebuild) {
+      if (host) host.remove();
       host = document.createElement("div");
       host.setAttribute(HOST_ATTR, "1");
 
-      var links = document.createElement("div");
-      links.className = "cms-tag-suggestions";
-      links.setAttribute(WRAP_ATTR, "1");
-      host.appendChild(links);
+      var row = document.createElement("div");
+      row.className = "cms-tag-suggestions";
+      row.setAttribute(WRAP_ATTR, "1");
+
+      var label = document.createElement("span");
+      label.className = "cms-tag-suggestions-label";
+      label.textContent = FREQ_LABEL;
+      row.appendChild(label);
+
+      var links = document.createElement("span");
+      links.className = "cms-tag-suggestions-links";
+      links.setAttribute("data-cms-tag-links", "1");
+      row.appendChild(links);
+
+      host.appendChild(row);
 
       var hint = document.createElement("p");
       hint.className = "cms-tag-hint";
@@ -215,7 +234,7 @@
   }
 
   function paintSuggestions(host, tagsField, tags) {
-    var wrap = host.querySelector("[" + WRAP_ATTR + "]");
+    var wrap = host.querySelector("[data-cms-tag-links]") || host.querySelector("[" + WRAP_ATTR + "]");
     if (!wrap) return;
 
     var selected = currentTags(tagsField);
@@ -228,11 +247,17 @@
     wrap.dataset.paintKey = nextKey;
     wrap.innerHTML = "";
 
-    tags.forEach(function (item) {
+    tags.forEach(function (item, index) {
+      if (index > 0) {
+        var sep = document.createElement("span");
+        sep.className = "cms-tag-suggestion-sep";
+        sep.textContent = " ";
+        wrap.appendChild(sep);
+      }
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "cms-tag-suggestion-link";
-      btn.textContent = "(" + item.name + ")";
+      btn.textContent = item.name;
       btn.dataset.tagName = item.name;
       btn.title = item.name + " · 클릭해서 추가";
       if (selected.indexOf(item.name) !== -1) {

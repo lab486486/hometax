@@ -566,7 +566,8 @@
 }
 
 /* Tags: hide Decap hint (custom hint rendered under suggestions) */
-#nc-root .cms-blog-form-layout > [data-cms-field="tags"] [class*="ControlHints"] {
+#nc-root .cms-blog-form-layout > [data-cms-field="tags"] [class*="ControlHints"],
+#nc-root [data-cms-field="tags"] [class*="ControlHints"] {
   display: none !important;
 }
 
@@ -574,9 +575,25 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 10px;
+  gap: 6px 8px;
   margin: 8px 0 0;
   padding: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #31343d;
+}
+
+#nc-root .cms-tag-suggestions-label {
+  flex: 0 0 auto;
+  color: #5d626f;
+  font-weight: 600;
+}
+
+#nc-root .cms-tag-suggestions-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
 }
 
 #nc-root .cms-tag-suggestion-link {
