@@ -490,7 +490,7 @@
   width: auto !important;
 }
 
-/* Row 1: 제목 | 날짜 */
+/* Row 1: 제목 | 날짜 — same stretch/fill pattern as description|cover */
 #nc-root .cms-blog-form-layout > [data-cms-field="title"] {
   grid-column: 1 / span 6 !important;
 }
@@ -516,18 +516,36 @@
 /* Row 3: 태그 | 자주 쓰는 태그 (5:5) */
 #nc-root .cms-blog-form-layout > [data-cms-field="tags"] {
   grid-column: 1 / span 5 !important;
-  align-self: stretch !important;
 }
 
 #nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] {
   grid-column: 6 / span 5 !important;
+}
+
+/* Paired fields: stretch row, label top-left, control fills to bottom */
+#nc-root .cms-blog-form-layout > [data-cms-field="title"],
+#nc-root .cms-blog-form-layout > [data-cms-field="date"],
+#nc-root .cms-blog-form-layout > [data-cms-field="description"],
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
   align-self: stretch !important;
 }
 
-/* Field label tabs stay top-left (Decap default) */
+#nc-root .cms-blog-form-layout > [data-cms-field="tags"],
+#nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  /* start: hint under tags must not stretch the frequent box taller */
+  align-self: start !important;
+}
+
 #nc-root .cms-blog-form-layout > [data-cms-field] > [class*="FieldLabel"],
 #nc-root .cms-blog-form-layout > [data-cms-tag-frequent] > [class*="FieldLabel"],
 #nc-root .cms-blog-form-layout > [data-cms-tag-frequent] > .cms-tag-frequent-label {
+  flex: 0 0 auto !important;
   align-self: flex-start !important;
   display: inline-block !important;
   float: none !important;
@@ -536,10 +554,88 @@
   text-align: left !important;
 }
 
+#nc-root .cms-blog-form-layout > [data-cms-field] > [class*="ControlHints"] {
+  flex: 0 0 auto !important;
+  align-self: stretch !important;
+  width: 100% !important;
+}
+
+/* Grow the control surface (not label/hint) so bottoms align */
+#nc-root .cms-blog-form-layout > [data-cms-field="title"] > *:not([class*="FieldLabel"]):not([class*="ControlHints"]),
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] > *:not([class*="FieldLabel"]):not([class*="ControlHints"]),
+#nc-root .cms-blog-form-layout > [data-cms-field="description"] > *:not([class*="FieldLabel"]):not([class*="ControlHints"]),
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] > *:not([class*="FieldLabel"]):not([class*="ControlHints"]),
+#nc-root .cms-blog-form-layout > [data-cms-field="tags"] > *:not([class*="FieldLabel"]):not([class*="ControlHints"]),
+#nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] > *:not([class*="FieldLabel"]):not(.cms-tag-frequent-label) {
+  flex: 1 1 auto !important;
+  align-self: stretch !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="title"] input {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] [class*="DateTimeControl"],
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] > *:not([class*="FieldLabel"]) {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: center !important;
+  align-items: center !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] input,
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] button {
+  font-size: 0.88rem !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="description"] textarea {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 148px !important;
+  box-sizing: border-box !important;
+  resize: vertical !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="ImageControl"],
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="ImageField"],
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="image-card"],
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] > *:last-child > * {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-height: 148px !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] img {
+  max-height: 180px !important;
+  width: 100% !important;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] .cms-tag-suggestions-box {
+  align-self: stretch !important;
+  width: 100% !important;
+}
+
 #nc-root [data-cms-tag-frequent] {
   box-sizing: border-box;
   min-width: 0;
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
 }
 
 #nc-root .cms-tag-frequent-label {
@@ -624,67 +720,6 @@
   #nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] {
     grid-column: 1 / -1 !important;
   }
-}
-
-/* Keep date controls usable in the side column */
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] input,
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] button {
-  font-size: 0.88rem !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] [class*="DateTimeControl"],
-#nc-root .cms-blog-form-layout > [data-cms-field="date"] > div {
-  flex-wrap: wrap !important;
-}
-
-/* Description + cover: fill shared row height (JS also locks equal box heights) */
-#nc-root .cms-blog-form-layout > [data-cms-field="description"],
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  align-self: stretch !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="description"] > *:last-child,
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] > *:last-child {
-  flex: 1 1 auto !important;
-  align-self: stretch !important;
-  display: flex !important;
-  flex-direction: column !important;
-  width: 100% !important;
-  min-height: 148px !important;
-  box-sizing: border-box !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="description"] textarea {
-  flex: 1 1 auto !important;
-  width: 100% !important;
-  min-height: 148px !important;
-  box-sizing: border-box !important;
-  resize: vertical !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="ImageControl"],
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="ImageField"],
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] [class*="image-card"],
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] > *:last-child > * {
-  flex: 1 1 auto !important;
-  width: 100% !important;
-  min-height: 148px !important;
-  box-sizing: border-box !important;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] img {
-  max-height: 180px !important;
-  width: 100% !important;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-#nc-root .cms-blog-form-layout > [data-cms-field="title"] input {
-  width: 100% !important;
-  box-sizing: border-box !important;
 }
 
 @media (max-width: 900px) {

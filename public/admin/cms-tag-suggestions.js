@@ -267,8 +267,6 @@
     control.style.minHeight = h + "px";
     box.style.height = h + "px";
     box.style.minHeight = h + "px";
-    control.dataset.cmsPairBox = "1";
-    box.dataset.cmsPairBox = "1";
   }
 
   function paintSuggestions(section, tagsField, tags) {

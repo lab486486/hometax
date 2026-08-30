@@ -1,9 +1,9 @@
 /**
  * Blog entry form layout for Decap CMS.
  * Tags each field ControlContainer via FieldLabel text, then CSS grids:
- *   제목 | 날짜 (6:4, equal control height)
- *   디스크립션 | 커버 (6:4, equal control height)
- *   태그 | 자주 쓰는 태그 (5:5, equal control height)
+ *   제목 | 날짜 (6:4) — CSS stretch fills equal height (like description|cover)
+ *   디스크립션 | 커버 (6:4) — CSS stretch
+ *   태그 | 자주 쓰는 태그 (5:5) — JS equalizes bordered control boxes
  *   퍼머링크 / 본문 full width
  */
 (function () {
@@ -33,16 +33,7 @@
     return el.closest('[class*="ControlContainer"]') || el.closest("[data-cms-tag-frequent]");
   }
 
-  function clearInlineHeights(root) {
-    root.querySelectorAll("[data-cms-pair-box]").forEach(function (el) {
-      el.style.height = "";
-      el.style.minHeight = "";
-      el.removeAttribute("data-cms-pair-box");
-    });
-  }
-
   function clearLayout(root) {
-    clearInlineHeights(root);
     root.querySelectorAll(".cms-blog-form-layout").forEach(function (pane) {
       pane.classList.remove("cms-blog-form-layout");
     });
@@ -55,93 +46,59 @@
     });
   }
 
-  function borderedBox(field, selectors) {
+  function findBorderedControl(field) {
     if (!(field instanceof HTMLElement)) return null;
-    for (var i = 0; i < selectors.length; i++) {
-      var el = field.querySelector(selectors[i]);
-      if (el instanceof HTMLElement) return el;
+    var nodes = field.querySelectorAll("div, ul, ol, input, textarea");
+    var best = null;
+    var bestScore = 0;
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (!(el instanceof HTMLElement)) continue;
+      if (el.closest("[data-cms-tag-frequent]")) continue;
+      if (el.className && String(el.className).indexOf("ControlHints") !== -1) continue;
+      var style = window.getComputedStyle(el);
+      if (style.display === "none" || style.visibility === "hidden") continue;
+      var bt = parseFloat(style.borderTopWidth) || 0;
+      var bl = parseFloat(style.borderLeftWidth) || 0;
+      if (bt < 1 && bl < 1) continue;
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 28 || rect.width < 40) continue;
+      // Prefer outer-ish controls: larger area, but not the whole field.
+      var score = rect.width * Math.min(rect.height, 240);
+      if (score > bestScore) {
+        bestScore = score;
+        best = el;
+      }
     }
-    var nodes = field.querySelectorAll("div, textarea, input");
-    for (var j = 0; j < nodes.length; j++) {
-      var cand = nodes[j];
-      if (!(cand instanceof HTMLElement)) continue;
-      if (cand.closest("[data-cms-tag-frequent]")) continue;
-      var style = window.getComputedStyle(cand);
-      if (style.display === "none") continue;
-      if (style.borderTopWidth === "0px" && style.borderLeftWidth === "0px") continue;
-      var h = cand.getBoundingClientRect().height;
-      if (h >= 28) return cand;
-    }
-    return null;
+    return best;
   }
 
-  function titleBox(field) {
-    return borderedBox(field, ["input"]);
-  }
-
-  function dateBox(field) {
-    return borderedBox(field, ["[class*='DateTimeControl']", "[class*='DateTime']"]);
-  }
-
-  function descriptionBox(field) {
-    return borderedBox(field, ["textarea"]);
-  }
-
-  function coverBox(field) {
-    return borderedBox(field, [
-      "[class*='ImageControl']",
-      "[class*='ImageField']",
-      "[class*='image-card']",
-    ]);
-  }
-
-  function tagsBox(field) {
-    return borderedBox(field, ["[class*='ListControl']", "[class*='list-control']"]);
-  }
-
-  function frequentBox(field) {
-    if (!(field instanceof HTMLElement)) return null;
-    return field.querySelector(".cms-tag-suggestions-box");
-  }
-
-  function lockHeight(el, h) {
-    if (!(el instanceof HTMLElement) || !h) return;
-    el.dataset.cmsPairBox = "1";
-    el.style.boxSizing = "border-box";
-    el.style.height = h + "px";
-    el.style.minHeight = h + "px";
-  }
-
-  function matchPairBoxes(a, b) {
+  function lockEqualHeights(a, b) {
     if (!(a instanceof HTMLElement) || !(b instanceof HTMLElement)) return;
     a.style.height = "";
     a.style.minHeight = "";
     b.style.height = "";
     b.style.minHeight = "";
-    a.removeAttribute("data-cms-pair-box");
-    b.removeAttribute("data-cms-pair-box");
-
-    var ha = Math.round(a.getBoundingClientRect().height);
-    var hb = Math.round(b.getBoundingClientRect().height);
-    var h = Math.max(ha, hb);
+    var h = Math.max(
+      Math.round(a.getBoundingClientRect().height),
+      Math.round(b.getBoundingClientRect().height)
+    );
     if (h < 28) return;
-    lockHeight(a, h);
-    lockHeight(b, h);
+    a.style.boxSizing = "border-box";
+    b.style.boxSizing = "border-box";
+    a.style.height = h + "px";
+    a.style.minHeight = h + "px";
+    b.style.height = h + "px";
+    b.style.minHeight = h + "px";
   }
 
-  function syncPairHeights(root) {
-    matchPairBoxes(
-      titleBox(root.querySelector('[data-cms-field="title"]')),
-      dateBox(root.querySelector('[data-cms-field="date"]'))
-    );
-    matchPairBoxes(
-      descriptionBox(root.querySelector('[data-cms-field="description"]')),
-      coverBox(root.querySelector('[data-cms-field="cover_image"]'))
-    );
-    matchPairBoxes(
-      tagsBox(root.querySelector('[data-cms-field="tags"]')),
-      frequentBox(root.querySelector('[data-cms-field="tags_frequent"]'))
-    );
+  function syncTagPairHeights(root) {
+    var tagsField = root.querySelector('[data-cms-field="tags"]');
+    var freqField = root.querySelector('[data-cms-field="tags_frequent"]');
+    if (!tagsField || !freqField) return;
+    var tagsControl = findBorderedControl(tagsField);
+    var freqBox = freqField.querySelector(".cms-tag-suggestions-box");
+    lockEqualHeights(tagsControl, freqBox);
   }
 
   function sync() {
@@ -200,7 +157,7 @@
 
     pane.classList.add("cms-blog-form-layout");
     window.requestAnimationFrame(function () {
-      syncPairHeights(root);
+      syncTagPairHeights(root);
     });
   }
 
