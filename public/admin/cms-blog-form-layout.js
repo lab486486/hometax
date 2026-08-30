@@ -3,7 +3,8 @@
  * Tags each field ControlContainer via FieldLabel text, then CSS grids:
  *   제목 | 날짜 (6:4)
  *   디스크립션 | 커버 (6:4, same height)
- *   태그 / 퍼머링크 / 본문 full width
+ *   태그 | 자주 쓰는 태그 (5:5)
+ *   퍼머링크 / 본문 full width
  */
 (function () {
   var FIELD_RULES = [
@@ -11,6 +12,7 @@
     { re: /^날짜/, name: "date" },
     { re: /^퍼머링크/, name: "slug" },
     { re: /^커버/, name: "cover_image" },
+    { re: /^자주\s*쓰는\s*태그/, name: "tags_frequent" },
     { re: /^태그|^카테고리/, name: "tags" },
     { re: /^디스크립션|^설명/, name: "description" },
     { re: /^본문/, name: "body" },
@@ -28,7 +30,7 @@
 
   function closestControlContainer(el) {
     if (!(el instanceof Element)) return null;
-    return el.closest('[class*="ControlContainer"]');
+    return el.closest('[class*="ControlContainer"]') || el.closest("[data-cms-tag-frequent]");
   }
 
   function clearLayout(root) {
@@ -36,6 +38,10 @@
       pane.classList.remove("cms-blog-form-layout");
     });
     root.querySelectorAll("[data-cms-field]").forEach(function (node) {
+      if (node.getAttribute("data-cms-tag-frequent") === "1") {
+        node.dataset.cmsField = "tags_frequent";
+        return;
+      }
       delete node.dataset.cmsField;
     });
   }

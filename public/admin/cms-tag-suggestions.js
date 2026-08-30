@@ -1,11 +1,10 @@
 /**
- * Tag suggestions beside the tags field (5:5): top 5 by post count, click to add.
+ * Frequent tags as a separate CMS-style section beside the tags field (5:5).
  * Data: /admin/tag-stats.json (generated on build).
  */
 (function () {
   const WRAP_ATTR = "data-cms-tag-suggestions";
-  const ROW_ATTR = "data-cms-tag-row";
-  const INPUT_ATTR = "data-cms-tag-input";
+  const FREQ_ATTR = "data-cms-tag-frequent";
   const MAX = 5;
   let cachedTags = null;
   let loading = false;
@@ -68,10 +67,8 @@
     var buttons = field.querySelectorAll("button");
     for (var i = 0; i < buttons.length; i++) {
       var t = (buttons[i].textContent || "").replace(/\s+/g, " ").trim();
-      if (/추가|Add/i.test(t) && !/삭제|Delete|Remove|cms-tag-chip/i.test(t)) {
-        if (buttons[i].classList.contains("cms-tag-chip")) continue;
-        return buttons[i];
-      }
+      if (buttons[i].classList.contains("cms-tag-chip")) continue;
+      if (/추가|Add/i.test(t) && !/삭제|Delete|Remove/i.test(t)) return buttons[i];
     }
     return null;
   }
@@ -106,64 +103,71 @@
     }, 40);
   }
 
-  function isFieldLabel(el) {
-    if (!(el instanceof HTMLElement)) return false;
-    var cls = typeof el.className === "string" ? el.className : "";
-    return /FieldLabel/i.test(cls);
+  function copySampleClasses(from, to) {
+    if (!from) return;
+    from.classList.forEach(function (cls) {
+      if (cls.indexOf("cms-") === 0) return;
+      to.classList.add(cls);
+    });
   }
 
-  function ensureRow(field) {
-    var row = field.querySelector("[" + ROW_ATTR + "]");
-    if (row) return row;
+  function ensureFrequentSection(tagsField) {
+    var pane = tagsField.parentElement;
+    if (!pane) return null;
 
-    row = document.createElement("div");
-    row.className = "cms-tag-row";
-    row.setAttribute(ROW_ATTR, "1");
-
-    var left = document.createElement("div");
-    left.className = "cms-tag-input-panel";
-    left.setAttribute(INPUT_ATTR, "1");
-
-    var movers = [];
-    Array.prototype.forEach.call(field.children, function (child) {
-      if (isFieldLabel(child)) return;
-      if (child.getAttribute(ROW_ATTR) === "1") return;
-      movers.push(child);
-    });
-    movers.forEach(function (child) {
-      left.appendChild(child);
+    // Remove old in-field suggestion UI from previous version.
+    tagsField.querySelectorAll("[" + WRAP_ATTR + "], [data-cms-tag-row]").forEach(function (node) {
+      node.remove();
     });
 
-    row.appendChild(left);
-    field.appendChild(row);
-    return row;
-  }
+    var section = pane.querySelector("[" + FREQ_ATTR + "]");
+    if (!section) {
+      section = document.createElement("div");
+      section.setAttribute(FREQ_ATTR, "1");
+      section.dataset.cmsField = "tags_frequent";
+      copySampleClasses(tagsField, section);
 
-  function ensureSuggestions(field, tags) {
-    if (!(field instanceof HTMLElement)) return;
+      var sampleLabel = tagsField.querySelector('[class*="FieldLabel"]');
+      var label = document.createElement(sampleLabel ? sampleLabel.tagName : "div");
+      copySampleClasses(sampleLabel, label);
+      if (!label.className) label.className = "cms-tag-frequent-label";
+      label.textContent = "자주 쓰는 태그";
+      section.appendChild(label);
 
-    var row = ensureRow(field);
-    var wrap = row.querySelector("[" + WRAP_ATTR + "]");
-    if (!wrap) {
-      wrap = document.createElement("div");
-      wrap.className = "cms-tag-suggestions";
-      wrap.setAttribute(WRAP_ATTR, "1");
-      row.appendChild(wrap);
+      var body = document.createElement("div");
+      body.className = "cms-tag-suggestions";
+      body.setAttribute(WRAP_ATTR, "1");
+      section.appendChild(body);
+
+      if (tagsField.nextSibling) {
+        pane.insertBefore(section, tagsField.nextSibling);
+      } else {
+        pane.appendChild(section);
+      }
+    } else {
+      section.dataset.cmsField = "tags_frequent";
+      if (section.nextElementSibling !== tagsField && tagsField.nextElementSibling !== section) {
+        pane.insertBefore(section, tagsField.nextSibling);
+      }
     }
 
-    var selected = currentTags(field);
+    return section;
+  }
+
+  function paintSuggestions(section, tagsField, tags) {
+    var wrap = section.querySelector("[" + WRAP_ATTR + "]");
+    if (!wrap) return;
+
+    var selected = currentTags(tagsField);
     wrap.innerHTML = "";
 
     if (!tags.length) {
-      wrap.hidden = true;
+      var empty = document.createElement("p");
+      empty.className = "cms-tag-suggestions-empty";
+      empty.textContent = "아직 표시할 태그가 없습니다.";
+      wrap.appendChild(empty);
       return;
     }
-    wrap.hidden = false;
-
-    var label = document.createElement("div");
-    label.className = "cms-tag-suggestions-label";
-    label.textContent = "자주 쓰는 태그";
-    wrap.appendChild(label);
 
     var chips = document.createElement("div");
     chips.className = "cms-tag-suggestions-chips";
@@ -182,7 +186,7 @@
       btn.addEventListener("click", function (event) {
         event.preventDefault();
         event.stopPropagation();
-        addTag(field, item.name);
+        addTag(tagsField, item.name);
       });
       chips.appendChild(btn);
     });
@@ -193,7 +197,9 @@
     var field = root.querySelector('[data-cms-field="tags"]');
     if (!field) return;
     loadTags().then(function (tags) {
-      ensureSuggestions(field, tags);
+      var section = ensureFrequentSection(field);
+      if (!section) return;
+      paintSuggestions(section, field, tags);
     });
   }
 

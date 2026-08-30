@@ -439,40 +439,32 @@
   display: none !important;
 }
 
-/* Tags field: input | frequent tags (5:5) */
-#nc-root .cms-tag-row {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-  gap: 12px !important;
-  align-items: stretch !important;
-  margin-top: 8px;
-  width: 100%;
-  box-sizing: border-box;
+/* Tags field: input | frequent tags as sibling sections (5:5) */
+#nc-root .cms-blog-form-layout > [data-cms-field="tags"] {
+  grid-column: 1 / span 5 !important;
 }
 
-#nc-root .cms-tag-input-panel {
+#nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] {
+  grid-column: 6 / span 5 !important;
+}
+
+#nc-root [data-cms-tag-frequent] {
+  box-sizing: border-box;
   min-width: 0;
+}
+
+#nc-root .cms-tag-frequent-label {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7b8290;
+  text-transform: none;
 }
 
 #nc-root .cms-tag-suggestions {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  margin-top: 0;
-  padding: 12px 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: #f8fafc;
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-#nc-root .cms-tag-suggestions-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
-  margin: 0;
+  display: block;
+  margin-top: 4px;
 }
 
 #nc-root .cms-tag-suggestions-chips {
@@ -482,10 +474,16 @@
   gap: 8px;
 }
 
+#nc-root .cms-tag-suggestions-empty {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
 #nc-root .cms-tag-chip {
   appearance: none;
   border: 1px solid #d1d5db;
-  background: #fff;
+  background: #f8fafc;
   color: #1f2937;
   border-radius: 999px;
   padding: 4px 10px;
@@ -508,8 +506,9 @@
 }
 
 @media (max-width: 900px) {
-  #nc-root .cms-tag-row {
-    grid-template-columns: 1fr !important;
+  #nc-root .cms-blog-form-layout > [data-cms-field="tags"],
+  #nc-root .cms-blog-form-layout > [data-cms-field="tags_frequent"] {
+    grid-column: 1 / -1 !important;
   }
 }
 
@@ -582,7 +581,6 @@
   grid-column: 7 / span 4 !important;
 }
 
-#nc-root .cms-blog-form-layout > [data-cms-field="tags"],
 #nc-root .cms-blog-form-layout > [data-cms-field="slug"],
 #nc-root .cms-blog-form-layout > [data-cms-field="body"] {
   grid-column: 1 / -1 !important;
