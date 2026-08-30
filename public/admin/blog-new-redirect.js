@@ -1,55 +1,43 @@
+/**
+ * Legacy collection hashes → consolidated list+create collections.
+ * blog_new / gunmart_new were removed; keep old bookmarks working.
+ */
 (function () {
-  const NEW_POST_HASH = "#/collections/blog_new/new";
-  const LIST_HASHES = new Set(["#/collections/blog_new", "#/collections/blog_new/"]);
-  const ALLOW_LIST_KEY = "blog-new-allow-list";
+  const REDIRECTS = {
+    "#/collections/blog_new": "#/collections/blog",
+    "#/collections/blog_new/": "#/collections/blog",
+    "#/collections/blog_new/new": "#/collections/blog/new",
+    "#/collections/gunmart_new": "#/collections/gunmart",
+    "#/collections/gunmart_new/": "#/collections/gunmart",
+    "#/collections/gunmart_new/new": "#/collections/gunmart/new",
+  };
 
-  let started = false;
-  let lastHash = location.hash || "";
-
-  function openNewPostEditor() {
+  function redirectLegacy() {
     const hash = location.hash || "";
-
-    if (sessionStorage.getItem(ALLOW_LIST_KEY) === "1") {
-      sessionStorage.removeItem(ALLOW_LIST_KEY);
+    if (REDIRECTS[hash]) {
+      location.hash = REDIRECTS[hash];
       return;
     }
-
-    if (!LIST_HASHES.has(hash)) return;
-    location.hash = NEW_POST_HASH;
-  }
-
-  function onHashChange() {
-    const hash = location.hash || "";
-    const prev = lastHash;
-    lastHash = hash;
-
-    if (prev === NEW_POST_HASH && LIST_HASHES.has(hash)) {
-      sessionStorage.setItem(ALLOW_LIST_KEY, "1");
+    // Entry deep links: #/collections/blog_new/entries/slug → blog
+    const blogEntry = hash.match(/^#\/collections\/blog_new\/(entries\/.+)$/);
+    if (blogEntry) {
+      location.hash = "#/collections/blog/" + blogEntry[1];
       return;
     }
-
-    openNewPostEditor();
+    const gunEntry = hash.match(/^#\/collections\/gunmart_new\/(entries\/.+)$/);
+    if (gunEntry) {
+      location.hash = "#/collections/gunmart/" + gunEntry[1];
+    }
   }
 
   function start() {
-    if (started) return;
-    started = true;
-    window.addEventListener("hashchange", onHashChange);
-    openNewPostEditor();
-  }
-
-  function waitForCms() {
-    const root = document.getElementById("nc-root");
-    if (root && root.firstElementChild) {
-      start();
-      return;
-    }
-    window.requestAnimationFrame(waitForCms);
+    window.addEventListener("hashchange", redirectLegacy);
+    redirectLegacy();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", waitForCms);
+    document.addEventListener("DOMContentLoaded", start);
   } else {
-    waitForCms();
+    start();
   }
 })();

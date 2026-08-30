@@ -13,12 +13,8 @@
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 2.8 1.6 5.2 4 6.3V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.7c2.4-1.1 4-3.5 4-6.3a7 7 0 0 0-7-7Zm-1 18a1 1 0 0 0 1 1h0a1 1 0 0 0 1-1v-1h-2v1Zm1-16a5 5 0 0 1 5 5c0 2-1.2 3.7-3 4.5l-.5.2V14h-3v-.3l-.5-.2A5 5 0 0 1 7 9a5 5 0 0 1 5-5Z"/></svg>',
     blog:
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M7 3h7.5L19 7.5V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm7 1.5V8h3.5L14 4.5ZM8 11h8v1.5H8V11Zm0 3.5h8V16H8v-1.5Zm0 3.5h5V18H8v-1.5Z"/></svg>',
-    blog_new:
-      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M4 20h4.1l10.1-10.1-4.1-4.1L4 15.9V20Zm14.7-11.6 1.4-1.4a1.5 1.5 0 0 0 0-2.1l-2-2a1.5 1.5 0 0 0-2.1 0l-1.4 1.4 4.1 4.1Z"/></svg>',
     gunmart:
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M7 3h7.5L19 7.5V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm7 1.5V8h3.5L14 4.5ZM8 11h8v1.5H8V11Zm0 3.5h8V16H8v-1.5Zm0 3.5h5V18H8v-1.5Z"/></svg>',
-    gunmart_new:
-      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M4 20h4.1l10.1-10.1-4.1-4.1L4 15.9V20Zm14.7-11.6 1.4-1.4a1.5 1.5 0 0 0 0-2.1l-2-2a1.5 1.5 0 0 0-2.1 0l-1.4 1.4 4.1 4.1Z"/></svg>',
   };
 
   let siteMeta = {

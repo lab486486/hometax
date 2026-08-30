@@ -1,5 +1,5 @@
 (function () {
-  const BLOG_COLLECTIONS = new Set(["blog", "blog_new"]);
+  const BLOG_COLLECTIONS = new Set(["blog", "gunmart"]);
 
   function slugifyTitle(title) {
     return String(title)
@@ -21,9 +21,10 @@
   function isBlogEditorHash() {
     const hash = location.hash || "";
     return (
+      hash.includes("/collections/blog/new") ||
       hash.includes("/collections/blog/entries/") ||
-      hash.includes("/collections/blog_new/new") ||
-      hash.includes("/collections/blog_new/entries/")
+      hash.includes("/collections/gunmart/new") ||
+      hash.includes("/collections/gunmart/entries/")
     );
   }
 
