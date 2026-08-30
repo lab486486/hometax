@@ -135,7 +135,7 @@
       section.appendChild(label);
 
       var body = document.createElement("div");
-      body.className = "cms-tag-suggestions";
+      body.className = "cms-tag-suggestions-box";
       body.setAttribute(WRAP_ATTR, "1");
       section.appendChild(body);
 
