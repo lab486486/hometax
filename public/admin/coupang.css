@@ -190,6 +190,13 @@ body.cms-coupang-page {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
+.cms-coupang-col-left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
 .cms-coupang-notes {
   margin: 4px 0 14px;
   padding: 12px 14px;
@@ -198,15 +205,115 @@ body.cms-coupang-page {
   border: 1px solid #e5e7eb;
 }
 
-.cms-coupang-notes p {
+.cms-coupang-notes-loc p {
   margin: 0;
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.1;
   color: #4b5563;
 }
 
-.cms-coupang-notes p + p {
-  margin-top: 6px;
+.cms-coupang-notes-secure {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4b5563;
+}
+
+.cms-coupang-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cms-coupang-history-head h2 {
+  margin: 0;
+}
+
+.cms-coupang-history-clear {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #6b7280;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cms-coupang-history-clear:hover {
+  color: #b91c1c;
+}
+
+.cms-coupang-history-table {
+  min-width: 0;
+}
+
+.cms-coupang-history-row {
+  display: grid;
+  grid-template-columns: 50% 20% 30%;
+  align-items: center;
+  gap: 0;
+  min-height: 34px;
+  border-top: 1px solid #eef2f7;
+}
+
+.cms-coupang-history-row.is-head {
+  border-top: 0;
+  min-height: 28px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cms-coupang-history-keyword,
+.cms-coupang-history-copy,
+.cms-coupang-history-date {
+  min-width: 0;
+  padding: 6px 4px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.cms-coupang-history-keyword {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+.cms-coupang-history-copy {
+  text-align: center;
+}
+
+.cms-coupang-history-date {
+  text-align: right;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cms-coupang-history-copy-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #1565c0;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cms-coupang-history-copy-btn:hover {
+  color: #0d47a1;
+}
+
+.cms-coupang-history-empty {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #9ca3af;
 }
 
 .cms-coupang-btn.ghost {

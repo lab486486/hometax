@@ -2,6 +2,9 @@
   const root = document.getElementById("app");
   if (!root) return;
 
+  const HISTORY_KEY = "cms.coupang.code-history";
+  const HISTORY_DAYS = 30;
+
   let accessKey = "";
   let secretKey = "";
   let source = "none";
@@ -15,6 +18,7 @@
   let generatedCode = "";
   let copyHint = "";
   let urlClearedOnce = false;
+  let historyItems = [];
 
   function getToken() {
     const keys = ["decap-cms-user", "netlify-cms-user"];
@@ -57,6 +61,82 @@
     return '[coupang url="' + safeUrl + '" keyword="' + safeKeyword + '"]';
   }
 
+  function pruneHistory(items) {
+    const cutoff = Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000;
+    return (items || [])
+      .filter(function (item) {
+        const t = Date.parse(item && item.createdAt);
+        return Number.isFinite(t) && t >= cutoff && item.code && item.keyword;
+      })
+      .sort(function (a, b) {
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+      });
+  }
+
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      historyItems = pruneHistory(Array.isArray(parsed) ? parsed : []);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(historyItems));
+    } catch {
+      historyItems = [];
+    }
+  }
+
+  function saveHistory() {
+    historyItems = pruneHistory(historyItems);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(historyItems));
+    } catch {
+      /* ignore quota */
+    }
+  }
+
+  function addHistory(keyword, url, code) {
+    historyItems.unshift({
+      id: String(Date.now()) + "-" + Math.random().toString(36).slice(2, 8),
+      keyword: keyword,
+      url: url,
+      code: code,
+      createdAt: new Date().toISOString(),
+    });
+    saveHistory();
+  }
+
+  function clearHistory() {
+    historyItems = [];
+    try {
+      localStorage.removeItem(HISTORY_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function formatHistoryDate(iso) {
+    try {
+      const d = new Date(iso);
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Asia/Seoul",
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).formatToParts(d);
+      const get = function (type) {
+        const hit = parts.find(function (p) {
+          return p.type === type;
+        });
+        return hit ? hit.value : "";
+      };
+      return get("year") + "-" + get("month") + "-" + get("day") + " " + get("hour") + ":" + get("minute");
+    } catch {
+      return "";
+    }
+  }
+
   async function api(method, body) {
     const token = getToken();
     if (!token) throw new Error("GitHub 로그인이 필요합니다. 관리자 페이지에서 먼저 로그인해 주세요.");
@@ -90,11 +170,60 @@
     return "미설정";
   }
 
+  function renderHistory() {
+    const rows = historyItems
+      .map(function (item) {
+        return (
+          '<div class="cms-coupang-history-row" data-id="' +
+          escapeHtml(item.id) +
+          '">' +
+          '<div class="cms-coupang-history-keyword" title="' +
+          escapeHtml(item.keyword) +
+          '">' +
+          escapeHtml(item.keyword) +
+          "</div>" +
+          '<div class="cms-coupang-history-copy">' +
+          '<button type="button" class="cms-coupang-history-copy-btn" data-action="copy-history" data-id="' +
+          escapeHtml(item.id) +
+          '">복사</button>' +
+          "</div>" +
+          '<div class="cms-coupang-history-date">' +
+          escapeHtml(formatHistoryDate(item.createdAt)) +
+          "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+
+    const body =
+      historyItems.length > 0
+        ? rows
+        : '<p class="cms-coupang-history-empty">최근 30일 기록이 없습니다.</p>';
+
+    return (
+      '<section class="cms-coupang-card cms-coupang-history">' +
+      '<div class="cms-coupang-history-head">' +
+      "<h2>최근 코드기록</h2>" +
+      '<button type="button" class="cms-coupang-history-clear" id="historyClear">검색기록 삭제</button>' +
+      "</div>" +
+      '<div class="cms-coupang-history-table">' +
+      '<div class="cms-coupang-history-row is-head">' +
+      '<div class="cms-coupang-history-keyword">keyword</div>' +
+      '<div class="cms-coupang-history-copy">쿠팡코드</div>' +
+      '<div class="cms-coupang-history-date">생성일자</div>' +
+      "</div>" +
+      body +
+      "</div>" +
+      "</section>"
+    );
+  }
+
   function bindHelpActions() {
     const urlInput = document.getElementById("builderUrl");
     const genBtn = document.getElementById("builderGenerate");
     const copyBtn = document.getElementById("builderCopy");
     const resetBtn = document.getElementById("builderReset");
+    const clearBtn = document.getElementById("historyClear");
 
     if (urlInput) {
       urlInput.addEventListener("focus", function () {
@@ -127,6 +256,7 @@
           return;
         }
         generatedCode = buildShortcode(builderUrl, builderKeyword);
+        addHistory(builderKeyword, builderUrl, generatedCode);
         copyHint = "";
         paint();
       });
@@ -155,6 +285,32 @@
         paint();
       });
     }
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function () {
+        if (!historyItems.length) return;
+        if (!window.confirm("최근 코드기록을 모두 삭제할까요?")) return;
+        clearHistory();
+        paint();
+      });
+    }
+
+    root.querySelectorAll('[data-action="copy-history"]').forEach(function (btn) {
+      btn.addEventListener("click", async function () {
+        const id = btn.getAttribute("data-id");
+        const item = historyItems.find(function (row) {
+          return row.id === id;
+        });
+        if (!item || !item.code) return;
+        try {
+          await navigator.clipboard.writeText(item.code);
+          copyHint = "기록 코드를 복사했습니다.";
+        } catch {
+          copyHint = "복사에 실패했습니다.";
+        }
+        paint();
+      });
+    });
   }
 
   function paint() {
@@ -199,6 +355,7 @@
       loginHint +
       statusHtml +
       '<div class="cms-coupang-grid">' +
+      '<div class="cms-coupang-col-left">' +
       '<section class="cms-coupang-card cms-coupang-card-keys">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">' +
       '<h2 style="margin:0">API 키</h2>' +
@@ -222,9 +379,11 @@
       '" />' +
       "</div>" +
       '<div class="cms-coupang-notes">' +
+      '<div class="cms-coupang-notes-loc">' +
       "<p>쿠팡API 키 발급 위치:</p>" +
       "<p>쿠팡 파트너스 → 추가 기능 → 파트너스 API</p>" +
-      "<p>* Access Key, Secret Key는 암호화 저장</p>" +
+      "</div>" +
+      '<p class="cms-coupang-notes-secure">⚠️ Access Key, Secret Key는 암호화 저장</p>' +
       "</div>" +
       '<div class="cms-coupang-actions">' +
       '<button type="submit" class="cms-coupang-btn"' +
@@ -238,6 +397,8 @@
       "</div>" +
       "</form>" +
       "</section>" +
+      renderHistory() +
+      "</div>" +
       '<section class="cms-coupang-card cms-coupang-help">' +
       "<h2>본문에서 사용 방법</h2>" +
       "<p>글쓰기 본문에 아래 형식으로 넣으면 쿠팡 파트너스 상품 박스가 삽입됩니다.</p>" +
@@ -301,6 +462,7 @@
   }
 
   async function boot() {
+    loadHistory();
     paint();
     if (!getToken()) return;
     try {
