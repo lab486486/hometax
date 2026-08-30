@@ -227,6 +227,37 @@
     return section;
   }
 
+  function findTagsControlBox(tagsField) {
+    // Prefer the Decap list/control surface (bordered), ignore hint text below.
+    var nodes = tagsField.querySelectorAll("div");
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (el.closest("[" + FREQ_ATTR + "]")) continue;
+      var style = window.getComputedStyle(el);
+      if (style.borderTopWidth === "0px" && style.borderLeftWidth === "0px") continue;
+      if (style.display === "none") continue;
+      var h = el.getBoundingClientRect().height;
+      if (h >= 36 && h <= 220) return el;
+    }
+    var input = tagsField.querySelector("input, textarea");
+    return input ? input.closest("div") : null;
+  }
+
+  function syncFrequentBoxHeight(tagsField, section) {
+    var box = section.querySelector(".cms-tag-suggestions-box");
+    if (!box) return;
+    var control = findTagsControlBox(tagsField);
+    if (!control) {
+      box.style.height = "";
+      box.style.minHeight = "";
+      return;
+    }
+    var h = Math.round(control.getBoundingClientRect().height);
+    if (!h) return;
+    box.style.height = h + "px";
+    box.style.minHeight = h + "px";
+  }
+
   function paintSuggestions(section, tagsField, tags) {
     var wrap = section.querySelector("[" + WRAP_ATTR + "]");
     if (!wrap) return;
@@ -237,34 +268,40 @@
         return item.name + ":" + (selected.indexOf(item.name) !== -1 ? "1" : "0");
       })
       .join("|");
-    if (wrap.dataset.paintKey === nextKey) return;
-    wrap.dataset.paintKey = nextKey;
-    wrap.innerHTML = "";
+    if (wrap.dataset.paintKey !== nextKey) {
+      wrap.dataset.paintKey = nextKey;
+      wrap.innerHTML = "";
 
-    if (!tags.length) {
-      var empty = document.createElement("p");
-      empty.className = "cms-tag-suggestions-empty";
-      empty.textContent = "아직 표시할 태그가 없습니다.";
-      wrap.appendChild(empty);
-      return;
+      if (!tags.length) {
+        var empty = document.createElement("p");
+        empty.className = "cms-tag-suggestions-empty";
+        empty.textContent = "아직 표시할 태그가 없습니다.";
+        wrap.appendChild(empty);
+      } else {
+        var chips = document.createElement("div");
+        chips.className = "cms-tag-suggestions-chips";
+        wrap.appendChild(chips);
+
+        tags.forEach(function (item) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "cms-tag-chip";
+          btn.textContent = item.name;
+          btn.dataset.tagName = item.name;
+          btn.title = item.count
+            ? item.name + " (" + item.count + ") · 클릭해서 추가"
+            : item.name + " · 클릭해서 추가";
+          if (selected.indexOf(item.name) !== -1) {
+            btn.classList.add("is-selected");
+            btn.disabled = true;
+          }
+          chips.appendChild(btn);
+        });
+      }
     }
 
-    var chips = document.createElement("div");
-    chips.className = "cms-tag-suggestions-chips";
-    wrap.appendChild(chips);
-
-    tags.forEach(function (item) {
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "cms-tag-chip";
-      btn.textContent = item.name;
-      btn.dataset.tagName = item.name;
-      btn.title = item.count ? item.name + " (" + item.count + ") · 클릭해서 추가" : item.name + " · 클릭해서 추가";
-      if (selected.indexOf(item.name) !== -1) {
-        btn.classList.add("is-selected");
-        btn.disabled = true;
-      }
-      chips.appendChild(btn);
+    window.requestAnimationFrame(function () {
+      syncFrequentBoxHeight(tagsField, section);
     });
   }
 
