@@ -2,13 +2,10 @@
  * Resolve Coupang product title/image for shortcode boxes.
  * POST { url, keyword } → { url, title, image, description }
  *
- * Secrets (Pages → Settings → Environment variables):
- *   COUPANG_ACCESS_KEY
- *   COUPANG_SECRET_KEY
- *
- * Without keys: still returns 200 with keyword title + local placeholder
- * (never via.placeholder.com — that host is dead).
+ * Keys: R2 config/coupang.json (admin UI) → fallback Pages env secrets.
  */
+
+import { loadCoupangKeys } from "../lib/coupang-keys.js";
 
 const PLACEHOLDER_IMAGE = "/images/coupang-placeholder.svg";
 
@@ -56,7 +53,6 @@ async function coupangFetch(path, query, accessKey, secretKey, method = "GET") {
   return res.json();
 }
 
-/** Follow affiliate short link to capture product id when possible. */
 async function extractProductId(url) {
   try {
     const res = await fetch(url, {
@@ -109,8 +105,9 @@ export async function onRequest(context) {
     return Response.json({ error: "url required" }, { status: 400 });
   }
 
-  const accessKey = (env.COUPANG_ACCESS_KEY || "").trim();
-  const secretKey = (env.COUPANG_SECRET_KEY || "").trim();
+  const keys = await loadCoupangKeys(env);
+  const accessKey = keys.accessKey;
+  const secretKey = keys.secretKey;
 
   let title = keyword || "쿠팡 추천 상품";
   let image = PLACEHOLDER_IMAGE;
