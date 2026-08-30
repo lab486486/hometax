@@ -338,7 +338,7 @@
       ? '<button type="button" class="cms-coupang-btn" id="builderCopy">복사하기</button>' +
         '<span class="cms-coupang-action-sep" aria-hidden="true">|</span>' +
         '<button type="button" class="cms-coupang-btn ghost" id="builderReset">초기화</button>'
-      : '<button type="button" class="cms-coupang-btn" id="builderGenerate">본문 코드받기</button>';
+      : '<button type="button" class="cms-coupang-btn" id="builderGenerate">코드 생성</button>';
 
     const hintHtml = copyHint
       ? '<p class="cms-coupang-builder-hint">' + escapeHtml(copyHint) + "</p>"

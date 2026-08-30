@@ -344,6 +344,10 @@ body.cms-coupang-page {
 
 .cms-coupang-code-result {
   margin: 0;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  word-break: normal;
 }
 
 .cms-coupang-action-sep {
