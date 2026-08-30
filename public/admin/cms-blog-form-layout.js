@@ -46,6 +46,59 @@
     });
   }
 
+  function controlSurface(field) {
+    if (!(field instanceof HTMLElement)) return null;
+    var input = field.querySelector("textarea, input, [class*='ImageControl'], [class*='DateTimeControl']");
+    if (input) {
+      var box = input.closest("div");
+      if (box && box !== field) return box;
+    }
+    var kids = field.children;
+    for (var i = kids.length - 1; i >= 0; i--) {
+      var el = kids[i];
+      if (!(el instanceof HTMLElement)) continue;
+      if (el.className && String(el.className).indexOf("FieldLabel") !== -1) continue;
+      if (el.className && String(el.className).indexOf("ControlHints") !== -1) continue;
+      return el;
+    }
+    return null;
+  }
+
+  function matchPairHeights(a, b) {
+    if (!(a instanceof HTMLElement) || !(b instanceof HTMLElement)) return;
+    var sa = controlSurface(a);
+    var sb = controlSurface(b);
+    if (!sa || !sb) return;
+    sa.style.minHeight = "";
+    sb.style.minHeight = "";
+    var ha = Math.round(sa.getBoundingClientRect().height);
+    var hb = Math.round(sb.getBoundingClientRect().height);
+    var h = Math.max(ha, hb);
+    if (h < 32) return;
+    sa.style.minHeight = h + "px";
+    sb.style.minHeight = h + "px";
+    a.style.minHeight = "";
+    b.style.minHeight = "";
+    var fa = Math.round(a.getBoundingClientRect().height);
+    var fb = Math.round(b.getBoundingClientRect().height);
+    var fh = Math.max(fa, fb);
+    if (fh > 0) {
+      a.style.minHeight = fh + "px";
+      b.style.minHeight = fh + "px";
+    }
+  }
+
+  function syncPairHeights(root) {
+    matchPairHeights(
+      root.querySelector('[data-cms-field="title"]'),
+      root.querySelector('[data-cms-field="date"]')
+    );
+    matchPairHeights(
+      root.querySelector('[data-cms-field="description"]'),
+      root.querySelector('[data-cms-field="cover_image"]')
+    );
+  }
+
   function sync() {
     var root = document.getElementById("nc-root") || document.body;
     clearLayout(root);
@@ -103,6 +156,9 @@
     if (!childNames.title || !childNames.date) return;
 
     pane.classList.add("cms-blog-form-layout");
+    window.requestAnimationFrame(function () {
+      syncPairHeights(root);
+    });
   }
 
   var scheduled = false;

@@ -34,7 +34,6 @@ x-blog-fields: &blog_fields
     date_format: YYYY-MM-DD
     time_format: false
     default: "{{now}}"
-    hint: "기본값은 오늘입니다. 클릭해서 바꿀 수 있습니다."
   - { label: 디스크립션, name: description, widget: text }
   - { label: 커버 이미지, name: cover_image, widget: image, required: false }
   - { label: 태그, name: tags, widget: list, default: ["홈택스"], required: false, hint: "예: 홈택스 → /category/홈택스/" }
@@ -46,7 +45,6 @@ x-blog-fields: &blog_fields
   - label: 본문
     name: body
     widget: tui-markdown
-    hint: "쿠팡 박스: [coupang url=\"파트너스링크\" keyword=\"상품검색어\"] — API 키는 왼쪽 메뉴 「쿠팡파트너스 API Key」에서 설정"
     height: 420px
     initial_edit_type: wysiwyg
     preview_style: tab

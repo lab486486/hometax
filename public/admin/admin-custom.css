@@ -614,6 +614,39 @@
   }
 }
 
+/* Paired rows: equal heights (title|date, description|cover) */
+#nc-root .cms-blog-form-layout > [data-cms-field="title"],
+#nc-root .cms-blog-form-layout > [data-cms-field="date"],
+#nc-root .cms-blog-form-layout > [data-cms-field="description"],
+#nc-root .cms-blog-form-layout > [data-cms-field="cover_image"] {
+  align-self: stretch !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="title"] > *:not([class*="FieldLabel"]),
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] > *:not([class*="FieldLabel"]) {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  min-height: 0 !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="title"] input,
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] input,
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] [class*="DateTimeControl"],
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] > div {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] [class*="DateTimeControl"],
+#nc-root .cms-blog-form-layout > [data-cms-field="date"] > div:last-child {
+  flex: 1 1 auto !important;
+  align-items: stretch !important;
+}
+
 /* Keep date controls usable in the side column */
 #nc-root .cms-blog-form-layout > [data-cms-field="date"] input,
 #nc-root .cms-blog-form-layout > [data-cms-field="date"] button {
