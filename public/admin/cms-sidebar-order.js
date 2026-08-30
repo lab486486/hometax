@@ -1,6 +1,9 @@
 /**
  * Reorder Decap CMS sidebar into three groups with dividers:
  * 1) Site settings  2) Monetization  3) Content collections
+ *
+ * Only mutates DOM when order actually differs (avoids loops with
+ * coupang-nav / shortlinks MutationObservers).
  */
 (function () {
   var GROUPS = [
@@ -31,6 +34,7 @@
   var started = false;
   var pending = false;
   var applying = false;
+  var lastSignature = "";
 
   function getRoot() {
     return document.getElementById("nc-root") || document.body;
@@ -41,8 +45,12 @@
   }
 
   function findCollectionLink(sidebar, name) {
-    var byData = sidebar.querySelector('a.cms-collection-link[data-collection="' + name + '"]');
-    if (byData) return byData;
+    var byData = sidebar.querySelector(
+      'a.cms-collection-link[data-collection="' + name + '"]'
+    );
+    if (byData && !byData.classList.contains("cms-coupang-nav") && !byData.classList.contains("cms-shortlinks-nav")) {
+      return byData;
+    }
     var links = sidebar.querySelectorAll('a[href^="#/collections/"]');
     for (var i = 0; i < links.length; i++) {
       var href = links[i].getAttribute("href") || "";
@@ -59,7 +67,9 @@
 
   function rowOf(link) {
     if (!link) return null;
-    return link.closest("li") || link.parentElement;
+    var row = link.closest("li");
+    if (row) return row;
+    return link.parentElement;
   }
 
   function findList(sidebar) {
@@ -88,6 +98,23 @@
     return row;
   }
 
+  function signatureOf(rows) {
+    return rows
+      .map(function (row) {
+        if (row.getAttribute && row.getAttribute("data-cms-sidebar-divider")) {
+          return "div:" + row.getAttribute("data-cms-sidebar-divider");
+        }
+        var a = row.querySelector && row.querySelector("a");
+        if (!a) return "row";
+        if (a.classList.contains("cms-coupang-nav")) return "coupang";
+        if (a.classList.contains("cms-shortlinks-nav")) return "shortlinks";
+        var href = a.getAttribute("href") || "";
+        var m = href.match(/^#\/collections\/([^/?#]+)\/?$/);
+        return m ? "col:" + m[1] : "a:" + href;
+      })
+      .join("|");
+  }
+
   function applyOrder() {
     if (applying) return;
     var root = getRoot();
@@ -97,46 +124,81 @@
     var list = findList(sidebar);
     if (!list) return;
 
-    applying = true;
-    try {
-      var orderedRows = [];
-      var seen = new Set();
+    var orderedRows = [];
+    var seen = new Set();
 
-      GROUPS.forEach(function (group, groupIndex) {
-        if (groupIndex > 0) {
-          var divider = ensureDivider(list, "after-" + GROUPS[groupIndex - 1].id);
-          orderedRows.push(divider);
-          seen.add(divider);
-        }
+    GROUPS.forEach(function (group, groupIndex) {
+      if (groupIndex > 0) {
+        var divider = ensureDivider(list, "after-" + GROUPS[groupIndex - 1].id);
+        orderedRows.push(divider);
+        seen.add(divider);
+      }
 
-        group.items.forEach(function (item) {
-          var link = findLink(sidebar, item);
-          var row = rowOf(link);
-          if (!row || row.parentElement !== list) return;
-          if (seen.has(row)) return;
-          orderedRows.push(row);
-          seen.add(row);
-        });
+      group.items.forEach(function (item) {
+        var link = findLink(sidebar, item);
+        var row = rowOf(link);
+        if (!row || !list.contains(row)) return;
+        if (seen.has(row)) return;
+        orderedRows.push(row);
+        seen.add(row);
       });
+    });
 
-      if (orderedRows.length < 2) return;
+    if (orderedRows.length < 2) return;
 
-      // Append in order; keep unknown rows after known groups.
-      orderedRows.forEach(function (row) {
-        list.appendChild(row);
-      });
+    var nextSignature = signatureOf(orderedRows);
+    var currentPrefix = [];
+    for (var i = 0; i < orderedRows.length; i++) {
+      currentPrefix.push(list.children[i] || null);
+    }
+    var currentSignature = signatureOf(
+      currentPrefix.filter(Boolean).length === orderedRows.length
+        ? currentPrefix
+        : []
+    );
 
-      // Remove stale dividers that are no longer in the plan.
+    // Already in the desired order — do not touch DOM.
+    if (nextSignature && nextSignature === currentSignature) {
+      lastSignature = nextSignature;
+      // Still drop leftover dividers not in plan.
       list.querySelectorAll("[data-cms-sidebar-divider]").forEach(function (row) {
         if (!seen.has(row)) row.remove();
       });
+      return;
+    }
+
+    if (nextSignature === lastSignature) {
+      // Same desired order we already applied; avoid re-append churn.
+      var mismatch = false;
+      for (var j = 0; j < orderedRows.length; j++) {
+        if (list.children[j] !== orderedRows[j]) {
+          mismatch = true;
+          break;
+        }
+      }
+      if (!mismatch) return;
+    }
+
+    applying = true;
+    window.__cmsSidebarOrdering = true;
+    try {
+      orderedRows.forEach(function (row) {
+        list.appendChild(row);
+      });
+      list.querySelectorAll("[data-cms-sidebar-divider]").forEach(function (row) {
+        if (!seen.has(row)) row.remove();
+      });
+      lastSignature = nextSignature;
     } finally {
       applying = false;
+      window.setTimeout(function () {
+        window.__cmsSidebarOrdering = false;
+      }, 0);
     }
   }
 
   function schedule() {
-    if (pending) return;
+    if (pending || applying) return;
     pending = true;
     window.requestAnimationFrame(function () {
       pending = false;
@@ -149,12 +211,14 @@
     started = true;
     var root = getRoot();
     var observer = new MutationObserver(function () {
-      if (applying) return;
+      if (applying || window.__cmsSidebarOrdering) return;
       schedule();
     });
     observer.observe(root, { childList: true, subtree: true });
     window.addEventListener("hashchange", schedule);
-    schedule();
+    // Run after nav injectors have a chance to create links.
+    window.setTimeout(schedule, 0);
+    window.setTimeout(schedule, 200);
   }
 
   function waitForCms() {

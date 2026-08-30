@@ -1,5 +1,6 @@
 /**
  * Sidebar: "쿠팡파트너스 API Key" → /admin/coupang (new tab)
+ * Creates the link once; final order is owned by cms-sidebar-order.js.
  */
 (function () {
   const PAGE = "/admin/coupang";
@@ -27,22 +28,48 @@
     });
   }
 
+  function findCollectionList(sidebar) {
+    var sample =
+      sidebar.querySelector('a[href="#/collections/adsense"]') ||
+      sidebar.querySelector('a[href="#/collections/nav"]') ||
+      sidebar.querySelector('a[href^="#/collections/"]');
+    if (!sample) return null;
+    var row = sample.closest("li") || sample.parentElement;
+    return row && row.parentElement ? row.parentElement : null;
+  }
+
+  function ensureOwnRow(list, link, sampleRow) {
+    var row = link.closest("li");
+    // Stuck inside another collection's <li> with sibling links — pull out.
+    if (row && row.querySelectorAll("a").length > 1) {
+      row = null;
+    }
+    if (row) return row;
+
+    var tag = sampleRow && sampleRow.tagName ? sampleRow.tagName : "LI";
+    row = document.createElement(tag);
+    row.appendChild(link);
+    list.appendChild(row);
+    return row;
+  }
+
   function ensureNavLink(root) {
+    if (window.__cmsSidebarOrdering) return;
+
     const sidebar = getSidebar(root);
     if (!sidebar) return;
 
-    let link = sidebar.querySelector("a.cms-coupang-nav");
-    const shortlinks = sidebar.querySelector("a.cms-shortlinks-nav");
-    const adsense =
-      sidebar.querySelector('a[href="#/collections/adsense"]') ||
-      sidebar.querySelector('a[href*="#/collections/adsense"]');
+    const list = findCollectionList(sidebar);
+    if (!list) return;
+
     const sample =
-      shortlinks ||
-      adsense ||
+      sidebar.querySelector('a[href="#/collections/adsense"]') ||
       sidebar.querySelector('a[href="#/collections/nav"]') ||
       sidebar.querySelector('a[href^="#/collections/"]');
-    if (!sample || !sample.parentElement) return;
+    if (!sample) return;
+    const sampleRow = sample.closest("li") || sample.parentElement;
 
+    let link = sidebar.querySelector("a.cms-coupang-nav");
     if (!link) {
       link = document.createElement("a");
       link.className = "cms-coupang-nav cms-collection-link";
@@ -65,6 +92,10 @@
         event.stopPropagation();
         window.open(PAGE, "_blank", "noopener");
       });
+
+      ensureOwnRow(list, link, sampleRow);
+    } else {
+      ensureOwnRow(list, link, sampleRow);
     }
 
     if (!link.querySelector(".cms-coupang-external")) {
@@ -80,16 +111,6 @@
     link.target = "_blank";
     link.rel = "noopener";
     link.title = "쿠팡파트너스 API Key 설정";
-
-    // Place above shortlinks (or adsense) so it sits near monetization tools.
-    const anchor = shortlinks || adsense;
-    if (anchor && anchor.parentElement === sample.parentElement) {
-      if (link.nextElementSibling !== anchor) {
-        anchor.parentElement.insertBefore(link, anchor);
-      }
-    } else if (!link.isConnected) {
-      sample.parentElement.insertBefore(link, sample);
-    }
   }
 
   function sync() {
@@ -99,7 +120,7 @@
   }
 
   function schedule() {
-    if (pending) return;
+    if (pending || window.__cmsSidebarOrdering) return;
     pending = true;
     window.requestAnimationFrame(function () {
       pending = false;

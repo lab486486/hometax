@@ -226,17 +226,24 @@
 #nc-root aside .cms-sidebar-divider-row,
 #nc-root [class*="Sidebar"] .cms-sidebar-divider-row {
   list-style: none !important;
-  margin: 8px 0 !important;
-  padding: 0 16px !important;
+  margin: 10px 0 !important;
+  padding: 0 14px !important;
   pointer-events: none !important;
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
 }
 
 #nc-root aside .cms-sidebar-divider,
 #nc-root [class*="Sidebar"] .cms-sidebar-divider {
-  height: 0 !important;
-  border: 0 !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+  display: block !important;
+  width: 100% !important;
+  height: 1px !important;
   margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: rgba(148, 163, 184, 0.65) !important;
+  opacity: 1 !important;
 }
 
 .cms-collection-icon {

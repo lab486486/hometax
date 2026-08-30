@@ -1,12 +1,11 @@
 /**
- * Sidebar: "단축링크 생성" → open standalone manager in a new tab
- * (placed above AdSense)
+ * Sidebar: "단축링크 생성" → open standalone manager in a new tab.
+ * Creates the link once; final order is owned by cms-sidebar-order.js.
  */
 (function () {
   const PAGE = "/admin/shortlinks";
   const ICON =
     '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M9.5 7a4.5 4.5 0 0 1 6.36 0l1.14 1.14a1 1 0 0 0 1.42-1.42l-1.14-1.14a6.5 6.5 0 0 0-9.2 0l-1.14 1.14a1 1 0 1 0 1.42 1.42L9.5 7Zm5 10a4.5 4.5 0 0 1-6.36 0l-1.14-1.14a1 1 0 1 0-1.42 1.42l1.14 1.14a6.5 6.5 0 0 0 9.2 0l1.14-1.14a1 1 0 0 0-1.42-1.42L14.5 17Zm-6.07-2.36a1 1 0 0 0 1.42 0l4.5-4.5a1 1 0 1 0-1.42-1.42l-4.5 4.5a1 1 0 0 0 0 1.42Z"/></svg>';
-  // Square with arrow going out = open in new window
   const EXTERNAL_ICON =
     '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg>';
 
@@ -29,24 +28,54 @@
     });
   }
 
+  function findCollectionList(sidebar) {
+    var sample =
+      sidebar.querySelector('a[href="#/collections/adsense"]') ||
+      sidebar.querySelector('a[href="#/collections/nav"]') ||
+      sidebar.querySelector('a[href^="#/collections/"]');
+    if (!sample) return null;
+    var row = sample.closest("li") || sample.parentElement;
+    return row && row.parentElement ? row.parentElement : null;
+  }
+
+  function ensureOwnRow(list, link, sampleRow) {
+    var row = link.closest("li");
+    if (row && row.querySelectorAll("a").length > 1) {
+      row = null;
+    }
+    if (row) return row;
+
+    var tag = sampleRow && sampleRow.tagName ? sampleRow.tagName : "LI";
+    row = document.createElement(tag);
+    row.appendChild(link);
+    list.appendChild(row);
+    return row;
+  }
+
   function ensureNavLink(root) {
+    if (window.__cmsSidebarOrdering) return;
+
     const sidebar = getSidebar(root);
     if (!sidebar) return;
 
-    // Drop the old Decap collection entry if config still has it briefly.
     const decapLink = sidebar.querySelector('a[href="#/collections/shortlinks"]');
-    if (decapLink) decapLink.style.display = "none";
+    if (decapLink) {
+      const decapRow = decapLink.closest("li");
+      if (decapRow) decapRow.style.display = "none";
+      else decapLink.style.display = "none";
+    }
 
-    let link = sidebar.querySelector("a.cms-shortlinks-nav");
-    const adsense =
-      sidebar.querySelector('a[href="#/collections/adsense"]') ||
-      sidebar.querySelector('a[href*="#/collections/adsense"]');
+    const list = findCollectionList(sidebar);
+    if (!list) return;
+
     const sample =
-      adsense ||
+      sidebar.querySelector('a[href="#/collections/adsense"]') ||
       sidebar.querySelector('a[href="#/collections/nav"]') ||
       sidebar.querySelector('a[href^="#/collections/"]');
-    if (!sample || !sample.parentElement) return;
+    if (!sample) return;
+    const sampleRow = sample.closest("li") || sample.parentElement;
 
+    let link = sidebar.querySelector("a.cms-shortlinks-nav");
     if (!link) {
       link = document.createElement("a");
       link.className = "cms-shortlinks-nav cms-collection-link";
@@ -69,6 +98,10 @@
         event.stopPropagation();
         window.open(PAGE, "_blank", "noopener");
       });
+
+      ensureOwnRow(list, link, sampleRow);
+    } else {
+      ensureOwnRow(list, link, sampleRow);
     }
 
     if (!link.querySelector(".cms-shortlinks-external")) {
@@ -84,15 +117,6 @@
     link.target = "_blank";
     link.rel = "noopener";
     link.title = "새 창에서 단축링크 관리";
-
-    // Keep it directly above AdSense.
-    if (adsense && adsense.parentElement === sample.parentElement) {
-      if (link.nextElementSibling !== adsense) {
-        adsense.parentElement.insertBefore(link, adsense);
-      }
-    } else if (!link.isConnected) {
-      sample.parentElement.insertBefore(link, sample);
-    }
   }
 
   function redirectLegacyHash() {
@@ -117,7 +141,7 @@
   }
 
   function schedule() {
-    if (pending) return;
+    if (pending || window.__cmsSidebarOrdering) return;
     pending = true;
     window.requestAnimationFrame(function () {
       pending = false;
