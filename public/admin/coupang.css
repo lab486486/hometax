@@ -252,12 +252,6 @@ body.cms-coupang-page {
   color: #065f46;
 }
 
-@media (max-width: 640px) {
-  .cms-coupang-result {
-    flex-direction: column;
-  }
-}
-
 .cms-coupang-badge {
   display: inline-flex;
   align-items: center;
