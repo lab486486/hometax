@@ -285,7 +285,7 @@ collections:
             hint: "코드를 입력하면 상단 광고 활성화가 켜진 상태에서 글 본문 맨 아래에 표시됩니다."
 
   - name: blog
-    label: 세금 가이드 (기존)
+    label: "[목록] 세금 가이드"
     label_singular: 글
     folder: src/content/blog
     create: false
@@ -295,7 +295,7 @@ collections:
     fields: *blog_fields
 
   - name: blog_new
-    label: 세금 가이드 새 글
+    label: 세금 가이드 글쓰기
     label_singular: 글
     folder: src/content/blog
     create: true
@@ -305,7 +305,7 @@ collections:
     fields: *blog_fields
 
   - name: gunmart
-    label: 군마트 (자산)
+    label: "[목록] 전국 군마트"
     label_singular: 글
     folder: src/content/gunmart
     create: false
@@ -315,7 +315,7 @@ collections:
     fields: *blog_fields
 
   - name: gunmart_new
-    label: 군마트 새 글
+    label: 군마트 추가하기
     label_singular: 글
     folder: src/content/gunmart
     create: true

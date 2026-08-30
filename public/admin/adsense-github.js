@@ -1,5 +1,5 @@
 window.AdsenseGitHub = (function () {
-  const REPO = "lab486486/blogincome";
+  const REPO = "lab486486/hometax";
   const BRANCH = "main";
 
   function getToken() {

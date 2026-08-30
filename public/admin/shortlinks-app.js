@@ -139,7 +139,7 @@
       '<div class="cms-shortlinks-top">' +
       '<div class="cms-shortlinks-head">' +
       "<h1>단축링크 생성</h1>" +
-      "<p>예: /news-letter → 실제 긴 URL로 이동 · 새 링크는 비활성으로 추가됩니다</p>" +
+      "<p>예: /guide → 실제 긴 URL로 이동 · 새 링크는 비활성으로 추가됩니다</p>" +
       "</div>" +
       '<a class="cms-shortlinks-back" href="/admin/">← 관리자로</a>' +
       "</div>" +
@@ -155,7 +155,7 @@
         : "") +
       "</div>" +
       '<form class="cms-shortlinks-form">' +
-      '<label>짧은 주소<input name="slug" placeholder="news-letter" value="' +
+      '<label>짧은 주소<input name="slug" placeholder="guide" value="' +
       (isEditing ? escapeHtml(editSlug) : "") +
       '" required pattern="[A-Za-z0-9][A-Za-z0-9-]{0,62}" ' +
       (isEditing ? "readonly" : "") +

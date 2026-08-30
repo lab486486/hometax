@@ -1,9 +1,9 @@
 (function () {
   const SITE_LINK_LABEL = "내 사이트 방문";
-  const DEFAULT_SITE_URL = "https://blogincome.kr";
+  const DEFAULT_SITE_URL = "https://hometax.me";
 
   const STATIC_LINKS = [
-    { label: "Github", url: "https://github.com/lab486486/blogincome", target: "_blank" },
+    { label: "Github", url: "https://github.com/lab486486/hometax", target: "_blank" },
     { label: "PageSpeed", url: "https://pagespeed.web.dev/?hl=ko", target: "_blank" },
   ];
 
