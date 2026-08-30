@@ -73,23 +73,17 @@
     return best;
   }
 
-  function lockEqualHeights(a, b) {
-    if (!(a instanceof HTMLElement) || !(b instanceof HTMLElement)) return;
-    a.style.height = "";
-    a.style.minHeight = "";
-    b.style.height = "";
-    b.style.minHeight = "";
-    var h = Math.max(
-      Math.round(a.getBoundingClientRect().height),
-      Math.round(b.getBoundingClientRect().height)
-    );
+  function matchFrequentToTags(tagsControl, freqBox) {
+    if (!(tagsControl instanceof HTMLElement) || !(freqBox instanceof HTMLElement)) return;
+    freqBox.style.height = "";
+    freqBox.style.minHeight = "";
+    freqBox.style.maxHeight = "";
+    var h = Math.round(tagsControl.getBoundingClientRect().height);
     if (h < 28) return;
-    a.style.boxSizing = "border-box";
-    b.style.boxSizing = "border-box";
-    a.style.height = h + "px";
-    a.style.minHeight = h + "px";
-    b.style.height = h + "px";
-    b.style.minHeight = h + "px";
+    freqBox.style.boxSizing = "border-box";
+    freqBox.style.height = h + "px";
+    freqBox.style.minHeight = h + "px";
+    freqBox.style.maxHeight = h + "px";
   }
 
   function syncTagPairHeights(root) {
@@ -98,7 +92,7 @@
     if (!tagsField || !freqField) return;
     var tagsControl = findBorderedControl(tagsField);
     var freqBox = freqField.querySelector(".cms-tag-suggestions-box");
-    lockEqualHeights(tagsControl, freqBox);
+    matchFrequentToTags(tagsControl, freqBox);
   }
 
   function sync() {
