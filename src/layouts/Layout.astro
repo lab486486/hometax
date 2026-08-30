@@ -32,7 +32,9 @@ const {
   articlePublishedTime,
 } = Astro.props;
 const pageTitle = title === siteTitle ? title : `${title} · ${site.name}`;
-const canonical = new URL(Astro.url.pathname, settings.site_url || site.baseUrl).href;
+const base = (settings.site_url || site.baseUrl).replace(/\/$/, "");
+const canonical = new URL(Astro.url.pathname, `${base}/`).href;
+const resolvedOgImage = ogImage || `${base}/og.jpg`;
 const r2Origin = mediaOrigin();
 ---
 
@@ -51,7 +53,7 @@ const r2Origin = mediaOrigin();
       rel="alternate"
       type="application/rss+xml"
       title={`${siteTitle} RSS`}
-      href={new URL("/rss.xml", settings.site_url || site.baseUrl).href}
+      href={new URL("/rss.xml", `${base}/`).href}
     />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <meta property="og:type" content={ogType} />
@@ -60,12 +62,16 @@ const r2Origin = mediaOrigin();
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:alt" content={pageTitle} />
     {articlePublishedTime && <meta property="article:published_time" content={articlePublishedTime} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <meta name="twitter:image" content={resolvedOgImage} />
     <link rel="icon" href="/images/brand/hometax-mark.png" type="image/png" sizes="256x256" />
     <link rel="icon" href="/favicon.webp" type="image/webp" sizes="64x64" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
