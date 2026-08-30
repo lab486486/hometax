@@ -1,8 +1,8 @@
 /**
  * Decap CMS editor UX:
- * - Keep side-by-side preview off by default (full writing focus).
- * - Action bar under the body editor: 미리보기 | 발행 (right-aligned).
- * - When preview is on, treat it as a centered modal (not a split pane).
+ * - Action bar under body: 삭제(기존) | 미리보기 | 발행
+ * - Hide duplicate top Publish / Delete controls
+ * - Modal preview
  */
 (function () {
   const STORAGE_KEY = "cms.preview-visible";
@@ -13,7 +13,7 @@
   try {
     localStorage.setItem(STORAGE_KEY, "false");
   } catch {
-    /* ignore private mode */
+    /* ignore */
   }
 
   function isPreviewTitle(title) {
@@ -43,7 +43,7 @@
       t === "게시" ||
       t === "게시 중..." ||
       /^Publish\b/i.test(t) ||
-      t.startsWith("게시")
+      (t.startsWith("게시") && !t.includes("철회") && !t.includes("됨"))
     );
   }
 
@@ -57,16 +57,40 @@
     );
   }
 
-  function findPublishButton(root) {
+  function isDeleteLabel(text) {
+    const t = (text || "").replace(/\s+/g, " ").trim();
+    return (
+      t === "Delete entry" ||
+      t === "Delete Entry" ||
+      t === "항목 삭제" ||
+      t === "게시된 항목 삭제" ||
+      t === "게시 안된 항목 삭제" ||
+      /^Delete\b/i.test(t)
+    );
+  }
+
+  function findToolbarButton(root, matcher) {
     const nodes = root.querySelectorAll("button, [role='button']");
     for (const el of nodes) {
       if (el.closest(`[${BAR_ATTR}]`)) continue;
       const cls = typeof el.className === "string" ? el.className : "";
-      if (/PublishButton/i.test(cls) || isPublishLabel(el.textContent)) {
-        return el;
-      }
+      if (matcher(el, cls)) return el;
     }
     return null;
+  }
+
+  function findPublishButton(root) {
+    return findToolbarButton(
+      root,
+      (el, cls) => /PublishButton/i.test(cls) || isPublishLabel(el.textContent)
+    );
+  }
+
+  function findDeleteButton(root) {
+    return findToolbarButton(
+      root,
+      (el, cls) => /DeleteButton/i.test(cls) || isDeleteLabel(el.textContent)
+    );
   }
 
   function findBodyAnchor(root) {
@@ -109,7 +133,6 @@
   function triggerPublish(root) {
     const publishBtn = findPublishButton(root);
     if (!publishBtn) return;
-
     publishBtn.click();
     window.setTimeout(() => {
       if (!clickPublishNow(root)) {
@@ -118,58 +141,88 @@
     }, 40);
   }
 
-  function ensureActionBar(root, nativePreviewBtn) {
+  function triggerDelete(root) {
+    const deleteBtn = findDeleteButton(root);
+    if (deleteBtn) deleteBtn.click();
+  }
+
+  function rebuildActionBar(bar, root, canDelete) {
+    bar.innerHTML = "";
+
+    if (canDelete) {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "cms-editor-action-btn cms-editor-action-delete";
+      deleteBtn.setAttribute("data-cms-action", "delete");
+      deleteBtn.setAttribute("title", "삭제");
+      deleteBtn.textContent = "삭제";
+      deleteBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        triggerDelete(root);
+      });
+      bar.appendChild(deleteBtn);
+
+      const sep0 = document.createElement("span");
+      sep0.className = "cms-editor-action-sep";
+      sep0.setAttribute("aria-hidden", "true");
+      sep0.textContent = "|";
+      bar.appendChild(sep0);
+    }
+
+    const previewBtn = document.createElement("button");
+    previewBtn.type = "button";
+    previewBtn.className = "cms-editor-action-btn cms-editor-action-preview";
+    previewBtn.setAttribute("data-cms-action", "preview");
+    previewBtn.setAttribute("title", "미리보기");
+    previewBtn.textContent = "미리보기";
+    previewBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const toggle = findPreviewToggle(root);
+      if (toggle) toggle.click();
+    });
+    bar.appendChild(previewBtn);
+
+    const sep = document.createElement("span");
+    sep.className = "cms-editor-action-sep";
+    sep.setAttribute("aria-hidden", "true");
+    sep.textContent = "|";
+    bar.appendChild(sep);
+
+    const publishBtn = document.createElement("button");
+    publishBtn.type = "button";
+    publishBtn.className = "cms-editor-action-btn cms-editor-action-publish";
+    publishBtn.setAttribute("data-cms-action", "publish");
+    publishBtn.setAttribute("title", "발행");
+    publishBtn.textContent = "발행";
+    publishBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      triggerPublish(root);
+    });
+    bar.appendChild(publishBtn);
+  }
+
+  function ensureActionBar(root) {
     const anchor = findBodyAnchor(root);
     if (!anchor || !anchor.parentElement) return null;
 
+    const canDelete = Boolean(findDeleteButton(root));
     let bar = root.querySelector(`[${BAR_ATTR}]`);
     if (!bar) {
       bar = document.createElement("div");
       bar.className = "cms-editor-actions";
       bar.setAttribute(BAR_ATTR, "1");
-
-      const previewBtn = document.createElement("button");
-      previewBtn.type = "button";
-      previewBtn.className = "cms-editor-action-btn cms-editor-action-preview";
-      previewBtn.setAttribute("data-cms-action", "preview");
-      previewBtn.setAttribute("title", "미리보기");
-      previewBtn.textContent = "미리보기";
-      previewBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const toggle = findPreviewToggle(root);
-        if (toggle) toggle.click();
-      });
-
-      const sep = document.createElement("span");
-      sep.className = "cms-editor-action-sep";
-      sep.setAttribute("aria-hidden", "true");
-      sep.textContent = "|";
-
-      const publishBtn = document.createElement("button");
-      publishBtn.type = "button";
-      publishBtn.className = "cms-editor-action-btn cms-editor-action-publish";
-      publishBtn.setAttribute("data-cms-action", "publish");
-      publishBtn.setAttribute("title", "발행");
-      publishBtn.textContent = "발행";
-      publishBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        triggerPublish(root);
-      });
-
-      bar.appendChild(previewBtn);
-      bar.appendChild(sep);
-      bar.appendChild(publishBtn);
+      rebuildActionBar(bar, root, canDelete);
+      bar.dataset.deleteVisible = canDelete ? "1" : "0";
+    } else if (bar.dataset.deleteVisible !== (canDelete ? "1" : "0")) {
+      rebuildActionBar(bar, root, canDelete);
+      bar.dataset.deleteVisible = canDelete ? "1" : "0";
     }
 
     if (bar.previousElementSibling !== anchor) {
       anchor.insertAdjacentElement("afterend", bar);
-    }
-
-    const previewBtn = bar.querySelector('[data-cms-action="preview"]');
-    if (previewBtn && nativePreviewBtn) {
-      /* keep reference fresh via findPreviewToggle on click */
     }
 
     return bar;
@@ -233,8 +286,7 @@
   function scan(root) {
     const nativeBtn = findPreviewToggle(root);
     if (nativeBtn) hideNativeToggle(nativeBtn);
-
-    const bar = ensureActionBar(root, nativeBtn);
+    const bar = ensureActionBar(root);
     syncModalState(root, bar);
   }
 

@@ -5,7 +5,12 @@
  * Secrets (Pages → Settings → Environment variables):
  *   COUPANG_ACCESS_KEY
  *   COUPANG_SECRET_KEY
+ *
+ * Without keys: still returns 200 with keyword title + local placeholder
+ * (never via.placeholder.com — that host is dead).
  */
+
+const PLACEHOLDER_IMAGE = "/images/coupang-placeholder.svg";
 
 function gmtSignedDate() {
   const d = new Date();
@@ -51,6 +56,28 @@ async function coupangFetch(path, query, accessKey, secretKey, method = "GET") {
   return res.json();
 }
 
+/** Follow affiliate short link to capture product id when possible. */
+async function extractProductId(url) {
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      redirect: "manual",
+      headers: {
+        "User-Agent": "hometax-coupang-box/1.0",
+        Accept: "text/html",
+      },
+    });
+    const loc = res.headers.get("Location") || res.headers.get("location") || "";
+    const m =
+      loc.match(/\/vp\/products\/(\d+)/) ||
+      loc.match(/[?&](?:pageValue|ctag|productId)=(\d+)/i) ||
+      url.match(/\/vp\/products\/(\d+)/);
+    return m ? m[1] : "";
+  } catch {
+    return "";
+  }
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
 
@@ -69,15 +96,6 @@ export async function onRequest(context) {
     return new Response("Method not allowed", { status: 405 });
   }
 
-  const accessKey = (env.COUPANG_ACCESS_KEY || "").trim();
-  const secretKey = (env.COUPANG_SECRET_KEY || "").trim();
-  if (!accessKey || !secretKey) {
-    return Response.json(
-      { error: "COUPANG_ACCESS_KEY / COUPANG_SECRET_KEY not configured" },
-      { status: 500 },
-    );
-  }
-
   let body;
   try {
     body = await request.json();
@@ -91,11 +109,21 @@ export async function onRequest(context) {
     return Response.json({ error: "url required" }, { status: 400 });
   }
 
-  let title = keyword || "쿠팡 추천 상품";
-  let image = "https://via.placeholder.com/150?text=COUPANG";
-  const description = "실시간 가격 및 혜택은 아래 링크에서 확인하세요.";
+  const accessKey = (env.COUPANG_ACCESS_KEY || "").trim();
+  const secretKey = (env.COUPANG_SECRET_KEY || "").trim();
 
-  if (keyword) {
+  let title = keyword || "쿠팡 추천 상품";
+  let image = PLACEHOLDER_IMAGE;
+  const description = "실시간 가격 및 혜택은 아래 링크에서 확인하세요.";
+  let productId = "";
+
+  try {
+    productId = await extractProductId(url);
+  } catch {
+    /* ignore */
+  }
+
+  if (accessKey && secretKey && keyword) {
     const json = await coupangFetch(
       "/v2/providers/affiliate_open_api/apis/openapi/products/search",
       { keyword, limit: "1" },
@@ -107,5 +135,13 @@ export async function onRequest(context) {
     if (product?.productImage) image = product.productImage;
   }
 
-  return Response.json({ url, title, image, description, keyword });
+  return Response.json({
+    url,
+    title,
+    image,
+    description,
+    keyword,
+    productId: productId || undefined,
+    configured: Boolean(accessKey && secretKey),
+  });
 }

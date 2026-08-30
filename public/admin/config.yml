@@ -35,7 +35,7 @@ x-blog-fields: &blog_fields
     time_format: false
     default: "{{now}}"
     hint: "기본값은 오늘입니다. 클릭해서 바꿀 수 있습니다."
-  - { label: 설명, name: description, widget: text }
+  - { label: 디스크립션, name: description, widget: text }
   - { label: 커버 이미지, name: cover_image, widget: image, required: false }
   - { label: 태그, name: tags, widget: list, default: ["홈택스"], required: false, hint: "예: 홈택스 → /category/홈택스/" }
   - label: 퍼머링크 (슬러그)

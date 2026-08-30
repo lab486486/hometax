@@ -5,6 +5,9 @@
  * At build time, resolves title/image via Coupang Partners API when
  * COUPANG_ACCESS_KEY + COUPANG_SECRET_KEY are set. Button always uses the
  * affiliate URL you provide.
+ *
+ * Without keys (or on API failure), emit a deferred box that hydrates via
+ * /api/coupang on the client — never use via.placeholder.com.
  */
 
 export type CoupangProduct = {
@@ -16,6 +19,7 @@ export type CoupangProduct = {
 };
 
 const SHORTCODE_RE = /\[coupang\s+([^\]]+)\]/gi;
+const PLACEHOLDER_IMAGE = "/images/coupang-placeholder.svg";
 
 function parseAttrs(raw: string): Record<string, string> {
   const attrs: Record<string, string> = {};
@@ -89,8 +93,8 @@ export async function resolveCoupangProduct(
   accessKey: string,
   secretKey: string,
 ): Promise<CoupangProduct> {
-  let title = "쿠팡 추천 상품";
-  let image = "https://via.placeholder.com/150?text=COUPANG";
+  let title = keyword || "쿠팡 추천 상품";
+  let image = PLACEHOLDER_IMAGE;
   const description = "실시간 가격 및 혜택은 아래 링크에서 확인하세요.";
 
   if (keyword) {
@@ -157,7 +161,7 @@ export async function expandCoupangShortcodes(markdown: string): Promise<string>
             url,
             keyword,
             title: keyword || "쿠팡 추천 상품",
-            image: "https://via.placeholder.com/150?text=COUPANG",
+            image: PLACEHOLDER_IMAGE,
             description: "실시간 가격 및 혜택은 아래 링크에서 확인하세요.",
           },
           true,
@@ -168,8 +172,8 @@ export async function expandCoupangShortcodes(markdown: string): Promise<string>
         {
           url,
           keyword,
-          title: keyword || "쿠팡 추천 상품 불러오는 중…",
-          image: "https://via.placeholder.com/150?text=COUPANG",
+          title: keyword || "쿠팡 추천 상품",
+          image: PLACEHOLDER_IMAGE,
           description: "실시간 가격 및 혜택은 아래 링크에서 확인하세요.",
         },
         true,
