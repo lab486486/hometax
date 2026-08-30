@@ -1,5 +1,6 @@
 /**
  * Frequent tags as a separate CMS-style section beside the tags field (5:5).
+ * Clicking a chip adds it into the Decap tags list.
  * Data: /admin/tag-stats.json (generated on build).
  */
 (function () {
@@ -8,6 +9,9 @@
   const MAX = 5;
   let cachedTags = null;
   let loading = false;
+  let adding = false;
+  let observer = null;
+  let paintToken = 0;
 
   function loadTags() {
     if (cachedTags) return Promise.resolve(cachedTags);
@@ -63,44 +67,114 @@
     return values;
   }
 
+  function setReactInputValue(input, value) {
+    var proto = input instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    var descriptor = Object.getOwnPropertyDescriptor(proto, "value");
+    if (descriptor && descriptor.set) descriptor.set.call(input, value);
+    else input.value = value;
+
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    try {
+      input.dispatchEvent(new InputEvent("input", { bubbles: true, data: value, inputType: "insertText" }));
+    } catch {
+      /* older browsers */
+    }
+  }
+
   function findAddButton(field) {
+    var byClass = field.querySelector('[class*="AddButton"]');
+    if (byClass) return byClass;
+
     var buttons = field.querySelectorAll("button");
     for (var i = 0; i < buttons.length; i++) {
-      var t = (buttons[i].textContent || "").replace(/\s+/g, " ").trim();
-      if (buttons[i].classList.contains("cms-tag-chip")) continue;
-      if (/추가|Add/i.test(t) && !/삭제|Delete|Remove/i.test(t)) return buttons[i];
+      var btn = buttons[i];
+      if (btn.classList.contains("cms-tag-chip")) continue;
+      var t = (btn.textContent || "").replace(/\s+/g, " ").trim();
+      if (/추가|Add/i.test(t) && !/삭제|Delete|Remove|제거/i.test(t)) return btn;
+    }
+
+    // Fallback: last non-remove button in the tags field.
+    for (var j = buttons.length - 1; j >= 0; j--) {
+      var candidate = buttons[j];
+      if (candidate.classList.contains("cms-tag-chip")) continue;
+      var label = (candidate.textContent || "").replace(/\s+/g, " ").trim();
+      if (/삭제|Delete|Remove|제거/i.test(label)) continue;
+      return candidate;
     }
     return null;
   }
 
-  function addTag(field, tag) {
+  function findEmptyOrLastInput(field) {
+    var inputs = field.querySelectorAll("input[type='text'], input:not([type]), textarea");
+    var target = null;
+    for (var i = inputs.length - 1; i >= 0; i--) {
+      if (!String(inputs[i].value || "").trim()) {
+        target = inputs[i];
+        break;
+      }
+    }
+    if (!target && inputs.length) target = inputs[inputs.length - 1];
+    return target;
+  }
+
+  function wait(ms) {
+    return new Promise(function (resolve) {
+      window.setTimeout(resolve, ms);
+    });
+  }
+
+  async function addTag(field, tag) {
+    if (adding) return;
     var existing = currentTags(field);
     if (existing.indexOf(tag) !== -1) return;
 
-    var addBtn = findAddButton(field);
-    if (addBtn) addBtn.click();
+    adding = true;
+    if (observer) observer.disconnect();
 
-    window.setTimeout(function () {
-      var inputs = field.querySelectorAll("input[type='text'], input:not([type]), textarea");
-      var target = null;
-      for (var i = inputs.length - 1; i >= 0; i--) {
-        if (!String(inputs[i].value || "").trim()) {
-          target = inputs[i];
-          break;
+    try {
+      var target = findEmptyOrLastInput(field);
+      var needAdd = !target || String(target.value || "").trim() !== "";
+
+      if (needAdd) {
+        var addBtn = findAddButton(field);
+        if (addBtn) {
+          addBtn.click();
+          await wait(80);
+          target = findEmptyOrLastInput(field);
         }
       }
-      if (!target && inputs.length) target = inputs[inputs.length - 1];
+
+      if (!target) {
+        // One more try after React paint.
+        await wait(120);
+        target = findEmptyOrLastInput(field);
+      }
       if (!target) return;
 
-      var setter =
-        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value") ||
-        Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value");
-      if (setter && setter.set) setter.set.call(target, tag);
-      else target.value = tag;
+      // If last input already has a different value, click Add again.
+      if (String(target.value || "").trim() && String(target.value || "").trim() !== tag) {
+        var addAgain = findAddButton(field);
+        if (addAgain) {
+          addAgain.click();
+          await wait(80);
+          target = findEmptyOrLastInput(field);
+        }
+      }
+      if (!target) return;
 
-      target.dispatchEvent(new Event("input", { bubbles: true }));
-      target.dispatchEvent(new Event("change", { bubbles: true }));
-    }, 40);
+      target.focus();
+      setReactInputValue(target, tag);
+      target.blur();
+      await wait(30);
+    } finally {
+      adding = false;
+      if (observer) {
+        var root = document.getElementById("nc-root") || document.body;
+        observer.observe(root, { childList: true, subtree: true });
+      }
+      scan(true);
+    }
   }
 
   function copySampleClasses(from, to) {
@@ -115,7 +189,6 @@
     var pane = tagsField.parentElement;
     if (!pane) return null;
 
-    // Remove old in-field suggestion UI from previous version.
     tagsField.querySelectorAll("[" + WRAP_ATTR + "], [data-cms-tag-row]").forEach(function (node) {
       node.remove();
     });
@@ -146,7 +219,7 @@
       }
     } else {
       section.dataset.cmsField = "tags_frequent";
-      if (section.nextElementSibling !== tagsField && tagsField.nextElementSibling !== section) {
+      if (tagsField.nextElementSibling !== section) {
         pane.insertBefore(section, tagsField.nextSibling);
       }
     }
@@ -159,6 +232,13 @@
     if (!wrap) return;
 
     var selected = currentTags(tagsField);
+    var nextKey = tags
+      .map(function (item) {
+        return item.name + ":" + (selected.indexOf(item.name) !== -1 ? "1" : "0");
+      })
+      .join("|");
+    if (wrap.dataset.paintKey === nextKey) return;
+    wrap.dataset.paintKey = nextKey;
     wrap.innerHTML = "";
 
     if (!tags.length) {
@@ -178,41 +258,56 @@
       btn.type = "button";
       btn.className = "cms-tag-chip";
       btn.textContent = item.name;
-      btn.title = item.count ? item.name + " (" + item.count + ")" : item.name;
+      btn.dataset.tagName = item.name;
+      btn.title = item.count ? item.name + " (" + item.count + ") · 클릭해서 추가" : item.name + " · 클릭해서 추가";
       if (selected.indexOf(item.name) !== -1) {
         btn.classList.add("is-selected");
         btn.disabled = true;
       }
-      btn.addEventListener("click", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        addTag(tagsField, item.name);
-      });
       chips.appendChild(btn);
     });
   }
 
-  function scan() {
+  function scan(force) {
     var root = document.getElementById("nc-root") || document.body;
     var field = root.querySelector('[data-cms-field="tags"]');
     if (!field) return;
+    var token = ++paintToken;
     loadTags().then(function (tags) {
+      if (!force && token !== paintToken) return;
       var section = ensureFrequentSection(field);
       if (!section) return;
       paintSuggestions(section, field, tags);
     });
   }
 
+  function onChipClick(event) {
+    var btn = event.target && event.target.closest ? event.target.closest(".cms-tag-chip") : null;
+    if (!btn) return;
+    if (!btn.closest("[" + FREQ_ATTR + "]")) return;
+    if (btn.disabled) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    var field = document.querySelector('[data-cms-field="tags"]');
+    if (!field) return;
+    var name = (btn.dataset.tagName || btn.textContent || "").trim();
+    if (!name) return;
+    addTag(field, name);
+  }
+
   function start() {
-    scan();
+    document.addEventListener("click", onChipClick, true);
+    scan(true);
     var root = document.getElementById("nc-root") || document.body;
     var scheduled = false;
-    var observer = new MutationObserver(function () {
-      if (scheduled) return;
+    observer = new MutationObserver(function () {
+      if (adding || scheduled) return;
       scheduled = true;
-      requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
         scheduled = false;
-        scan();
+        if (!adding) scan(false);
       });
     });
     observer.observe(root, { childList: true, subtree: true });
