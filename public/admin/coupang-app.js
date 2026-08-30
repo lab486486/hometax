@@ -94,6 +94,7 @@
     const urlInput = document.getElementById("builderUrl");
     const genBtn = document.getElementById("builderGenerate");
     const copyBtn = document.getElementById("builderCopy");
+    const resetBtn = document.getElementById("builderReset");
 
     if (urlInput) {
       urlInput.addEventListener("focus", function () {
@@ -104,7 +105,6 @@
       });
       urlInput.addEventListener("mousedown", function (event) {
         if (urlClearedOnce) return;
-        // Clear before browser places caret into existing text.
         event.preventDefault();
         urlClearedOnce = true;
         urlInput.value = "";
@@ -131,6 +131,7 @@
         paint();
       });
     }
+
     if (copyBtn) {
       copyBtn.addEventListener("click", async function () {
         if (!generatedCode) return;
@@ -140,6 +141,17 @@
         } catch {
           copyHint = "복사에 실패했습니다. 코드를 직접 선택해 복사해 주세요.";
         }
+        paint();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        generatedCode = "";
+        builderUrl = "https://link.coupang.com/a/";
+        builderKeyword = "";
+        urlClearedOnce = false;
+        copyHint = "";
         paint();
       });
     }
@@ -163,9 +175,14 @@
         '<pre class="cms-coupang-code cms-coupang-code-result">' +
         escapeHtml(generatedCode) +
         "</pre>" +
-        '<button type="button" class="cms-coupang-btn ghost" id="builderCopy">복사</button>' +
         "</div>"
       : "";
+
+    const actionButtonsHtml = generatedCode
+      ? '<button type="button" class="cms-coupang-btn" id="builderCopy">복사하기</button>' +
+        '<span class="cms-coupang-action-sep" aria-hidden="true">|</span>' +
+        '<button type="button" class="cms-coupang-btn ghost" id="builderReset">초기화</button>'
+      : '<button type="button" class="cms-coupang-btn" id="builderGenerate">본문 코드받기</button>';
 
     const hintHtml = copyHint
       ? '<p class="cms-coupang-builder-hint">' + escapeHtml(copyHint) + "</p>"
@@ -205,8 +222,9 @@
       '" />' +
       "</div>" +
       '<div class="cms-coupang-notes">' +
-      "<p>쿠팡API 키 발급 위치: 쿠팡 파트너스 로그인 → 추가 기능 → 파트너스 API</p>" +
-      "<p>입력하신 Access Key와 Secret Key는 암호화되어 저장됩니다.</p>" +
+      "<p>쿠팡API 키 발급 위치:</p>" +
+      "<p>쿠팡 파트너스 → 추가 기능 → 파트너스 API</p>" +
+      "<p>* Access Key, Secret Key는 암호화 저장</p>" +
       "</div>" +
       '<div class="cms-coupang-actions">' +
       '<button type="submit" class="cms-coupang-btn"' +
@@ -243,7 +261,7 @@
       '" />' +
       "</div>" +
       '<div class="cms-coupang-actions">' +
-      '<button type="button" class="cms-coupang-btn" id="builderGenerate">본문 코드받기</button>' +
+      actionButtonsHtml +
       "</div>" +
       resultHtml +
       hintHtml +

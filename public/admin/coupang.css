@@ -232,15 +232,18 @@ body.cms-coupang-page {
 }
 
 .cms-coupang-result {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
   margin-top: 14px;
 }
 
 .cms-coupang-code-result {
-  flex: 1 1 auto;
   margin: 0;
+}
+
+.cms-coupang-action-sep {
+  color: #c5cad3;
+  font-size: 14px;
+  line-height: 1;
+  user-select: none;
 }
 
 .cms-coupang-builder-hint {
