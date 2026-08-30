@@ -1,13 +1,13 @@
 /**
  * Decap CMS editor UX:
  * - Keep side-by-side preview off by default (full writing focus).
- * - Label the native preview control as "미리보기".
+ * - Place a Publish-shaped "미리보기" button next to Publish (navy).
  * - When preview is on, treat it as a centered modal (not a split pane).
- * - Editor column is wider than the live post for comfortable WYSIWYG writing.
  */
 (function () {
   const STORAGE_KEY = "cms.preview-visible";
   const BTN_ATTR = "data-cms-preview-btn";
+  const PROXY_ATTR = "data-cms-preview-proxy";
   const OPEN_CLASS = "cms-preview-modal-open";
 
   try {
@@ -29,22 +29,98 @@
   function findPreviewToggle(root) {
     const candidates = root.querySelectorAll("button[title], [role='button'][title]");
     for (const el of candidates) {
+      if (el.getAttribute(PROXY_ATTR) === "1") continue;
       if (isPreviewTitle(el.getAttribute("title"))) return el;
     }
     return null;
   }
 
-  function enhanceButton(btn) {
+  function isPublishLabel(text) {
+    const t = (text || "").replace(/\s+/g, " ").trim();
+    return (
+      t === "Publish" ||
+      t === "Publishing..." ||
+      t === "게시" ||
+      t === "게시 중..." ||
+      /^Publish\b/i.test(t) ||
+      t.startsWith("게시")
+    );
+  }
+
+  /** Toolbar-level Publish control (dropdown wrapper), so preview sits beside it. */
+  function findPublishControl(root) {
+    const nodes = root.querySelectorAll("button, [role='button']");
+    let publishBtn = null;
+    for (const el of nodes) {
+      if (el.getAttribute(PROXY_ATTR) === "1") continue;
+      if (el.classList.contains("cms-preview-toggle-btn")) continue;
+      const cls = typeof el.className === "string" ? el.className : "";
+      if (/PublishButton/i.test(cls) || isPublishLabel(el.textContent)) {
+        publishBtn = el;
+        break;
+      }
+    }
+    if (!publishBtn) return null;
+
+    let el = publishBtn;
+    for (let i = 0; i < 6 && el.parentElement; i++) {
+      const parent = el.parentElement;
+      try {
+        const style = window.getComputedStyle(parent);
+        const flexish =
+          style.display === "flex" || style.display === "inline-flex";
+        if (flexish && parent.childElementCount >= 2) {
+          return el;
+        }
+      } catch {
+        /* ignore */
+      }
+      el = parent;
+    }
+    return publishBtn;
+  }
+
+  function hideNativeToggle(btn) {
     if (!btn || btn.getAttribute(BTN_ATTR) === "1") return;
     btn.setAttribute(BTN_ATTR, "1");
-    btn.classList.add("cms-preview-toggle-btn");
+    btn.classList.add("cms-preview-native-hidden");
+    btn.setAttribute("aria-hidden", "true");
+    btn.tabIndex = -1;
+  }
 
-    if (!btn.querySelector(".cms-preview-toggle-label")) {
-      const label = document.createElement("span");
-      label.className = "cms-preview-toggle-label";
-      label.textContent = "미리보기";
-      btn.appendChild(label);
+  function ensureProxyButton(nativeBtn, publishBtn) {
+    if (!nativeBtn || !publishBtn) return null;
+
+    const host = publishBtn.parentElement;
+    if (!host) return null;
+
+    let proxy = host.querySelector(`[${PROXY_ATTR}="1"]`);
+    if (!proxy) {
+      proxy = document.createElement("button");
+      proxy.type = "button";
+      proxy.setAttribute(PROXY_ATTR, "1");
+      proxy.className = "cms-preview-toggle-btn";
+      proxy.setAttribute("title", "미리보기");
+      proxy.setAttribute("aria-label", "미리보기");
+      proxy.textContent = "미리보기";
+      proxy.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        nativeBtn.click();
+      });
     }
+
+    if (proxy.nextElementSibling !== publishBtn) {
+      host.insertBefore(proxy, publishBtn);
+    }
+
+    return proxy;
+  }
+
+  function syncProxyState(proxy, open) {
+    if (!proxy) return;
+    proxy.setAttribute("aria-pressed", open ? "true" : "false");
+    proxy.classList.toggle("is-active", open);
   }
 
   function ensureBackdrop() {
@@ -79,7 +155,6 @@
   }
 
   function previewIsVisible(root) {
-    // Decap renders PreviewPaneFrame / PreviewPaneContainer only when preview is on.
     return Boolean(
       root.querySelector('[class*="PreviewPaneFrame"]') ||
         root.querySelector('[class*="PreviewPaneContainer"] iframe') ||
@@ -87,17 +162,21 @@
     );
   }
 
-  function syncModalState(root) {
+  function syncModalState(root, proxy) {
     const open = previewIsVisible(root);
     document.documentElement.classList.toggle(OPEN_CLASS, open);
+    syncProxyState(proxy, open);
     ensureBackdrop();
     ensureCloseButton();
   }
 
   function scan(root) {
-    const btn = findPreviewToggle(root);
-    if (btn) enhanceButton(btn);
-    syncModalState(root);
+    const nativeBtn = findPreviewToggle(root);
+    if (nativeBtn) hideNativeToggle(nativeBtn);
+
+    const publishBtn = findPublishControl(root);
+    const proxy = ensureProxyButton(nativeBtn, publishBtn);
+    syncModalState(root, proxy);
   }
 
   function start() {
